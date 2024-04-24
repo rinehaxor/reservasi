@@ -1,27 +1,43 @@
-import Link from 'next/link';
-import { headers } from 'next/headers';
-import { createClient } from '@/utils/supabase/server';
-import { redirect } from 'next/navigation';
-import { SubmitButton } from './submit-button';
+'use client';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { createClient } from '@/utils/supabase/client'; // Pastikan ini mengarah ke file yang benar!
 import NavbarUserRegister from '@/components/user/NavbarUserRegister';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import Link from 'next/link';
 import { WaveSVG } from '@/components/ui/waves';
+import { redirect, useRouter } from 'next/navigation';
 
-export default function Login({ searchParams }: { searchParams: { message: string } }) {
-   const signIn = async (formData: FormData) => {
-      'use server';
+interface FormData {
+   email: string;
+   password: string;
+}
 
-      const email = formData.get('email') as string;
-      const password = formData.get('password') as string;
+const LoginForm = () => {
+   const router = useRouter();
+   const {
+      register,
+      handleSubmit,
+      formState: { errors },
+   } = useForm<FormData>();
+   const { toast } = useToast();
+   const [message, setMessage] = useState('');
+
+   async function loginUser(data: FormData) {
+      const { email, password } = data;
       const supabase = createClient();
-
       const { error } = await supabase.auth.signInWithPassword({
-         email,
-         password,
+         email: email,
+         password: password,
       });
 
-      if (error) {
-         return redirect('/login?message=Could not authenticate user');
-      }
+      //   if (error) {
+      //      return redirect('/login?message=Could not authenticate user');
+      //   }
       async function getUserRole(userId: any) {
          const supabase = createClient();
          const { data, error } = await supabase.from('user_roles').select(`role_id`).eq('user_id', userId).single();
@@ -37,84 +53,55 @@ export default function Login({ searchParams }: { searchParams: { message: strin
          data: { user },
       } = await supabase.auth.getUser();
 
-      if (!user) {
-         return redirect('/login');
-      }
-
-      const roleId = await getUserRole(user.id);
+      //   if (!user) {
+      //      return  router.push('/login');
+      //   }
+      const roleId = await getUserRole(user?.id);
 
       if (roleId !== 2) {
          // asumsikan 2 adalah 'admin'
-         return redirect('/'); // Redirect user biasa ke homepage atau halaman lain
+         router.push('/'); // Redirect user biasa ke homepage atau halaman lain
       } else {
-         return redirect('/admin/dashboard');
+         router.push('/admin/dashboard');
       }
-   };
+   }
 
-   const signUp = async (formData: FormData) => {
-      'use server';
-
-      const origin = headers().get('origin');
-      const email = formData.get('email') as string;
-      const password = formData.get('password') as string;
-      const supabase = createClient();
-
-      const { error } = await supabase.auth.signUp({
-         email,
-         password,
-         options: {
-            emailRedirectTo: `${origin}/auth/callback`,
-         },
-      });
-
-      if (error) {
-         return redirect('/login?message=Could not authenticate user');
-      }
-
-      return redirect('/login?message=Check email to continue sign in process');
+   const onSubmit = async (data: FormData) => {
+      await loginUser(data);
    };
 
    return (
       <div className="w-full min-h-screen relative">
          <NavbarUserRegister />
-         <div className="w-1/3 mx-auto max-w-sm items-center gap-1.5 ">
-            <Link href="/" className="absolute left-8 top-8 py-2 px-4 rounded-md no-underline text-foreground bg-btn-background hover:bg-btn-background-hover flex items-center group text-sm">
-               <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1"
-               >
-                  <polyline points="15 18 9 12 15 6" />
-               </svg>{' '}
-               Back
-            </Link>
+         <div className="w-1/3 mx-auto max-w-sm items-center gap-1.5">
+            <div className="mt-20">
+               <h1 className="font-extrabold mb-10 text-lg md:text-2xl">Login Akun</h1>
+               <form onSubmit={handleSubmit(onSubmit)}>
+                  <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
+                     <Label htmlFor="email">Email</Label>
+                     <Input type="email" id="email" {...register('email', { required: true })} placeholder="Email" className="form-input" />
+                     {errors.email && <p className="text-red-500 text-xs md:text-lg">Masukan Email Anda.</p>}
+                  </div>
 
-            <form className="animate-in flex-1 flex flex-col w-full justify-center gap-2 text-foreground">
-               <label className="text-md" htmlFor="email">
-                  Email
-               </label>
-               <input className="rounded-md px-4 py-2 bg-inherit border mb-6" name="email" placeholder="you@example.com" required />
-               <label className="text-md" htmlFor="password">
-                  Password
-               </label>
-               <input className="rounded-md px-4 py-2 bg-inherit border mb-6" type="password" name="password" placeholder="••••••••" required />
-               <SubmitButton formAction={signIn} className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2" pendingText="Signing In...">
-                  Sign In
-               </SubmitButton>
-               <SubmitButton formAction={signUp} className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2" pendingText="Signing Up...">
-                  Sign Up
-               </SubmitButton>
-               {searchParams?.message && <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">{searchParams.message}</p>}
-            </form>
+                  <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
+                     <Label htmlFor="password">Password</Label>
+                     <Input type="password" id="password" {...register('password', { required: 'Password diperlukan.', minLength: { value: 8, message: 'Password harus minimal 8 karakter.' } })} className="form-input" />
+                     {errors.password && <p className="text-red-500 text-xs md:text-lg">{errors.password.message}</p>}
+                  </div>
+
+                  <Button type="submit" className="w-full font-bold mt-5 bg-amber-500">
+                     Login
+                  </Button>
+                  <div className="mt-2">{message}</div>
+                  <div className="mt-2">
+                     <Link href="/forgot-password">Lupa Password?</Link>
+                  </div>
+               </form>
+            </div>
          </div>
          <WaveSVG />
       </div>
    );
-}
+};
+
+export default LoginForm;
