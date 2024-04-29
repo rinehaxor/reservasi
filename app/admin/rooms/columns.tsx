@@ -1,4 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table';
+import Link from 'next/link';
 
 export type Room = {
    id: string;
@@ -36,6 +37,17 @@ export const columns: ColumnDef<Room>[] = [
       cell: ({ getValue }) => {
          const url: string = getValue() as string; // Type assertion here
          return <img src={url} alt="Room Image" style={{ width: '100px', height: 'auto' }} />;
+      },
+   },
+   {
+      id: 'detail', // ID unik untuk kolom
+      header: 'Detail',
+      cell: ({ row }) => {
+         return (
+            <Link href={`/admin/rooms/${row.original.id}`} passHref>
+               <button>View Details</button>
+            </Link>
+         );
       },
    },
 ];
