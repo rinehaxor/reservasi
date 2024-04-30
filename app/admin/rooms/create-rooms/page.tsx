@@ -3,6 +3,7 @@ import ReadRoom from '@/components/admin/readRoom';
 import NavbarAdmin from '@/components/admin/navbarAdmin';
 import React from 'react';
 import SideBar from '@/components/admin/SideBar';
+import { WaveSVG } from '@/components/ui/waves';
 
 export default function page() {
    return (
@@ -12,6 +13,7 @@ export default function page() {
             <div className="flex flex-row">
                <SideBar />
                <AddRoom />
+               <WaveSVG />
             </div>
          </div>
       </div>

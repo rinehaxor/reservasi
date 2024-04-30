@@ -1,11 +1,10 @@
 'use client';
 import Image from 'next/image';
-import React, { useState } from 'react';
+
 import NavbarHome from './NavbarHome';
 import { Button } from '../ui/button';
 
 export default function Hero() {
-   const [isOpen, setIsOpen] = useState(false);
    return (
       <div className="relative w-screen h-screen flex  justify-center">
          <Image

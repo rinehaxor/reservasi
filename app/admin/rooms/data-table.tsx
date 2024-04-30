@@ -23,7 +23,11 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
                      {headerGroup.headers.map((header) => {
-                        return <TableHead key={header.id}>{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}</TableHead>;
+                        return (
+                           <TableHead key={header.id} className="bg-orange-500 text-white">
+                              {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                           </TableHead>
+                        );
                      })}
                   </TableRow>
                ))}
@@ -31,7 +35,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             <TableBody>
                {table.getRowModel().rows?.length ? (
                   table.getRowModel().rows.map((row) => (
-                     <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+                     <TableRow key={row.id} className="bg-gray-100" data-state={row.getIsSelected() && 'selected'}>
                         {row.getVisibleCells().map((cell) => (
                            <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                         ))}

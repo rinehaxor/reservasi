@@ -1,4 +1,6 @@
+import { deleteRoomAtom } from '@/components/atoms/store';
 import { ColumnDef } from '@tanstack/react-table';
+import { useAtom } from 'jotai';
 import Link from 'next/link';
 
 export type Room = {
@@ -48,6 +50,14 @@ export const columns: ColumnDef<Room>[] = [
                <button>View Details</button>
             </Link>
          );
+      },
+   },
+   {
+      accessorKey: 'delete',
+      header: 'Aksi',
+      cell: ({ row }) => {
+         const [, deleteRoom] = useAtom(deleteRoomAtom);
+         return <button onClick={() => deleteRoom(row.original.id)}>Delete</button>;
       },
    },
 ];

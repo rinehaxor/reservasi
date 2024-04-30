@@ -1,20 +1,21 @@
 'use client';
 import { useState } from 'react';
-import { useAtom } from 'jotai';
-import { roomsAtom } from '@/components/atoms/store';
 import { createClient } from '@/utils/supabase/client';
-import NavbarAdmin from './navbarAdmin';
+import { Label } from '../ui/label';
+import { Input } from '../ui/input';
 
 const AddRoom = () => {
    const [name, setName] = useState('');
    const [type, setType] = useState('');
    const [description, setDescription] = useState('');
    const [price, setPrice] = useState('');
-   const [image, setImage] = useState(null);
+   const [image, setImage] = useState<File | null>(null);
    const supabase = createClient();
 
-   const handleFileChange = (event) => {
-      setImage(event.target.files[0]);
+   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (event.target.files && event.target.files[0]) {
+         setImage(event.target.files[0]); // Now safely assigning File to state
+      }
    };
 
    const uploadImage = async () => {
@@ -73,8 +74,16 @@ const AddRoom = () => {
    };
 
    return (
-      <div>
-         {/* <NavbarAdmin /> */}
+      <div className="flex flex-col gap-4">
+         <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
+            <Label htmlFor="name">Nama Kamar</Label>
+            <Input type="text" id="name" placeholder="Nama Lengkap" className="form-input" />
+         </div>
+         <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
+            <Label htmlFor="type">Tipe Kamar</Label>
+            <Input type="text" id="type" placeholder="Nama Lengkap" className="form-input" />
+         </div>
+
          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Room Number" />
          <input value={type} onChange={(e) => setType(e.target.value)} placeholder="Room Type" />
          <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Description" />
