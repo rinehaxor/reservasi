@@ -7,7 +7,7 @@ import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
 import { useForm } from 'react-hook-form';
 
-const AddRoom = () => {
+const EditRoom = () => {
    const {
       register,
       handleSubmit,
@@ -24,11 +24,6 @@ const AddRoom = () => {
       },
    });
 
-   const [name, setName] = useState('');
-   const [type, setType] = useState('');
-   const [description, setDescription] = useState('');
-   const [price, setPrice] = useState('');
-   const [image, setImage] = useState<File | null>(null);
    const supabase = createClient();
 
    useEffect(() => {
@@ -145,4 +140,4 @@ const AddRoom = () => {
    );
 };
 
-export default AddRoom;
+export default EditRoom;

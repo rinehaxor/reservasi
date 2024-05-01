@@ -44,7 +44,7 @@ export default async function ProtectedPage() {
       <div className="flex-1 w-full flex flex-col gap-20 items-center">
          <div className="w-full">
             {/* <NavbarAdmin /> */}
-            <div className="py-6 font-bold bg-orange-600 text-center  text-md md:text-xl">Selamat Datang Resepsionis</div>
+            <div className="py-6 font-bold bg-orange-500 text-center  text-md md:text-xl">Selamat Datang Resepsionis</div>
             {/* <Button className="bg-black">
                {' '}
                <Link href="/admin/rooms/create-rooms">Buat Kamar </Link>
