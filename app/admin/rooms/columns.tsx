@@ -1,4 +1,5 @@
 import { deleteRoomAtom } from '@/components/atoms/store';
+import { Button } from '@/components/ui/button';
 import { ColumnDef } from '@tanstack/react-table';
 import { useAtom } from 'jotai';
 import Link from 'next/link';
@@ -9,6 +10,7 @@ export type Room = {
    type: string;
    description: string;
    price_per_night: number;
+   image_url: string;
 };
 
 export const columns: ColumnDef<Room>[] = [
@@ -57,7 +59,14 @@ export const columns: ColumnDef<Room>[] = [
       header: 'Aksi',
       cell: ({ row }) => {
          const [, deleteRoom] = useAtom(deleteRoomAtom);
-         return <button onClick={() => deleteRoom(row.original.id)}>Delete</button>;
+         return (
+            <div className="flex flex-row items-center justify-center gap-4">
+               <Button onClick={() => deleteRoom(row.original.id)}>Delete</Button>
+               <Link href={`/admin/rooms/edit-rooms/${row.original.id}`} passHref>
+                  <Button>Edit</Button>
+               </Link>
+            </div>
+         );
       },
    },
 ];

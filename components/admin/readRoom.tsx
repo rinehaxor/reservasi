@@ -111,8 +111,6 @@ export default function ReadRoom() {
          alert('Failed to update room');
       } else {
          alert('Room updated successfully!');
-         closeEditModal();
-         //  setRooms((prevRooms) => prevRooms.map((r) => (r.id === room.id ? { ...r, ...data[0] } : r)));
       }
    };
 
