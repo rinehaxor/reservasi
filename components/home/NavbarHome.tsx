@@ -15,7 +15,7 @@ export default function NavbarHome() {
                   {/* Logo on the left */}
                   <div className="flex items-center space-x-4 flex-grow ">
                      <a href="#" className="flex items-center py-5 px-2 text-gray-200 hover:text-gray-100">
-                        <span className="font-bold">Brand</span>
+                        <span className="font-bold">MAEROKOCO</span>
                      </a>
                   </div>
 
@@ -28,7 +28,7 @@ export default function NavbarHome() {
                         About
                      </a>
                      <a href="#" className="py-5 px-3 hover:text-gray-100">
-                        Services
+                        Room
                      </a>
                      <a href="#" className="py-5 px-3 hover:text-gray-100">
                         Contact

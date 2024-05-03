@@ -142,11 +142,17 @@ const RegisterForm = () => {
 
                   <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
                      <Label htmlFor="password">Password</Label>
-                     <Input type="password" id="password" {...register('password', { required: 'Password diperlukan.', minLength: { value: 8, message: 'Password harus minimal 8 karakter.' } })} className="form-input" />
+                     <Input
+                        type="password"
+                        id="password"
+                        placeholder="*******"
+                        {...register('password', { required: 'Password diperlukan.', minLength: { value: 8, message: 'Password harus minimal 8 karakter.' } })}
+                        className="form-input"
+                     />
                      {errors.password && <p className="text-red-500 text-xs md:text-lg">{errors.password.message}</p>}
                   </div>
 
-                  <Button type="submit" className="w-full font-bold mt-5 bg-amber-500">
+                  <Button type="submit" className="w-full mt-5" variant={'secondary'}>
                      Daftar
                   </Button>
                   <div className="mt-2">{message}</div>

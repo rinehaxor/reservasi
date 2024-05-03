@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
-import EditRoom from '@/components/admin/EditRoom';
 import SideBar from '@/components/admin/SideBar';
 import { WaveSVG } from '@/components/ui/waves';
 import { useForm } from 'react-hook-form';
@@ -172,6 +171,7 @@ export default function Page({ params }: any) {
          <SideBar />
          <div className="w-full">
             <div className="flex-1 w-full flex flex-col gap-20 items-center mt-10">
+               <p className="text-xl font-bold">Edit Kamar</p>
                <div className="flex flex-row">
                   <form onSubmit={handleSubmit(updateRoom)} className="flex flex-col gap-4">
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
