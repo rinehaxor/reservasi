@@ -37,7 +37,7 @@ export const columnsFasilitas: ColumnDef<Fasilitas>[] = [
          return (
             <div className="flex flex-row items-center justify-center gap-4">
                <Button onClick={() => deleteFasilitas(row.original.id)}>Delete</Button>
-               <Link href={`/admin/rooms/edit-rooms/${row.original.id}`} passHref>
+               <Link href={`/admin/fasilitas/edit-fasilitas/${row.original.id}`} passHref>
                   <Button>Edit</Button>
                </Link>
             </div>

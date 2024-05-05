@@ -48,10 +48,7 @@ export default function FasilitasDashboard() {
          <div className="w-full">
             {/* <NavbarAdmin /> */}
             <div className="flex w-full">
-               <div className="w-[14%]">
-                  <SideBar />
-               </div>
-               <div className="flex-1 ">
+               <div className=" py-10 px-10">
                   {loading ? (
                      <>
                         <div className="flex justify-center items-center">
@@ -63,7 +60,7 @@ export default function FasilitasDashboard() {
                         <div className="w-[14%] ">
                            <SideBar />
                         </div>
-                        <div className=" md:w-[600px] py-10 px-10">
+                        <div className=" md:w-[600px]">
                            <div className="flex justify-end items-end mb-10">
                               <Link href="/admin/fasilitas/tambah-fasilitas">
                                  {' '}
