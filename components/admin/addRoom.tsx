@@ -6,6 +6,8 @@ import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
 import { useForm } from 'react-hook-form';
+import { Facility } from '@/app/admin/rooms/edit-rooms/[id]/page';
+import { Checkbox } from '../ui/checkbox';
 
 const AddRoom = () => {
    const {
@@ -24,16 +26,23 @@ const AddRoom = () => {
       },
    });
 
-   const [name, setName] = useState('');
-   const [type, setType] = useState('');
-   const [description, setDescription] = useState('');
-   const [price, setPrice] = useState('');
-   const [image, setImage] = useState<File | null>(null);
    const supabase = createClient();
 
+   const [facilities, setFacilities] = useState<Facility[]>([]);
+   const [selectedFacilities, setSelectedFacilities] = useState<number[]>([]);
+
    useEffect(() => {
-      register('image', { required: 'File gambar wajib diunggah' });
-   }, [register]);
+      const fetchFacilities = async () => {
+         const { data, error } = await supabase.from('facilities').select('*');
+         if (error) {
+            console.error('Error fetching facilities:', error);
+         } else {
+            setFacilities(data);
+         }
+      };
+
+      fetchFacilities();
+   }, []);
 
    //    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
    //       if (event.target.files && event.target.files[0]) {
@@ -71,6 +80,16 @@ const AddRoom = () => {
       return urlData.publicUrl;
    };
 
+   const handleFacilityChange = (facilityId: any) => {
+      setSelectedFacilities((current) => (current.includes(facilityId) ? current.filter((id) => id !== facilityId) : [...current, facilityId]));
+   };
+
+   const generateRandomIntegerId = () => {
+      // Menentukan nilai maksimum yang diinginkan untuk ID
+      const maxIdValue = 1000000000;
+      return Math.floor(Math.random() * maxIdValue);
+   };
+
    const handleAddRoom = async (formData: any) => {
       const { name, type, description, price, image } = formData;
       try {
@@ -80,8 +99,11 @@ const AddRoom = () => {
             return;
          }
 
-         const { data, error } = await supabase.from('rooms').insert([
+         const roomId = generateRandomIntegerId();
+
+         const { error } = await supabase.from('rooms').insert([
             {
+               id: roomId,
                name,
                type,
                description,
@@ -93,6 +115,16 @@ const AddRoom = () => {
          if (error) {
             console.error('Error adding room:', error);
          } else {
+            const facilityInserts = selectedFacilities.map((facilityId) => ({
+               room_id: roomId,
+               facility_id: facilityId,
+            }));
+
+            const { error: facilitiesError } = await supabase.from('room_facilities').insert(facilityInserts);
+            if (facilitiesError) {
+               console.error('Error adding room facilities:', facilitiesError);
+               return;
+            }
             alert('Room added successfully!');
          }
       } catch (error) {
@@ -127,6 +159,15 @@ const AddRoom = () => {
             <Input type="file" className="form-input" onChange={handleFileChange} />
             {errors.image && <p className="text-red-500 text-xs">Masukan Gambar.</p>}
          </div>
+         <div>
+            {facilities.map((facility) => (
+               <Label className="flex items-center gap-2" key={facility.id}>
+                  <Checkbox value={facility.id} checked={selectedFacilities.includes(facility.id)} onChange={() => handleFacilityChange(Number(facility.id))} />
+                  {facility.name}
+               </Label>
+            ))}
+         </div>
+
          <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
             <Button variant={'secondary'} type="submit">
                Tambah Kamar

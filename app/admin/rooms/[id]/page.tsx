@@ -1,12 +1,23 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
+import { Room } from '../columns';
 
-export default function Page({ params }) {
-   const [room, setRoom] = useState(null);
+interface Booking {
+   room: any;
+   id: number;
+   user_id: number;
+   room_id: number;
+   bookingdate: string; // Assuming bookingdate is stored as a string
+}
+interface PostgrestError {
+   message: string;
+}
+export default function Page({ params }: any) {
+   const [room, setRoom] = useState<Room | null>(null);
    const [loading, setLoading] = useState(true);
-   const [error, setError] = useState(null);
-   const [bookings, setBookings] = useState([]);
+   const [error, setError] = useState<PostgrestError | null>(null);
+   const [bookings, setBookings] = useState<Booking[]>([]);
 
    const supabase = createClient();
 

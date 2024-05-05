@@ -1,0 +1,108 @@
+'use client';
+import { useEffect, useState } from 'react';
+import { createClient } from '@/utils/supabase/client';
+import { Label } from '../ui/label';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
+import { useForm } from 'react-hook-form';
+
+const AddFacility = () => {
+   const {
+      register,
+      handleSubmit,
+      setValue,
+      watch,
+      formState: { errors },
+   } = useForm({
+      defaultValues: {
+         name: '',
+         image: null,
+      },
+   });
+
+   const [name, setName] = useState('');
+   const [image, setImage] = useState<File | null>(null);
+   const supabase = createClient();
+
+   useEffect(() => {
+      register('image', { required: 'Image file is required' });
+   }, [register]);
+
+   const handleFileChange = (event: any) => {
+      const file = event.target.files[0];
+      if (file) {
+         setValue('image', file, { shouldValidate: true });
+      }
+   };
+
+   const uploadImage = async (file: any) => {
+      if (!file) return null;
+
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `facilities/${fileName}`;
+
+      let { error: uploadError, data: uploadData } = await supabase.storage.from('facility-images').upload(filePath, file);
+
+      if (uploadError) {
+         console.error('Failed to upload image:', uploadError);
+         return null;
+      }
+
+      let { data: urlData } = await supabase.storage.from('facility-images').getPublicUrl(filePath);
+      if (!urlData.publicUrl) {
+         console.error('Failed to get public URL:');
+         return null;
+      }
+
+      return urlData.publicUrl;
+   };
+
+   const handleAddFacility = async (formData: any) => {
+      const { name, image } = formData;
+      try {
+         const imageUrl = await uploadImage(image);
+         if (!imageUrl) {
+            console.error('Failed to get the image URL');
+            return;
+         }
+
+         const { data, error } = await supabase.from('facilities').insert([
+            {
+               name,
+               image_url: imageUrl,
+            },
+         ]);
+
+         if (error) {
+            console.error('Error adding facility:', error);
+         } else {
+            alert('Facility added successfully!');
+         }
+      } catch (error) {
+         console.error('Error in handleAddFacility:', error);
+      }
+   };
+
+   return (
+      <form onSubmit={handleSubmit(handleAddFacility)} className="flex flex-col gap-4">
+         <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
+            <Label htmlFor="name">Facility Name</Label>
+            <Input type="text" id="name" placeholder="Facility Name" {...register('name', { required: 'Enter facility name' })} className="form-input" />
+            {errors.name && <p className="text-red-500 text-xs">Enter facility name.</p>}
+         </div>
+         <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
+            <Label htmlFor="image">Facility Image</Label>
+            <Input type="file" className="form-input" onChange={handleFileChange} />
+            {errors.image && <p className="text-red-500 text-xs">Image file is required.</p>}
+         </div>
+         <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
+            <Button variant={'secondary'} type="submit">
+               Add Facility
+            </Button>
+         </div>
+      </form>
+   );
+};
+
+export default AddFacility;
