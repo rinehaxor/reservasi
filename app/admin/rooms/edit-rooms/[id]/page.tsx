@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
-import EditRoom from '@/components/admin/EditRoom';
 import SideBar from '@/components/admin/SideBar';
 import { WaveSVG } from '@/components/ui/waves';
 import { useForm } from 'react-hook-form';
@@ -43,10 +42,6 @@ export default function Page({ params }: any) {
       },
    });
 
-   useEffect(() => {
-      register('image', { required: 'File gambar wajib diunggah' });
-   }, [register]);
-
    const handleFileChange = (event: any) => {
       const file = event.target.files[0];
       if (file) {
@@ -83,6 +78,46 @@ export default function Page({ params }: any) {
    const [bookings, setBookings] = useState<Booking[]>([]);
 
    const supabase = createClient();
+
+   const [currentFacilities, setCurrentFacilities] = useState<number[]>([]);
+
+   const [facilities, setFacilities] = useState<Facility[]>([]);
+
+   useEffect(() => {
+      const fetchFacilities = async () => {
+         const { data, error } = await supabase.from('facilities').select('*');
+         if (error) {
+            console.error('Error fetching facilities:', error);
+         } else {
+            setFacilities(data);
+         }
+      };
+
+      fetchFacilities();
+      async function fetchCurrentFacilities() {
+         if (room) {
+            const { data, error } = await supabase.from('room_facilities').select('facility_id').eq('room_id', room.id);
+
+            if (error) {
+               console.error('Error fetching facilities:', error);
+            } else {
+               setCurrentFacilities(data.map((fac) => fac.facility_id));
+            }
+         }
+      }
+
+      fetchCurrentFacilities();
+   }, [room]);
+
+   const [selectedFacilities, setSelectedFacilities] = useState<number[]>([]);
+
+   useEffect(() => {
+      setSelectedFacilities(currentFacilities);
+   }, [currentFacilities]);
+
+   const handleFacilityChange = (facilityId: any) => {
+      setSelectedFacilities((prev) => (prev.includes(facilityId) ? prev.filter((id) => id !== facilityId) : [...prev, facilityId]));
+   };
 
    useEffect(() => {
       async function fetchRoomDetail() {
@@ -153,18 +188,31 @@ export default function Page({ params }: any) {
          image_url: imageUrl,
       };
 
-      const { data, error } = await supabase.from('rooms').update(updatedData).match({ id: room?.id });
+      try {
+         // Update room details
+         const { data: roomData, error: roomError } = await supabase.from('rooms').update(updatedData).match({ id: room?.id });
+         if (roomError) throw new Error(`Error updating room: ${roomError.message}`);
 
-      if (error) {
-         console.error('Error updating room:', error);
-         alert('Failed to update room');
-      } else {
-         alert('Room updated successfully!');
+         // Update room facilities
+         // First, delete existing facilities
+         const { error: deleteError } = await supabase.from('room_facilities').delete().match({ room_id: room?.id });
+         if (deleteError) throw new Error(`Error deleting old facilities: ${deleteError.message}`);
+
+         // Insert updated facilities
+         const facilityInserts = selectedFacilities.map((facilityId) => ({
+            room_id: room?.id,
+            facility_id: facilityId,
+         }));
+         const { error: insertError } = await supabase.from('room_facilities').insert(facilityInserts);
+         if (insertError) throw new Error(`Error inserting new facilities: ${insertError.message}`);
+
+         alert('Room and facilities updated successfully!');
          setRoom({ ...room, ...updatedData }); // Update local state to reflect changes
+      } catch (error) {
+         console.error(error);
+         alert(error);
       }
    };
-
-   if (loading) return <div>Loading...</div>;
 
    return (
       <div className="w-full justify-start items-start">
@@ -172,6 +220,7 @@ export default function Page({ params }: any) {
          <SideBar />
          <div className="w-full">
             <div className="flex-1 w-full flex flex-col gap-20 items-center mt-10">
+               <p className="text-xl font-bold">Edit Kamar</p>
                <div className="flex flex-row">
                   <form onSubmit={handleSubmit(updateRoom)} className="flex flex-col gap-4">
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
@@ -197,7 +246,14 @@ export default function Page({ params }: any) {
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
                         <Label htmlFor="price">Foto Kamar</Label>
                         <Input type="file" className="form-input" onChange={handleFileChange} />
-                        {errors.image && <p className="text-red-500 text-xs">Masukan Gambar.</p>}
+                     </div>
+                     <div>
+                        {facilities.map((facility) => (
+                           <label key={facility.id}>
+                              <input type="checkbox" value={facility.id} checked={selectedFacilities.includes(facility.id)} onChange={() => handleFacilityChange(facility.id)} />
+                              {facility.name}
+                           </label>
+                        ))}
                      </div>
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
                         <Button variant={'secondary'} type="submit">
@@ -212,3 +268,9 @@ export default function Page({ params }: any) {
       </div>
    );
 }
+
+export type Facility = {
+   id: number;
+   name: string;
+   image: string;
+};

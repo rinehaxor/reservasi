@@ -38,7 +38,7 @@ export default function ReadRoom() {
       checkUserAccess();
    }, [supabase]);
 
-   async function getUserRole(userId) {
+   async function getUserRole(userId: any) {
       const { data, error } = await supabase.from('user_roles').select('role_id').eq('user_id', userId).single();
 
       if (error) {
@@ -76,7 +76,7 @@ export default function ReadRoom() {
       return { data };
    };
 
-   const handleDelete = async (roomId) => {
+   const handleDelete = async (roomId: any) => {
       const { error } = await deleteRoom(roomId);
       if (!error) {
          setRooms(rooms.filter((room) => room.id !== roomId));
@@ -86,7 +86,7 @@ export default function ReadRoom() {
    };
 
    //edit kamar
-   const openEditModal = (room) => {
+   const openEditModal = (room: any) => {
       setEditingRoom(room);
       setIsEditModalOpen(true);
    };
@@ -95,7 +95,7 @@ export default function ReadRoom() {
       setIsEditModalOpen(false);
       setEditingRoom(null);
    };
-   const updateRoom = async (room) => {
+   const updateRoom = async (room: any) => {
       const { data, error } = await supabase
          .from('rooms')
          .update({
@@ -141,7 +141,7 @@ export default function ReadRoom() {
                ))}
             </tbody>
          </table>
-         <Dialog open={isEditModalOpen} onOpenChange={closeEditModal}>
+         {/* <Dialog open={isEditModalOpen} onOpenChange={closeEditModal}>
             <DialogTrigger asChild>
                <Button variant="outline">Edit Profile</Button>
             </DialogTrigger>
@@ -162,7 +162,7 @@ export default function ReadRoom() {
                   </Button>
                </DialogFooter>
             </DialogContent>
-         </Dialog>
+         </Dialog> */}
       </div>
    );
 }

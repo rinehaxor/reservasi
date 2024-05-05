@@ -18,7 +18,26 @@ const deleteRoom = async (roomId: any) => {
 export const deleteRoomAtom = atom(null, async (get, set, roomId) => {
    const { error } = await deleteRoom(roomId);
    if (!error) {
-      const updatedRooms = get(roomsAtom).filter((room: any) => room.id !== roomId);
+      const updatedRooms = get(roomsAtom).filter((room) => room.id !== roomId);
+      set(roomsAtom, updatedRooms);
+   } else {
+      alert('Failed to delete room');
+   }
+});
+
+const deleteFasilitas = async (facilitiesId: any) => {
+   const { data, error } = await supabase.from('facilities').delete().match({ id: facilitiesId });
+   if (error) {
+      console.error('Error deleting facilities:', error);
+      return { error };
+   }
+   return { data };
+};
+
+export const deleteFasilitasAtom = atom(null, async (get, set, facilitiesId) => {
+   const { error } = await deleteRoom(facilitiesId);
+   if (!error) {
+      const updatedRooms = get(roomsAtom).filter((facilities) => facilities.id !== facilitiesId);
       set(roomsAtom, updatedRooms);
    } else {
       alert('Failed to delete room');

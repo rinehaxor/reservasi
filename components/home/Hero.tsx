@@ -3,6 +3,7 @@ import Image from 'next/image';
 
 import NavbarHome from './NavbarHome';
 import { Button } from '../ui/button';
+import { LuBackpack } from 'react-icons/lu';
 
 export default function Hero() {
    return (
@@ -34,15 +35,15 @@ export default function Hero() {
                   <span className="mr-2">S</span>
                </p>
 
-               <p className="text-xl font-thin mt-10">
+               <p className="text-xl font-thin mt-7">
                   {' '}
-                  Book your stay and enjoy <br />
-                  redefined at the most affordable rates.
+                  Pesan penginapan Anda dan nikmatilah <br />
+                  Senang dengan harga paling terjangkau.
                </p>
             </div>
-            <div className="absolute flex flex-col justify-center items-center w-full h-full">
-               <Button className="bg-orange-500 border-none" variant={'secondary'}>
-                  <span className="font-bold text-white"> BOOK NOW</span>
+            <div className="absolute flex flex-col justify-center items-center w-full h-full mb-5">
+               <Button className="bg-orange-500 border-none flex gap-3" variant={'secondary'}>
+                  <LuBackpack /> BOOK NOW
                </Button>
             </div>
          </div>

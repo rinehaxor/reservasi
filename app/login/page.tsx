@@ -89,13 +89,13 @@ const LoginForm = () => {
                      {errors.password && <p className="text-red-500 text-xs md:text-lg">{errors.password.message}</p>}
                   </div>
 
-                  <Button type="submit" className="w-full font-bold mt-5 bg-amber-500">
+                  <Button type="submit" variant={'secondary'} className="w-full mt-10">
                      Login
                   </Button>
                   <div className="mt-2">{message}</div>
-                  <div className="mt-2">
+                  {/* <div className="mt-2">
                      <Link href="/forgot-password">Lupa Password?</Link>
-                  </div>
+                  </div> */}
                </form>
             </div>
          </div>

@@ -33,7 +33,7 @@ export const columns: ColumnDef<Room>[] = [
    },
    {
       accessorKey: 'price_per_night', // Mengakses data menggunakan key 'price_per_night'
-      header: 'Harga per malam',
+      header: 'Harga ',
    },
    {
       accessorKey: 'image_url',
@@ -43,17 +43,17 @@ export const columns: ColumnDef<Room>[] = [
          return <img src={url} alt="Room Image" style={{ width: '100px', height: 'auto' }} />;
       },
    },
-   {
-      id: 'detail', // ID unik untuk kolom
-      header: 'Detail',
-      cell: ({ row }) => {
-         return (
-            <Link href={`/admin/rooms/${row.original.id}`} passHref>
-               <button>View Details</button>
-            </Link>
-         );
-      },
-   },
+   //    {
+   //       id: 'detail', // ID unik untuk kolom
+   //       header: 'Detail',
+   //       cell: ({ row }) => {
+   //          return (
+   //             <Link href={`/admin/rooms/${row.original.id}`} passHref>
+   //                <button>View Details</button>
+   //             </Link>
+   //          );
+   //       },
+   //    },
    {
       accessorKey: 'delete',
       header: 'Aksi',
