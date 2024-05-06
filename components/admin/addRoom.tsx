@@ -131,6 +131,7 @@ const AddRoom = () => {
          console.error('Error in handleAddRoom:', error);
       }
    };
+   const [checked, setChecked] = useState(false);
 
    return (
       <form onSubmit={handleSubmit(handleAddRoom)} className="flex flex-col gap-4">
@@ -161,8 +162,9 @@ const AddRoom = () => {
          </div>
          <div>
             {facilities.map((facility) => (
-               <Label className="flex items-center gap-2" key={facility.id}>
-                  <Checkbox value={facility.id} checked={selectedFacilities.includes(facility.id)} onChange={() => handleFacilityChange(Number(facility.id))} />
+               <Label className="flex items-center gap-2 mb-2" key={facility.id}>
+                  <input type="checkbox" value={facility.id} checked={selectedFacilities.includes(facility.id)} onChange={() => handleFacilityChange(facility.id)} />
+
                   {facility.name}
                </Label>
             ))}

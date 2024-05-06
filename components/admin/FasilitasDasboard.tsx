@@ -44,39 +44,47 @@ export default function FasilitasDashboard() {
    }, [setFacilities, facilities.length]); // Dependency on rooms.length is to prevent refetching when already loaded
 
    return (
-      <div className="flex-1 w-full flex flex-col gap-20 items-center">
+      <div className=" w-full flex flex-col h-screen ">
          <div className="w-full">
             {/* <NavbarAdmin /> */}
             <div className="flex w-full">
-               <div className=" py-10 px-10">
-                  {loading ? (
-                     <>
-                        <div className="flex justify-center items-center">
-                           <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-orange-500"></div>
+               {loading ? (
+                  <>
+                     <div className="flex flex-1 justify-center items-center mt-10">
+                        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-orange-500"></div>
+                     </div>
+                  </>
+               ) : facilities.length > 0 ? (
+                  <>
+                     <div className="w-[14%] ">
+                        <SideBar />
+                     </div>
+                     <div className="w-[400px] md:w-full py-10 px-10">
+                        <div className="flex justify-end items-end mb-10 ">
+                           <Link href="/admin/fasilitas/tambah-fasilitas">
+                              <Button className="bg-orange-500">Tambah Fasilitas</Button>
+                           </Link>
                         </div>
-                     </>
-                  ) : facilities.length > 0 ? (
-                     <>
-                        <div className="w-[14%] ">
-                           <SideBar />
-                        </div>
-                        <div className=" md:w-[600px]">
-                           <div className="flex justify-end items-end mb-10">
-                              <Link href="/admin/fasilitas/tambah-fasilitas">
-                                 {' '}
-                                 <Button variant={'secondary'} className="bg-orange-500">
-                                    Tambah Fasilitas
-                                 </Button>
-                              </Link>
-                           </div>
-
+                        <div className=" overflow-x-auto custom-scroll-container">
                            <DataTable columns={columnsFasilitas} data={facilities} />
                         </div>
-                     </>
-                  ) : (
-                     <div className="flex justify-center items-center h-screen">No data available.</div>
-                  )}
-               </div>
+                     </div>
+                  </>
+               ) : (
+                  <>
+                     <div className="w-[14%] flex justify-start items-start ">
+                        <SideBar />
+                     </div>
+                     <div className="w-full py-10 px-10">
+                        <div className="flex justify-end items-end mb-10 ">
+                           <Link href="/admin/fasilitas/tambah-fasilitas" passHref>
+                              <Button className="bg-orange-500">Tambah Fasilitas</Button>
+                           </Link>
+                        </div>
+                        <div className="flex justify-center items-center h-screen">No data available.</div>
+                     </div>
+                  </>
+               )}
             </div>
          </div>
          <WaveSVG />

@@ -86,19 +86,20 @@ const AddFacility = () => {
 
    return (
       <form onSubmit={handleSubmit(handleAddFacility)} className="flex flex-col gap-4">
+         <p className="text-xl font-bold border-b-2 border-orange-500 mb-5">Tambah Fasilitas</p>
          <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-            <Label htmlFor="name">Facility Name</Label>
-            <Input type="text" id="name" placeholder="Facility Name" {...register('name', { required: 'Enter facility name' })} className="form-input" />
-            {errors.name && <p className="text-red-500 text-xs">Enter facility name.</p>}
+            <Label htmlFor="name">Nama Fasilitas </Label>
+            <Input type="text" id="name" placeholder="Nama Fasilitas" {...register('name', { required: 'Masukan Nama Fasilitas' })} className="form-input" />
+            {errors.name && <p className="text-red-500 text-xs">Masukan Nama Fasilitas .</p>}
          </div>
          <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-            <Label htmlFor="image">Facility Image</Label>
+            <Label htmlFor="image">Gambar Fasilitas </Label>
             <Input type="file" className="form-input" onChange={handleFileChange} />
-            {errors.image && <p className="text-red-500 text-xs">Image file is required.</p>}
+            {errors.image && <p className="text-red-500 text-xs">Masukan Gambar Fasilitas.</p>}
          </div>
          <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
             <Button variant={'secondary'} type="submit">
-               Add Facility
+               Tambah Fasilitas
             </Button>
          </div>
       </form>

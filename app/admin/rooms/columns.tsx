@@ -11,7 +11,17 @@ export type Room = {
    description: string;
    price_per_night: number;
    image_url: string;
+   room_facilities: RoomFacility[];
 };
+export type RoomFacility = {
+   facility_id: number;
+   facility: Facility;
+};
+interface Facility {
+   id: number;
+   name: string;
+   image_url: string;
+}
 
 export const columns: ColumnDef<Room>[] = [
    {

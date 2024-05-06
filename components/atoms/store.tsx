@@ -35,7 +35,7 @@ const deleteFasilitas = async (facilitiesId: any) => {
 };
 
 export const deleteFasilitasAtom = atom(null, async (get, set, facilitiesId) => {
-   const { error } = await deleteRoom(facilitiesId);
+   const { error } = await deleteFasilitas(facilitiesId);
    if (!error) {
       const updatedRooms = get(roomsAtom).filter((facilities) => facilities.id !== facilitiesId);
       set(roomsAtom, updatedRooms);

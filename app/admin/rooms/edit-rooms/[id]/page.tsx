@@ -249,10 +249,10 @@ export default function Page({ params }: any) {
                      </div>
                      <div>
                         {facilities.map((facility) => (
-                           <label key={facility.id}>
+                           <Label className="flex items-center gap-2 mb-2" key={facility.id}>
                               <input type="checkbox" value={facility.id} checked={selectedFacilities.includes(facility.id)} onChange={() => handleFacilityChange(facility.id)} />
                               {facility.name}
-                           </label>
+                           </Label>
                         ))}
                      </div>
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
