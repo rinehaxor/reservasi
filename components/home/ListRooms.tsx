@@ -73,7 +73,7 @@ export default function ListRooms() {
                   <br></br>
                   <div className="flex">
                      <Button className="ml-auto mt-5 font-extrabold w-1/4 text-xl" variant={'secondary'}>
-                        <Link href={`/pesan/${room.id}`}>Pesan</Link>
+                        <Link href={`/kamar/${room.id}`}>Pesan</Link>
                      </Button>
                   </div>
                </div>

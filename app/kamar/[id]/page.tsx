@@ -9,6 +9,9 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 import { SlashIcon } from 'lucide-react';
 import { DatePickerWithRange } from '@/components/ui/datePickerWithRange';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { roomDetailsAtom } from '@/components/atoms/bookingStore';
+import { useAtom } from 'jotai';
 
 interface Booking {
    room: any;
@@ -25,6 +28,7 @@ export default function Page({ params }: any) {
    const [loading, setLoading] = useState(true);
    const [error, setError] = useState<PostgrestError | null>(null);
    const [bookings, setBookings] = useState<Booking[]>([]);
+   const [, setRoomDetails] = useAtom(roomDetailsAtom);
 
    const supabase = createClient();
 
@@ -45,6 +49,7 @@ export default function Page({ params }: any) {
                .eq('id', params.id)
                .single();
             setRoom(data);
+            setRoomDetails(data);
             setError(error);
             setLoading(false);
          }
@@ -150,17 +155,23 @@ export default function Page({ params }: any) {
                               </>
                            ))}
                         </div>
-                        <p className="mt-5 text-md font-semibold mb-2 w-2/3 text-justify">{room?.description}</p>
-                        <p className="mt-5 text-2xl font-bold mb-2">Harga</p>
-                        <p className="inline-block font-extrabold text-3xl   ">{room?.price_per_night.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</p>
+                        <p className="mt-5 text-md font-semibold mb-2 w-3/4 text-justify">
+                           <span className="font-bold">Deskripsi</span>
+                           <br></br>
+                           {room?.description}
+                        </p>
                      </div>
                      <div className="w-1/2 flex flex-col">
+                        <div className="flex justify-end mb-5">
+                           <p className="font-extrabold text-3xl   ">{room?.price_per_night.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}/Malam</p>
+                        </div>
+
                         <div className="flex justify-end">
                            <DatePickerWithRange />
                         </div>
                         <div className="flex justify-end mt-10">
                            <Button variant={'secondary'} size={'lg'} className="text-bold w-40 text-white">
-                              Pesan
+                              <Link href={`/kamar/${room.id}/pesan`}>Pesan</Link>
                            </Button>
                         </div>
                      </div>
@@ -169,7 +180,7 @@ export default function Page({ params }: any) {
             </div>
             <Footer />
          </div>
-         <h1>Room Details</h1>
+         {/* <h1>Room Details</h1>
          {room ? (
             <div>
                <p>ID: {room.id}</p>
@@ -186,7 +197,7 @@ export default function Page({ params }: any) {
                   {booking?.room?.name} - Booked on: {new Date(booking.bookingdate).toLocaleDateString()}
                </li>
             ))}
-         </ul>
+         </ul> */}
       </>
    );
 }
