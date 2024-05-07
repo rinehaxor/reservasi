@@ -11,36 +11,57 @@ import { bookingDetailsAtom, roomDetailsAtom } from '@/components/atoms/bookingS
 
 const BookingPage = () => {
    const [step, setStep] = useState(1);
-   const [bookingDetails] = useAtom(bookingDetailsAtom);
+   const [bookingDetails] = useAtom(bookingDetailsAtom); // Global state booking details
    const [roomDetails] = useAtom(roomDetailsAtom);
    const supabase = createClient();
 
-   const handleBooking = async () => {
+   async function handleBooking() {
       const {
          data: { user },
       } = await supabase.auth.getUser();
 
+      //invoice
+      function generateInvoiceNumber() {
+         const prefix = 'BOK';
+         const randomNumber = Math.floor(Math.random() * 1000000)
+            .toString()
+            .padStart(6, '0'); // Creates a six-digit number
+         return `${prefix}${randomNumber}`;
+      }
+      const invoiceNumber = generateInvoiceNumber();
+
+      //date formatting
+      function formatDateToYYYYMMDD(date: any) {
+         const d = new Date(date);
+         const year = d.getFullYear();
+         const month = d.getMonth() + 1; // getMonth() returns months from 0-11
+         const day = d.getDate();
+         return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+      }
+
       if (user) {
-         const details = {
+         const bookingPayload = {
             user_id: user.id,
             room_id: roomDetails?.id,
+            invoice_number: invoiceNumber,
             bookingdate: new Date().toISOString(),
-            // payment_name: bookingDetails.paymentName,
-            // payment_account_number: bookingDetails.paymentAccountNumber,
+            checkindate: formatDateToYYYYMMDD(bookingDetails.checkinDate),
+            checkoutdate: formatDateToYYYYMMDD(bookingDetails.checkoutDate),
+            name: bookingDetails.name,
+            phone_number: bookingDetails.phoneNumber,
+            email: bookingDetails.email,
          };
-
-         const { error } = await supabase.from('bookings').insert([details]);
+         console.log('Final payload being sent to the server:', bookingPayload);
+         const { error } = await supabase.from('bookings').insert([bookingPayload]);
          if (error) {
             alert('Failed to book room: ' + error.message);
-            return;
+         } else {
+            alert('Room booked successfully!');
          }
-
-         setStep(step + 1); // Move to confirmation step
-         alert('Room booked successfully!');
       } else {
          alert('You must be logged in to book a room.');
       }
-   };
+   }
 
    return (
       <div>

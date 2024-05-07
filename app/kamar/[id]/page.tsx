@@ -145,14 +145,14 @@ export default function Page({ params }: any) {
                         <p className="mt-5 text-2xl font-bold mb-2">Fasilitas</p>
                         <div className="flex flex-row gap-5">
                            {room?.room_facilities.map((rf) => (
-                              <>
-                                 <div className="">
-                                    <div key={rf.facility_id}>
-                                       <Image src={rf.facility.image_url} width={'50'} height={'50'} alt="Facility" />
-                                       <p className="text-center font-semibold">{rf.facility.name}</p>
-                                    </div>
+                              <div key={rf.facility_id}>
+                                 {' '}
+                                 {/* Ensure key is unique */}
+                                 <div>
+                                    <Image src={rf.facility.image_url} width={'50'} height={'50'} alt="Facility" />
+                                    <p className="text-center font-semibold">{rf.facility.name}</p>
                                  </div>
-                              </>
+                              </div>
                            ))}
                         </div>
                         <p className="mt-5 text-md font-semibold mb-2 w-3/4 text-justify">

@@ -10,7 +10,7 @@ const ConfirmationMessage = () => {
       <div>
          <h1>Booking Confirmed!</h1>
          <p>
-            Thank you, {bookingDetails.name}. Your booking has been confirmed for the dates {bookingDetails.dateRange}.
+            Thank you, {bookingDetails.name}. Your booking has been confirmed for the dates {bookingDetails.checkinDate} - {bookingDetails.checkoutDate}.
          </p>
       </div>
    );

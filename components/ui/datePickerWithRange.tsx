@@ -11,16 +11,31 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { CalendarIcon } from 'lucide-react';
 
+import { useAtom } from 'jotai';
+import { bookingDetailsAtom } from '@/components/atoms/bookingStore';
+
 export function DatePickerWithRange({ className }: React.HTMLAttributes<HTMLDivElement>) {
-   const [date, setDate] = React.useState<DateRange | undefined>({
-      from: new Date(), // Set initial from date to today
-      to: addDays(new Date(), 0), // Example: Set initial to date 20 days from today
-   });
+   const [, setBookingDetails] = useAtom(bookingDetailsAtom);
+   const [date, setDate] = React.useState<DateRange | undefined>();
 
    // Create a function to determine if a day should be disabled
    const disableDays = (day: Date) => {
       // Disable all days before today
       return isBefore(day, startOfDay(new Date()));
+   };
+
+   const onSelect = (selectedDates: any) => {
+      console.log('Selected Dates:', selectedDates);
+      setDate(selectedDates);
+      console.log('Setting state - Check-in:', selectedDates.from);
+      console.log('Setting state - Check-out:', selectedDates.to);
+      if (selectedDates.from && selectedDates.to) {
+         setBookingDetails((details) => ({
+            ...details,
+            checkinDate: selectedDates.from,
+            checkoutDate: selectedDates.to,
+         }));
+      }
    };
 
    return (
@@ -43,7 +58,7 @@ export function DatePickerWithRange({ className }: React.HTMLAttributes<HTMLDivE
                </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
-               <Calendar initialFocus mode="range" defaultMonth={date?.from} selected={date} onSelect={setDate} numberOfMonths={2} disabled={disableDays} />
+               <Calendar initialFocus mode="range" defaultMonth={date?.from} selected={date} onSelect={onSelect} numberOfMonths={2} disabled={disableDays} />
             </PopoverContent>
          </Popover>
       </div>
