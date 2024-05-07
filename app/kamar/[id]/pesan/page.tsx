@@ -64,7 +64,7 @@ const BookingPage = () => {
    }
 
    return (
-      <div>
+      <div className="w-full">
          {step === 1 && <PersonalDetailsForm onNext={() => setStep(step + 1)} onBack={() => setStep(step - 1)} />}
          {step === 2 && <PaymentDetailsForm onConfirm={handleBooking} onBack={() => setStep(step - 1)} />}
          {step === 3 && <ConfirmationMessage />}
