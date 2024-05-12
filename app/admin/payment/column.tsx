@@ -1,4 +1,4 @@
-import { deleteFasilitasAtom } from '@/components/atoms/store';
+import { deleteFasilitasAtom, deletePaymentAtom } from '@/components/atoms/store';
 import { Button } from '@/components/ui/button';
 import { ColumnDef } from '@tanstack/react-table';
 import { useAtom } from 'jotai';
@@ -7,19 +7,20 @@ import Link from 'next/link';
 
 export type Payment = {
    id: string;
-   name: string;
+   bank_name: string;
    image_url: string;
+   account_number: number;
 };
 
-export const columnsFasilitas: ColumnDef<Payment>[] = [
+export const columnsPayment: ColumnDef<Payment>[] = [
    {
       id: 'no',
       header: 'No',
       cell: ({ row }) => row.index + 1,
    },
    {
-      accessorKey: 'name',
-      header: 'Nama Fasilitas',
+      accessorKey: 'bank_name',
+      header: 'Nama Pembayaran',
    },
    {
       accessorKey: 'image_url',
@@ -33,11 +34,11 @@ export const columnsFasilitas: ColumnDef<Payment>[] = [
       accessorKey: 'delete',
       header: 'Aksi',
       cell: ({ row }) => {
-         const [, deleteFasilitas] = useAtom(deleteFasilitasAtom);
+         const [, deletePayment] = useAtom(deletePaymentAtom);
          return (
             <div className="flex flex-row items-center justify-center gap-4">
-               <Button onClick={() => deleteFasilitas(row.original.id)}>Delete</Button>
-               <Link href={`/admin/fasilitas/edit-fasilitas/${row.original.id}`} passHref>
+               <Button onClick={() => deletePayment(row.original.id)}>Delete</Button>
+               <Link href={`/admin/fasilitas/edit-payment/${row.original.id}`} passHref>
                   <Button>Edit</Button>
                </Link>
             </div>

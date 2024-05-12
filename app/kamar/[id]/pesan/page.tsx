@@ -50,6 +50,9 @@ const BookingPage = () => {
             name: bookingDetails.name,
             phone_number: bookingDetails.phoneNumber,
             email: bookingDetails.email,
+            payment_name: bookingDetails.paymentName,
+            payment_account_number: bookingDetails.paymentAccountNumber,
+            payment_proof_url: bookingDetails.paymentProofUrl,
          };
          console.log('Final payload being sent to the server:', bookingPayload);
          const { error } = await supabase.from('bookings').insert([bookingPayload]);
@@ -62,6 +65,8 @@ const BookingPage = () => {
          alert('You must be logged in to book a room.');
       }
    }
+
+   console.log(' ini data booking', bookingDetails);
 
    return (
       <div className="w-full">

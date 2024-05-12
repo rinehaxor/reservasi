@@ -39,8 +39,14 @@ export default async function Index() {
             </main>
          </div> */}
 
-         <Hero />
-         <DescriptionHome />
+         <div>
+            {' '}
+            <Hero />
+         </div>
+         <div>
+            <DescriptionHome />
+         </div>
+
          <Footer />
          {/* <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
             <p>

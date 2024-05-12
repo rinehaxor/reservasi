@@ -113,10 +113,10 @@ export default function Page({ params }: any) {
    return (
       <>
          <div className="w-full">
-            <div className=" bg-orange-500 h-16 w-full">
+            <div className="bg-orange-500 h-16 w-full">
                <NavbarHome />
             </div>
-            <div className="mx-48 mb-5">
+            <div className="mx-4 sm:mx-24 md:mx-48 mb-5">
                <Breadcrumb className="ml-5 font-thin">
                   <BreadcrumbList>
                      <BreadcrumbItem>
@@ -138,16 +138,14 @@ export default function Page({ params }: any) {
                </Breadcrumb>
                <div className="flex justify-center">{room && <Image src={room.image_url} alt="Room Image" width={'500'} height={'400'} className="w-[700px] h-auto" />}</div>
                {room && (
-                  <div className="flex flex-row mt-5">
-                     <div className="w-1/2">
-                        <h2 className="font-extrabold text-4xl">{room?.name}</h2>
-                        <h2 className=" text-2xl">{room?.type}</h2>
-                        <p className="mt-5 text-2xl font-bold mb-2">Fasilitas</p>
-                        <div className="flex flex-row gap-5">
+                  <div className="flex flex-col md:flex-row mt-5">
+                     <div className="md:w-1/2">
+                        <h2 className="font-extrabold text-2xl md:text-4xl">{room?.name}</h2>
+                        <h2 className="text-xl md:text-2xl">{room?.type}</h2>
+                        <p className="mt-5 text-xl md:text-2xl font-bold mb-2">Fasilitas</p>
+                        <div className="flex flex-row flex-wrap gap-5">
                            {room?.room_facilities.map((rf) => (
                               <div key={rf.facility_id}>
-                                 {' '}
-                                 {/* Ensure key is unique */}
                                  <div>
                                     <Image src={rf.facility.image_url} width={'50'} height={'50'} alt="Facility" />
                                     <p className="text-center font-semibold">{rf.facility.name}</p>
@@ -155,15 +153,15 @@ export default function Page({ params }: any) {
                               </div>
                            ))}
                         </div>
-                        <p className="mt-5 text-md font-semibold mb-2 w-3/4 text-justify">
+                        <p className="mt-5 text-sm md:text-md font-semibold mb-2 text-justify">
                            <span className="font-bold">Deskripsi</span>
                            <br></br>
                            {room?.description}
                         </p>
                      </div>
-                     <div className="w-1/2 flex flex-col">
+                     <div className="md:w-1/2 flex flex-col mt-5 md:mt-0">
                         <div className="flex justify-end mb-5">
-                           <p className="font-extrabold text-3xl   ">{room?.price_per_night.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}/Malam</p>
+                           <p className="font-extrabold text-xl md:text-3xl">{room?.price_per_night.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}/Malam</p>
                         </div>
 
                         <div className="flex justify-end">

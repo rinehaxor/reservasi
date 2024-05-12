@@ -12,4 +12,5 @@ export const bookingDetailsAtom = atom({
    checkoutDate: '',
    paymentName: '',
    paymentAccountNumber: '',
+   paymentProofUrl: '',
 });

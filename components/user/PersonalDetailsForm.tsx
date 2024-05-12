@@ -23,10 +23,6 @@ const PersonalDetailsForm = ({ onNext }: any) => {
    } = useForm();
    const [bookingDetails, setBookingDetails] = useAtom(bookingDetailsAtom);
 
-   const handleInputChange = (e: any) => {
-      const { name, value } = e.target;
-      setBookingDetails((prev) => ({ ...prev, [name]: value }));
-   };
    const handleBack = () => {
       if (roomDetails?.id) {
          router.push(`/kamar/${roomDetails.id}`);
@@ -37,8 +33,14 @@ const PersonalDetailsForm = ({ onNext }: any) => {
    const days = differenceInCalendarDays(new Date(bookingDetails.checkoutDate), new Date(bookingDetails.checkinDate));
 
    const onSubmit = (data: any) => {
-      // Update atom Jotai dengan data form
-      setBookingDetails(data);
+      const updatedBookingDetails = {
+         ...data,
+         checkinDate: bookingDetails.checkinDate,
+         checkoutDate: bookingDetails.checkoutDate,
+      };
+
+      // Update atom Jotai with combined data
+      setBookingDetails(updatedBookingDetails);
       onNext();
 
       // Lanjutkan ke langkah selanjutnya atau navigasi
@@ -76,7 +78,7 @@ const PersonalDetailsForm = ({ onNext }: any) => {
                            <div className="text-xl font-bold"> {roomDetails.name}</div>
                            <div className="text-lg font-normal"> {roomDetails.type}</div>
                         </div>
-                        <div className="flex flex-col justify-end items-end">
+                        <div className="flex flex-col justify-between items-end">
                            <p className="text-lg font-semibold">{(roomDetails.price_per_night * days).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</p>
                            <p className="text-lg font-semibold">{days} Malam</p>
                         </div>

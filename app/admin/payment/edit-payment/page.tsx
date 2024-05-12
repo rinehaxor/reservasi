@@ -8,8 +8,6 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { WaveSVG } from '@/components/ui/waves';
 import SideBar from '@/components/admin/SideBar';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 interface Facility {
    id: number;
@@ -36,7 +34,7 @@ export default function EditFacility({ params }: any) {
    useEffect(() => {
       async function fetchFacilityDetails() {
          if (params?.id) {
-            const { data, error } = await supabase.from('facilities').select('*').eq('id', params.id).single();
+            const { data, error } = await supabase.from('payments').select('*').eq('id', params.id).single();
             if (data) {
                setFacility(data);
                setValue('name', data.name);
@@ -60,15 +58,15 @@ export default function EditFacility({ params }: any) {
 
       const fileExt = file.name.split('.').pop();
       const fileName = `${Math.random()}.${fileExt}`;
-      const filePath = `facilities/${fileName}`;
+      const filePath = `payment-images/${fileName}`;
 
-      let { error: uploadError, data: uploadData } = await supabase.storage.from('facility-images').upload(filePath, file);
+      let { error: uploadError, data: uploadData } = await supabase.storage.from('payment-images').upload(filePath, file);
       if (uploadError) {
          console.error('Failed to upload image:', uploadError);
          return null;
       }
 
-      let { data: urlData } = await supabase.storage.from('facility-images').getPublicUrl(filePath);
+      let { data: urlData } = await supabase.storage.from('payment-images').getPublicUrl(filePath);
       if (!urlData.publicUrl) {
          console.error('Failed to get public URL:');
          return null;
@@ -77,7 +75,7 @@ export default function EditFacility({ params }: any) {
       return urlData.publicUrl;
    };
 
-   const handleUpdateFacility = async (formData: any) => {
+   const handleUpdatePayment = async (formData: any) => {
       const { name, image } = formData;
 
       let imageUrl = facility?.image_url;
@@ -117,7 +115,7 @@ export default function EditFacility({ params }: any) {
             <div className="flex-1 w-full flex flex-col gap-20 items-center mt-10">
                <p className="text-xl font-bold">Edit Fasilitas</p>
                <div className="flex flex-row">
-                  <form onSubmit={handleSubmit(handleUpdateFacility)} className="flex flex-col gap-4">
+                  <form onSubmit={handleSubmit(handleUpdatePayment)} className="flex flex-col gap-4">
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
                         <Label htmlFor="name">Facility Name</Label>
                         <Input type="text" id="name" placeholder="Facility Name" {...register('name', { required: 'Enter facility name' })} className="form-input" />
