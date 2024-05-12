@@ -11,10 +11,12 @@ import SideBar from '@/components/admin/SideBar';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-interface Facility {
+interface Payment {
    id: number;
    name: string;
    image_url?: string;
+   account_number: number;
+   bank_name: string;
 }
 
 export default function EditFacility({ params }: any) {
@@ -26,11 +28,13 @@ export default function EditFacility({ params }: any) {
    } = useForm({
       defaultValues: {
          name: '',
+         bank_name: '',
+         account_number: '',
          image: null,
       },
    });
 
-   const [facility, setFacility] = useState<Facility | null>(null);
+   const [payment, setPayment] = useState<Payment | null>(null);
    const supabase = createClient();
 
    useEffect(() => {
@@ -38,7 +42,7 @@ export default function EditFacility({ params }: any) {
          if (params?.id) {
             const { data, error } = await supabase.from('payments').select('*').eq('id', params.id).single();
             if (data) {
-               setFacility(data);
+               setPayment(data);
                setValue('name', data.name);
             }
          }
@@ -78,9 +82,9 @@ export default function EditFacility({ params }: any) {
    };
 
    const handleUpdatePayment = async (formData: any) => {
-      const { name, image } = formData;
+      const { name, image, account_number, bank_name } = formData;
 
-      let imageUrl = facility?.image_url;
+      let imageUrl = payment?.image_url;
       if (image instanceof File) {
          const uploadedImageUrl = await uploadImage(image);
          if (uploadedImageUrl) {
@@ -92,17 +96,19 @@ export default function EditFacility({ params }: any) {
          }
       }
 
-      const updatedData: Facility = {
-         id: facility?.id as number,
+      const updatedData: Payment = {
+         id: payment?.id as number,
          name,
          image_url: imageUrl,
+         account_number,
+         bank_name,
       };
 
       try {
-         const { data, error } = await supabase.from('facilities').update(updatedData).match({ id: facility?.id });
+         const { data, error } = await supabase.from('payments').update(updatedData).match({ id: payment?.id });
          if (error) throw new Error(`Error updating facility: ${error.message}`);
          toast.success('Berhasil Mengedit Pembayaran');
-         setFacility({ ...facility, ...updatedData });
+         setPayment({ ...payment, ...updatedData });
       } catch (error) {
          toast.error('Gagal Mengedit Pembayaran');
          console.error('Error in handleUpdateFacility:', error);
@@ -115,16 +121,21 @@ export default function EditFacility({ params }: any) {
          <SideBar />
          <div className="w-full">
             <div className="flex-1 w-full flex flex-col gap-20 items-center mt-10">
-               <p className="text-xl font-bold">Edit Fasilitas</p>
+               <p className="text-xl font-bold">Edit Pembayaran</p>
                <div className="flex flex-row">
                   <form onSubmit={handleSubmit(handleUpdatePayment)} className="flex flex-col gap-4">
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-                        <Label htmlFor="name">Facility Name</Label>
-                        <Input type="text" id="name" placeholder="Facility Name" {...register('name', { required: 'Enter facility name' })} className="form-input" />
+                        <Label htmlFor="bank_name">Nama Pembayaran </Label>
+                        <Input type="text" id="bank_name" placeholder="Facility Name" {...register('bank_name', { required: 'Masukan Nama Pembayaran' })} className="form-input" />
+                        {errors.name && <p className="text-red-500 text-xs">Masukan Nama Pembayaran.</p>}
+                     </div>
+                     <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
+                        <Label htmlFor="name">Nomer Rekening Pembayaran </Label>
+                        <Input type="text" id="name" placeholder="Facility Name" {...register('account_number', { required: 'Enter facility name' })} className="form-input" />
                         {errors.name && <p className="text-red-500 text-xs">Enter facility name.</p>}
                      </div>
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-                        <Label htmlFor="image">Facility Image</Label>
+                        <Label htmlFor="image">Gambar Pembayaran</Label>
                         <Input type="file" className="form-input" onChange={handleFileChange} />
                      </div>
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
