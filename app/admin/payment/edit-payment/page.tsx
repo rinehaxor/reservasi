@@ -8,6 +8,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { WaveSVG } from '@/components/ui/waves';
 import SideBar from '@/components/admin/SideBar';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Facility {
    id: number;
@@ -99,11 +101,11 @@ export default function EditFacility({ params }: any) {
       try {
          const { data, error } = await supabase.from('facilities').update(updatedData).match({ id: facility?.id });
          if (error) throw new Error(`Error updating facility: ${error.message}`);
-         alert('Facility updated successfully!');
+         toast.success('Berhasil Mengedit Pembayaran');
          setFacility({ ...facility, ...updatedData });
       } catch (error) {
+         toast.error('Gagal Mengedit Pembayaran');
          console.error('Error in handleUpdateFacility:', error);
-         alert(error);
       }
    };
 

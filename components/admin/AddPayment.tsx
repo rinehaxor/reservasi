@@ -5,12 +5,16 @@ import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { useForm } from 'react-hook-form';
+import useCheckUserRoleAndRedirect from '@/hooks/useCheckUserRoleAndRedirect ';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddPayment = () => {
    const {
       register,
       handleSubmit,
       setValue,
+      reset,
       formState: { errors },
    } = useForm({
       defaultValues: {
@@ -22,6 +26,8 @@ const AddPayment = () => {
 
    const [image, setImage] = useState<File | null>(null);
    const supabase = createClient();
+
+   useCheckUserRoleAndRedirect();
 
    useEffect(() => {
       register('image', { required: 'Image file is required' });
@@ -70,9 +76,11 @@ const AddPayment = () => {
       ]);
 
       if (error) {
+         toast.error('Gagal Menambahkan Pembayaran');
          console.error('Error adding payment method:', error);
       } else {
-         alert('Payment method added successfully!');
+         toast.success('Berhasil Menambahkan Pembayran');
+         reset();
       }
    };
 
@@ -97,6 +105,7 @@ const AddPayment = () => {
          <Button type="submit" variant="secondary">
             Add Payment Method
          </Button>
+         <ToastContainer />
       </form>
    );
 };

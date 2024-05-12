@@ -13,6 +13,7 @@ import { DataTable } from '@/app/admin/rooms/data-table';
 import { Room, columns } from '@/app/admin/rooms/columns';
 import Link from 'next/link';
 import { columnsFasilitas } from '@/app/admin/fasilitas/columns';
+import useCheckUserRoleAndRedirect from '@/hooks/useCheckUserRoleAndRedirect ';
 
 async function fetchRooms(): Promise<Room[]> {
    const supabase = createClient();
@@ -29,6 +30,8 @@ async function fetchRooms(): Promise<Room[]> {
 export default function FasilitasDashboard() {
    const [facilities, setFacilities] = useAtom(roomsAtom);
    const [loading, setLoading] = React.useState(true);
+
+   useCheckUserRoleAndRedirect();
 
    useEffect(() => {
       async function initializeRooms() {

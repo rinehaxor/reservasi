@@ -101,11 +101,12 @@ export default function EditFacility({ params }: any) {
       try {
          const { data, error } = await supabase.from('facilities').update(updatedData).match({ id: facility?.id });
          if (error) throw new Error(`Error updating facility: ${error.message}`);
-         alert('Facility updated successfully!');
+         toast.success('Berhasil Mengedit Fasilitas');
+
          setFacility({ ...facility, ...updatedData });
       } catch (error) {
+         toast.error('Gagal Mengedit Fasilitas');
          console.error('Error in handleUpdateFacility:', error);
-         alert(error);
       }
    };
 
@@ -132,6 +133,7 @@ export default function EditFacility({ params }: any) {
                            Update Facility
                         </Button>
                      </div>
+                     <ToastContainer />
                   </form>
                   <WaveSVG />
                </div>

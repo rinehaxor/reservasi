@@ -10,6 +10,7 @@ import { WaveSVG } from '@/components/ui/waves';
 import { redirect, useRouter } from 'next/navigation';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Link from 'next/link';
 
 interface FormData {
    email: string;
@@ -60,14 +61,29 @@ const LoginForm = () => {
          return;
       }
       const roleId = await getUserRole(user?.id);
-      const redirectPath = roleId !== 2 ? '/' : '/admin/dashboard';
-      const successMessage = roleId !== 2 ? 'Login successful!' : 'Welcome admin, redirecting to dashboard...';
 
-      toast.success(successMessage, {
-         position: 'top-right',
-         autoClose: 6000,
-         onClose: () => router.push(redirectPath), // Redirect after toast closes
-      });
+      if (roleId !== 2) {
+         toast.success('Login berhasil!', {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+         });
+         // asumsikan 2 adalah 'admin'
+         // Redirect user biasa ke homepage atau halaman lain
+         setTimeout(() => {
+            router.push('/');
+         }, 3000);
+      } else {
+         toast.success('Welcome admin');
+         setTimeout(() => {
+            router.push('/admin/dashboard');
+         }, 3000);
+      }
    }
 
    const onSubmit = async (data: FormData) => {
@@ -92,20 +108,21 @@ const LoginForm = () => {
                      <Input type="password" id="password" {...register('password', { required: 'Password diperlukan.', minLength: { value: 8, message: 'Password harus minimal 8 karakter.' } })} className="form-input" />
                      {errors.password && <p className="text-red-500 text-xs md:text-lg">{errors.password.message}</p>}
                   </div>
-
+                  <div className="mt-5">
+                     <p className="text-sm">
+                        Tidak Punya Akun?{' '}
+                        <span className="text-blue-500  font-semibold">
+                           <Link href="/register">Daftar Sekarang</Link>{' '}
+                        </span>
+                     </p>
+                  </div>
                   <Button type="submit" variant={'secondary'} className="w-full mt-10">
                      Login
                   </Button>
                   <div className="mt-2">{message}</div>
-                  {/* <div className="mt-2">
-                     <Link href="/forgot-password">Lupa Password?</Link>
-                  </div> */}
                </form>
             </div>
-            {/* <div> */}
-            {/* <button onClick={notify}>Notify!</button> */}
             <ToastContainer />
-            {/* </div> */}
          </div>
          <WaveSVG />
       </div>

@@ -5,12 +5,16 @@ import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { useForm } from 'react-hook-form';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import useCheckUserRoleAndRedirect from '@/hooks/useCheckUserRoleAndRedirect ';
 
 const AddFacility = () => {
    const {
       register,
       handleSubmit,
       setValue,
+      reset,
       watch,
       formState: { errors },
    } = useForm({
@@ -23,6 +27,12 @@ const AddFacility = () => {
    const [name, setName] = useState('');
    const [image, setImage] = useState<File | null>(null);
    const supabase = createClient();
+
+   // Simulate fetching user ID from authentication state
+   useCheckUserRoleAndRedirect();
+
+   // Protect the page
+   //    useAdminAccess(user.role);
 
    useEffect(() => {
       register('image', { required: 'Image file is required' });
@@ -75,9 +85,11 @@ const AddFacility = () => {
          ]);
 
          if (error) {
+            toast.error('Gagal Menambahkan Fasilitas');
             console.error('Error adding facility:', error);
          } else {
-            alert('Facility added successfully!');
+            toast.success('Berhasil Menambahkan Fasilitas');
+            reset();
          }
       } catch (error) {
          console.error('Error in handleAddFacility:', error);
@@ -102,6 +114,7 @@ const AddFacility = () => {
                Tambah Fasilitas
             </Button>
          </div>
+         <ToastContainer />
       </form>
    );
 };

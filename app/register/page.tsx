@@ -10,6 +10,8 @@ import { useToast } from '@/components/ui/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
 import { WaveSVG } from '@/components/ui/waves';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface FormData {
    user: any;
@@ -24,7 +26,7 @@ const RegisterForm = () => {
       handleSubmit,
       formState: { errors },
    } = useForm<FormData>();
-   const { toast } = useToast();
+   const { shadtoast } = useToast();
 
    const [message, setMessage] = useState('');
    const [registrationSuccess, setRegistrationSuccess] = useState(false);
@@ -84,14 +86,22 @@ const RegisterForm = () => {
          // Handle error
          console.error('Registration failed:', result.error.message);
          setMessage(`Registration failed: ${result.error.message}`);
+         //  toast.error('Pendaftaran Akun Gagal. ');
          setRegistrationSuccess(false); // Make sure to reset success state in case of error
          // Additional error handling like showing an error toast or alert can go here
-         toast({
+         if (result.error.message.toLowerCase().includes('already registered')) {
+            toast.error('Akun sudah terdaftar. Silakan masuk atau gunakan email lain.');
+         } else {
+            toast.error('Pendaftaran akun gagal: ');
+         }
+
+         shadtoast({
             description: 'Your message has been sent.',
          });
       } else {
          // Handle success
          console.log('Registration successful:', result.user);
+         toast.success('Pendaftaran Akun Berhasil. ');
          setMessage('Registration successful!'); // You can use this message or replace it with the Alert component
          setRegistrationSuccess(true); // Set the success state to true
          // Here you could redirect the user to another page or clear the form fields if necessary
@@ -109,7 +119,7 @@ const RegisterForm = () => {
                <div className="mt-10">
                   {registrationSuccess && (
                      <Alert variant="primary">
-                        <AlertTitle>Berhasi</AlertTitle>
+                        <AlertTitle>Berhasil</AlertTitle>
                         <AlertDescription>
                            Pendaftaran Akun Berhasil.{' '}
                            <span className="font-bold">
@@ -151,12 +161,20 @@ const RegisterForm = () => {
                      />
                      {errors.password && <p className="text-red-500 text-xs md:text-lg">{errors.password.message}</p>}
                   </div>
-
+                  <div className="mt-5">
+                     <p className="text-sm">
+                        Sudah Punya Akun?{' '}
+                        <span className="text-blue-500  font-semibold">
+                           <Link href="/login">Masuk Sekarang</Link>{' '}
+                        </span>
+                     </p>
+                  </div>
                   <Button type="submit" className="w-full mt-5" variant={'secondary'}>
                      Daftar
                   </Button>
-                  <div className="mt-2">{message}</div>
+                  {/* <div className="mt-2">{message}</div> */}
                </form>
+               <ToastContainer />
             </div>
          </div>
          <WaveSVG />

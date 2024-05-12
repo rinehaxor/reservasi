@@ -10,6 +10,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 interface Room {
    id?: string; // Making id optional
    name: string;
@@ -206,10 +208,10 @@ export default function Page({ params }: any) {
          const { error: insertError } = await supabase.from('room_facilities').insert(facilityInserts);
          if (insertError) throw new Error(`Error inserting new facilities: ${insertError.message}`);
 
-         alert('Room and facilities updated successfully!');
+         toast.success('Berhasil Mengedit Kamar');
          setRoom({ ...room, ...updatedData }); // Update local state to reflect changes
       } catch (error) {
-         console.error(error);
+         toast.error('Gagal Mengedit Kamar');
          alert(error);
       }
    };

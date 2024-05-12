@@ -7,7 +7,8 @@ import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
 import { useForm } from 'react-hook-form';
 import { Facility } from '@/app/admin/rooms/edit-rooms/[id]/page';
-import { Checkbox } from '../ui/checkbox';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddRoom = () => {
    const {
@@ -15,6 +16,7 @@ const AddRoom = () => {
       handleSubmit,
       setValue,
       watch,
+      reset,
       formState: { errors },
    } = useForm({
       defaultValues: {
@@ -122,10 +124,12 @@ const AddRoom = () => {
 
             const { error: facilitiesError } = await supabase.from('room_facilities').insert(facilityInserts);
             if (facilitiesError) {
+               toast.error('Gagal Menambahkan Kamar');
                console.error('Error adding room facilities:', facilitiesError);
                return;
             }
-            alert('Room added successfully!');
+            toast.success('Berhasil Menambahkan Pembayran');
+            reset();
          }
       } catch (error) {
          console.error('Error in handleAddRoom:', error);
@@ -174,6 +178,7 @@ const AddRoom = () => {
             <Button variant={'secondary'} type="submit">
                Tambah Kamar
             </Button>
+            <ToastContainer />
          </div>
          {/* <input type="file" onChange={handleFileChange} />
          <button onClick={handleAddRoom}>Add Room</button> */}
