@@ -53,13 +53,12 @@ const BookingPage = () => {
             payment_name: bookingDetails.paymentName,
             payment_account_number: bookingDetails.paymentAccountNumber,
             payment_proof_url: bookingDetails.paymentProofUrl,
+            total_price: bookingDetails.totalPrice,
          };
          console.log('Final payload being sent to the server:', bookingPayload);
          const { error } = await supabase.from('bookings').insert([bookingPayload]);
          if (error) {
             alert('Failed to book room: ' + error.message);
-         } else {
-            alert('Room booked successfully!');
          }
       } else {
          alert('You must be logged in to book a room.');
@@ -71,7 +70,7 @@ const BookingPage = () => {
    return (
       <div className="w-full">
          {step === 1 && <PersonalDetailsForm onNext={() => setStep(step + 1)} onBack={() => setStep(step - 1)} />}
-         {step === 2 && <PaymentDetailsForm onConfirm={handleBooking} onBack={() => setStep(step - 1)} />}
+         {step === 2 && <PaymentDetailsForm onConfirm={handleBooking} onBack={() => setStep(step - 1)} onNext={() => setStep(step + 1)} />}
          {step === 3 && <ConfirmationMessage />}
       </div>
    );

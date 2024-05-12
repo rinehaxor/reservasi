@@ -31,12 +31,15 @@ const PersonalDetailsForm = ({ onNext }: any) => {
       }
    };
    const days = differenceInCalendarDays(new Date(bookingDetails.checkoutDate), new Date(bookingDetails.checkinDate));
+   const pricePerNight = roomDetails?.price_per_night ?? 0;
+   const totalPrice = pricePerNight * days;
 
    const onSubmit = (data: any) => {
       const updatedBookingDetails = {
          ...data,
          checkinDate: bookingDetails.checkinDate,
          checkoutDate: bookingDetails.checkoutDate,
+         totalPrice: totalPrice,
       };
 
       // Update atom Jotai with combined data
@@ -44,7 +47,6 @@ const PersonalDetailsForm = ({ onNext }: any) => {
       onNext();
 
       // Lanjutkan ke langkah selanjutnya atau navigasi
-      onNext();
    };
 
    return (
@@ -79,7 +81,7 @@ const PersonalDetailsForm = ({ onNext }: any) => {
                            <div className="text-lg font-normal"> {roomDetails.type}</div>
                         </div>
                         <div className="flex flex-col justify-between items-end">
-                           <p className="text-lg font-semibold">{(roomDetails.price_per_night * days).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</p>
+                           <p className="text-lg font-semibold">{totalPrice.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</p>
                            <p className="text-lg font-semibold">{days} Malam</p>
                         </div>
                      </div>

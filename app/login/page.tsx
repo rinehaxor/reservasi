@@ -6,11 +6,10 @@ import NavbarUserRegister from '@/components/user/NavbarUserRegister';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/components/ui/use-toast';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import Link from 'next/link';
 import { WaveSVG } from '@/components/ui/waves';
 import { redirect, useRouter } from 'next/navigation';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface FormData {
    email: string;
@@ -24,7 +23,7 @@ const LoginForm = () => {
       handleSubmit,
       formState: { errors },
    } = useForm<FormData>();
-   const { toast } = useToast();
+
    const [message, setMessage] = useState('');
 
    async function loginUser(data: FormData) {
@@ -35,16 +34,18 @@ const LoginForm = () => {
          password: password,
       });
 
-      //   if (error) {
-      //      return redirect('/login?message=Could not authenticate user');
-      //   }
+      if (error) {
+         toast.error('Email atau Password Salah');
+         //  return redirect('/login?message=Could not authenticate user');
+      }
       async function getUserRole(userId: any) {
          const supabase = createClient();
          const { data, error } = await supabase.from('user_roles').select(`role_id`).eq('user_id', userId).single();
 
          if (error) {
-            console.error('Error fetching user role:', error);
-            return null;
+            toast.error('Login failed: ' + error.message);
+            console.log('Error during login:', error.message);
+            return;
          }
 
          return data.role_id; // asumsikan role_id 1 adalah 'user', 2 adalah 'admin'
@@ -53,17 +54,20 @@ const LoginForm = () => {
          data: { user },
       } = await supabase.auth.getUser();
 
-      //   if (!user) {
-      //      return  router.push('/login');
-      //   }
-      const roleId = await getUserRole(user?.id);
-
-      if (roleId !== 2) {
-         // asumsikan 2 adalah 'admin'
-         router.push('/'); // Redirect user biasa ke homepage atau halaman lain
-      } else {
-         router.push('/admin/dashboard');
+      if (!user) {
+         //  toast.error('Login failed: User does not exist');
+         console.log('User does not exist');
+         return;
       }
+      const roleId = await getUserRole(user?.id);
+      const redirectPath = roleId !== 2 ? '/' : '/admin/dashboard';
+      const successMessage = roleId !== 2 ? 'Login successful!' : 'Welcome admin, redirecting to dashboard...';
+
+      toast.success(successMessage, {
+         position: 'top-right',
+         autoClose: 6000,
+         onClose: () => router.push(redirectPath), // Redirect after toast closes
+      });
    }
 
    const onSubmit = async (data: FormData) => {

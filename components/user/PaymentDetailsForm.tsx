@@ -25,7 +25,7 @@ async function fetchPayment(): Promise<Payment[]> {
    return data || [];
 }
 
-const PaymentDetailsForm = ({ onConfirm, onBack }: any) => {
+const PaymentDetailsForm = ({ onConfirm, onBack, onNext }: any) => {
    const {
       register,
       handleSubmit,
@@ -118,6 +118,7 @@ const PaymentDetailsForm = ({ onConfirm, onBack }: any) => {
          alert('Error processing payment details: ' + error);
       } finally {
          setLoading(false);
+         onNext();
       }
    };
 

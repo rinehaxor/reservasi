@@ -56,18 +56,16 @@ export default function NavbarHome() {
                   </div>
                   <div className="hidden md:flex items-center space-x-1">
                      {/* Navigation Links */}
-                     <a href="#" className="py-5 px-3 hover:text-gray-100">
+                     <Link href="/" className="py-5 px-3 hover:text-gray-100">
                         Home
-                     </a>
-                     <a href="#" className="py-5 px-3 hover:text-gray-100">
-                        About
-                     </a>
-                     <a href="#" className="py-5 px-3 hover:text-gray-100">
+                     </Link>
+
+                     <Link href="/list-kamar" className="py-5 px-3 hover:text-gray-100">
                         Room
-                     </a>
-                     <a href="#" className="py-5 px-3 hover:text-gray-100">
+                     </Link>
+                     <Link href="/contact" className="py-5 px-3 hover:text-gray-100">
                         Contact
-                     </a>
+                     </Link>
                      {user ? (
                         <div className="relative">
                            <button onClick={toggleLogoutMenu} className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover">
@@ -113,7 +111,7 @@ export default function NavbarHome() {
                   <a href="#" className="block py-2 px-4 text-sm  border-white border-bold">
                      Contact
                   </a>
-                  {user && (
+                  {user ? (
                      <div className="py-2 px-4 text-sm  border-white border-bold">
                         <button onClick={toggleLogoutMenu}>{user.email}</button>
                         {showLogout && (
@@ -124,6 +122,10 @@ export default function NavbarHome() {
                            </div>
                         )}
                      </div>
+                  ) : (
+                     <Link href="/login" className="py-2 px-3 flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover">
+                        Login
+                     </Link>
                   )}
                </div>
             </nav>

@@ -13,4 +13,7 @@ export const bookingDetailsAtom = atom({
    paymentName: '',
    paymentAccountNumber: '',
    paymentProofUrl: '',
+   totalPrice: 0,
+   price_per_night: 0,
+   invoice_number: '',
 });
