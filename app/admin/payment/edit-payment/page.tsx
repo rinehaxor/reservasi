@@ -131,8 +131,8 @@ export default function EditFacility({ params }: any) {
                      </div>
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
                         <Label htmlFor="name">Nomer Rekening Pembayaran </Label>
-                        <Input type="text" id="name" placeholder="Facility Name" {...register('account_number', { required: 'Enter facility name' })} className="form-input" />
-                        {errors.name && <p className="text-red-500 text-xs">Enter facility name.</p>}
+                        <Input type="text" id="name" placeholder="Facility Name" {...register('account_number', { required: 'Masukan Nomer Rekening Pembayaran.' })} className="form-input" />
+                        {errors.name && <p className="text-red-500 text-xs">Masukan Nomer Rekening Pembayaran.</p>}
                      </div>
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
                         <Label htmlFor="image">Gambar Pembayaran</Label>

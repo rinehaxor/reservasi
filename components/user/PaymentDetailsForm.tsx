@@ -112,13 +112,12 @@ const PaymentDetailsForm = ({ onConfirm, onBack, onNext }: any) => {
             paymentProofUrl: imageUrl,
          };
          setBookingDetails(updatedBookingDetails);
-         onConfirm();
+         console.log('Booking Details after update:', bookingDetails);
       } catch (error) {
          console.error('Error processing payment details:', error);
          alert('Error processing payment details: ' + error);
       } finally {
          setLoading(false);
-         onNext();
       }
    };
 
@@ -126,9 +125,10 @@ const PaymentDetailsForm = ({ onConfirm, onBack, onNext }: any) => {
    useEffect(() => {
       // Check if both required payment details are present
       if (bookingDetails.paymentName && bookingDetails.paymentAccountNumber) {
-         onConfirm(); // Proceed to confirm or next step
+         onConfirm();
+         onNext(); // Proceed to confirm or next step
       }
-   }, [bookingDetails, onConfirm]);
+   }, [bookingDetails, onConfirm, onNext]);
 
    return (
       <div className="w-full">

@@ -1,6 +1,9 @@
-import { atom } from 'jotai';
+import { atom, useAtom } from 'jotai';
 
 import { Room } from '@/app/admin/rooms/columns'; // Adjust the import according to your project structure
+import { createClient } from '@/utils/supabase/client';
+import { Bookings } from '@/app/admin/reservasi/column';
+import { updateTriggerAtom } from './store';
 
 export const roomDetailsAtom = atom<Room | null>(null);
 
@@ -17,3 +20,42 @@ export const bookingDetailsAtom = atom({
    price_per_night: 0,
    invoice_number: '',
 });
+
+export const bookingsAtom = atom<Bookings[]>([]);
+
+export const useUpdatePaymentStatus = () => {
+   const [bookings, setBookings] = useAtom(bookingsAtom);
+   const [, setUpdateTrigger] = useAtom(updateTriggerAtom);
+   const supabase = createClient();
+
+   const updatePaymentStatus = async (bookingId: string, newStatus: string) => {
+      const { data, error } = await supabase.from('bookings').update({ payment_status: newStatus }).match({ id: bookingId });
+
+      if (!error) {
+         setBookings((currentBookings) => currentBookings.map((booking) => (booking.id === bookingId ? { ...booking, payment_status: newStatus } : booking)));
+         setUpdateTrigger((prev) => prev + 1);
+      } else {
+         console.error('Error updating Payment:', error);
+      }
+   };
+
+   return updatePaymentStatus;
+};
+export const useUpdateBookingStatus = () => {
+   const [bookings, setBookings] = useAtom(bookingsAtom);
+   const [, setUpdateTrigger] = useAtom(updateTriggerAtom);
+   const supabase = createClient();
+
+   const updateBookingStatus = async (bookingId: string, newStatus: string) => {
+      const { data, error } = await supabase.from('bookings').update({ booking_status: newStatus }).match({ id: bookingId });
+
+      if (!error) {
+         setBookings((currentBookings) => currentBookings.map((booking) => (booking.id === bookingId ? { ...booking, booking_status: newStatus } : booking)));
+         setUpdateTrigger((prev) => prev + 1);
+      } else {
+         console.error('Error updating bookings:', error);
+      }
+   };
+
+   return updateBookingStatus;
+};

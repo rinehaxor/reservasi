@@ -3,8 +3,11 @@ import { atom } from 'jotai';
 import { createClient } from '@/utils/supabase/client';
 import { Room } from '@/app/admin/rooms/columns';
 import { Payment } from '@/app/admin/payment/column';
+import { Bookings } from '@/app/admin/reservasi/column';
 export const roomsAtom = atom<Room[]>([]);
 export const paymentAtom = atom<Payment[]>([]);
+export const bookingsAtom = atom<Bookings[]>([]);
+export const updateTriggerAtom = atom(0);
 
 //delete room
 const supabase = createClient();

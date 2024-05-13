@@ -37,13 +37,14 @@ export const columns: ColumnDef<Room>[] = [
       accessorKey: 'type', // Mengakses data menggunakan key 'type'
       header: 'Tipe',
    },
-   {
-      accessorKey: 'description', // Mengakses data menggunakan key 'description'
-      header: 'Deskripsi',
-   },
+   //    {
+   //       accessorKey: 'description', // Mengakses data menggunakan key 'description'
+   //       header: 'Deskripsi',
+   //    },
    {
       accessorKey: 'price_per_night', // Mengakses data menggunakan key 'price_per_night'
       header: 'Harga ',
+      cell: ({ row }) => `${row.original.price_per_night.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}`,
    },
    {
       accessorKey: 'image_url',
