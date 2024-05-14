@@ -21,7 +21,7 @@ async function fetchBookings(): Promise<Bookings[]> {
       .select(
          `
    *,
-   room:rooms(id, name)
+   room:rooms(id, name,image_url)
 
  `
       )

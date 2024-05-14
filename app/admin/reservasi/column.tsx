@@ -1,3 +1,4 @@
+import MyDocument from '@/components/admin/Invoice';
 import { useUpdateBookingStatus, useUpdatePaymentStatus } from '@/components/atoms/bookingStore';
 import { deleteFasilitasAtom, deletePaymentAtom } from '@/components/atoms/store';
 import { Button } from '@/components/ui/button';
@@ -5,6 +6,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { createClient } from '@/utils/supabase/client';
+import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
 import { ColumnDef } from '@tanstack/react-table';
 import { useAtom } from 'jotai';
 import Image from 'next/image';
@@ -99,7 +101,7 @@ export const columnsBookings: ColumnDef<Bookings>[] = [
       id: 'Aksi',
       header: 'Aksi',
       cell: ({ row }) => {
-         const [isOpen, setIsOpen] = useState(false);
+         const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
          const updatePaymentStatus = useUpdatePaymentStatus();
          const updateBookingStatus = useUpdateBookingStatus();
@@ -149,6 +151,33 @@ export const columnsBookings: ColumnDef<Bookings>[] = [
                      </DialogFooter>
                   </DialogContent>
                </Dialog>
+
+               <Dialog>
+                  <DialogTrigger asChild>
+                     <Button onClick={() => setIsPreviewOpen(true)}>Invoice</Button>
+                  </DialogTrigger>
+                  <DialogContent className="w-full">
+                     <DialogHeader>
+                        <DialogTitle>Pembayaran</DialogTitle>
+                     </DialogHeader>
+                     <div className="grid gap-4 py-4">
+                        <BlobProvider document={<MyDocument bookingData={row.original} />}>
+                           {({ url, loading, error }) => {
+                              if (loading) return <p>Loading...</p>;
+                              if (error) return <p>Error loading PDF: {error.message}</p>;
+                              return (
+                                 <>
+                                    <iframe src={url || ''} style={{ width: '100%', height: '500px' }} title="PDF Preview" />
+                                 </>
+                              );
+                           }}
+                        </BlobProvider>
+                     </div>
+                  </DialogContent>
+               </Dialog>
+               {/* <PDFDownloadLink document={<MyDocument bookingData={row.original} />} fileName={`booking-${row.original.id}.pdf`}>
+                  {({ loading }) => (loading ? 'Preparing document...' : 'Download PDF')}
+               </PDFDownloadLink> */}
             </div>
          );
       },
