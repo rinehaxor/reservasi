@@ -12,6 +12,9 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { roomDetailsAtom } from '@/components/atoms/bookingStore';
 import { useAtom } from 'jotai';
+import Spinner from '@/components/ui/spinner';
+import { DateRange } from 'react-day-picker';
+import { User } from '@supabase/supabase-js';
 
 interface Booking {
    room: any;
@@ -24,11 +27,13 @@ interface PostgrestError {
    message: string;
 }
 export default function Page({ params }: any) {
+   const [user, setUser] = useState<User | null>(null);
    const [room, setRoom] = useState<Room | null>(null);
    const [loading, setLoading] = useState(true);
    const [error, setError] = useState<PostgrestError | null>(null);
    const [bookings, setBookings] = useState<Booking[]>([]);
    const [, setRoomDetails] = useAtom(roomDetailsAtom);
+   const [dateRange, setDateRange] = useState<DateRange | undefined>();
 
    const supabase = createClient();
 
@@ -59,55 +64,29 @@ export default function Page({ params }: any) {
    }, [params?.id]);
 
    useEffect(() => {
-      async function fetchBookingHistory() {
+      async function fetchUser() {
          const {
             data: { user },
             error: userError,
          } = await supabase.auth.getUser();
 
+         setUser(user);
+
          if (userError) {
             console.error('Error fetching user:', userError.message);
             return;
          }
-
-         if (user) {
-            const { data: bookingsData, error: bookingsError } = await supabase.from('bookings').select('*').eq('user_id', user.id);
-
-            if (bookingsError) {
-               console.error('Error fetching booking history:', bookingsError.message);
-            } else {
-               setBookings(bookingsData);
-            }
-         }
       }
 
-      fetchBookingHistory();
+      fetchUser();
    }, []);
 
-   async function handleBooking() {
-      const {
-         data: { user },
-      } = await supabase.auth.getUser();
-
-      if (user) {
-         const bookingDetails = {
-            user_id: user?.id, // Make sure 'user_id' matches the column name in your database
-            room_id: room?.id,
-            bookingdate: new Date().toISOString(),
-         };
-
-         const { error } = await supabase.from('bookings').insert([bookingDetails]);
-         if (error) {
-            alert('Failed to book room: ' + error.message);
-         } else {
-            alert('Room booked successfully!');
-         }
-      } else {
-         alert('You must be logged in to book a room.');
-      }
-   }
-
-   if (loading) return <div>Loading...</div>;
+   if (loading)
+      return (
+         <div>
+            <Spinner />
+         </div>
+      );
    if (error) return <div>Error: {error.message}</div>;
 
    return (
@@ -160,15 +139,16 @@ export default function Page({ params }: any) {
                         </p>
                      </div>
                      <div className="md:w-1/2 flex flex-col mt-5 md:mt-0">
-                        <div className="flex justify-end mb-5">
-                           <p className="font-extrabold text-xl md:text-3xl">{room?.price_per_night.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}/Malam</p>
+                        <div className="flex justify-end mb-5 items-end flex-col">
+                           <p className="font-extrabold text-xl md:text-3xl mb-5">{room?.price_per_night.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}/Malam</p>
+
+                           <DatePickerWithRange date={dateRange} setDate={setDateRange} />
+
+                           <p className={`font-extrabold text-xl md:text-3xl mt-5 ${room?.room_available === 'Tersedia' ? 'text-white bg-green-500 p-2 rounded-md' : 'text-white bg-red-500 p-2 rounded-md'}`}>Kamar {room?.room_available}</p>
                         </div>
 
-                        <div className="flex justify-end">
-                           <DatePickerWithRange />
-                        </div>
                         <div className="flex justify-end mt-10">
-                           <Button variant={'secondary'} size={'lg'} className="text-bold w-40 text-white">
+                           <Button variant={'secondary'} size={'lg'} className="text-bold w-40 text-white " disabled={!dateRange?.from || !dateRange?.to || room?.room_available !== 'Tersedia' || !user}>
                               <Link href={`/kamar/${room.id}/pesan`}>Pesan</Link>
                            </Button>
                         </div>
@@ -178,24 +158,6 @@ export default function Page({ params }: any) {
             </div>
             <Footer />
          </div>
-         {/* <h1>Room Details</h1>
-         {room ? (
-            <div>
-               <p>ID: {room.id}</p>
-               <p>Name: {room.name}</p>
-            </div>
-         ) : (
-            <p>Loading room details...</p>
-         )}
-         <button onClick={handleBooking}>Book This Room</button>
-         <h1>Your Booking History</h1>
-         <ul>
-            {bookings.map((booking) => (
-               <li key={booking.id}>
-                  {booking?.room?.name} - Booked on: {new Date(booking.bookingdate).toLocaleDateString()}
-               </li>
-            ))}
-         </ul> */}
       </>
    );
 }

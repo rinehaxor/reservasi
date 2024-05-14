@@ -3,6 +3,7 @@ import { createClient } from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import SidebarUser from './SidebarUser';
+import { Button } from '../ui/button';
 
 export default function ChangePassword() {
    const supabase = createClient();
@@ -81,9 +82,7 @@ export default function ChangePassword() {
                   </div>
 
                   <div className="flex justify-end">
-                     <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-                        Ganti Password
-                     </button>
+                     <Button variant={'secondary'}>Ganti Password</Button>
                   </div>
                </form>
             </div>

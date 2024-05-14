@@ -3,6 +3,7 @@ import Image from 'next/image';
 import NavbarHome from './NavbarHome';
 import { Button } from '../ui/button';
 import { LuBackpack } from 'react-icons/lu';
+import Link from 'next/link';
 
 export default function Hero() {
    return (
@@ -39,9 +40,12 @@ export default function Hero() {
                </p>
             </div>
             <div className="absolute flex flex-col justify-center items-center w-full h-full mb-5">
-               <Button className="bg-orange-500 border-none flex gap-3 text-sm md:text-base" variant={'secondary'}>
-                  <LuBackpack /> BOOK NOW
-               </Button>
+               <Link href={'/list-kamar'}>
+                  {' '}
+                  <Button className="bg-orange-500 border-none flex gap-3 text-sm md:text-base" variant={'secondary'}>
+                     <LuBackpack /> BOOK NOW
+                  </Button>
+               </Link>
             </div>
          </div>
       </div>

@@ -18,7 +18,7 @@ export default function SidebarUser() {
       }
    };
    return (
-      <div className="p-4  my-6 w-1/5">
+      <div className="p-4  my-6 w-1/4">
          <div className="bg-white p-4 border rounded shadow">
             <ul>
                <li className="mb-2 border-b-2">
@@ -50,7 +50,21 @@ export default function SidebarUser() {
                   </Link>
                </li>
                <li className="mb-2 border-b-2">
-                  <Link href="user/ganti-password" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                  <Link href="/user/reservasi" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                     <svg
+                        className="flex-shrink-0 w-8 h-8 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 18 18"
+                     >
+                        <HiIdentification />
+                     </svg>
+                     Reservasi
+                  </Link>
+               </li>
+               <li className="mb-2 border-b-2">
+                  <Link href="/user/ganti-password" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                      <svg
                         className="flex-shrink-0 w-8 h-8 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                         aria-hidden="true"

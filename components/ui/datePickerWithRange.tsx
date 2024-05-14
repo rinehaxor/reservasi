@@ -14,9 +14,13 @@ import { CalendarIcon } from 'lucide-react';
 import { useAtom } from 'jotai';
 import { bookingDetailsAtom } from '@/components/atoms/bookingStore';
 
-export function DatePickerWithRange({ className }: React.HTMLAttributes<HTMLDivElement>) {
+interface DatePickerWithRangeProps {
+   date: DateRange | undefined;
+   setDate: React.Dispatch<React.SetStateAction<DateRange | undefined>>;
+}
+
+export function DatePickerWithRange({ date, setDate }: DatePickerWithRangeProps) {
    const [, setBookingDetails] = useAtom(bookingDetailsAtom);
-   const [date, setDate] = React.useState<DateRange | undefined>();
 
    // Create a function to determine if a day should be disabled
    const disableDays = (day: Date) => {
@@ -39,7 +43,7 @@ export function DatePickerWithRange({ className }: React.HTMLAttributes<HTMLDivE
    };
 
    return (
-      <div className={cn('grid gap-2', className)}>
+      <div className={cn('grid gap-2')}>
          <Popover>
             <PopoverTrigger asChild>
                <Button id="date" variant={'outline'} className={cn('w-[300px] justify-start text-left font-normal', !date && 'text-muted-foreground')}>

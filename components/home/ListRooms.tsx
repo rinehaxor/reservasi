@@ -6,9 +6,12 @@ import Image from 'next/image';
 import { Button } from '../ui/button';
 import { Room } from '@/app/admin/rooms/columns';
 import Link from 'next/link';
+import Spinner from '../ui/spinner';
+import Footer from './Footer';
 
 export default function ListRooms() {
    const [rooms, setRooms] = useState<Room[]>([]);
+   const [loading, setLoading] = useState(true);
    const supabase = createClient();
 
    const fetchRoomsAndFacilities = async () => {
@@ -24,6 +27,7 @@ export default function ListRooms() {
          console.error('error fetching rooms and facilities', error);
       } else {
          console.log('Fetched rooms with facilities:', data);
+         setLoading(false);
          // Transform the data to a more useful structure if needed
       }
 
@@ -39,40 +43,56 @@ export default function ListRooms() {
       fetchData();
    }, []);
 
+   if (loading)
+      return (
+         <div>
+            <Spinner />
+         </div>
+      );
+
    return (
       <div className="w-full">
-         <div className="flex flex-col items-center justify-center my-10 sm:my-20">
-            <p className="text-3xl sm:text-6xl font-bold border-b-8 border-orange-500 mb-5">LIST KAMAR</p>
-         </div>
-         {rooms.map((room, index) => (
-            <div key={room.id} className="flex flex-col sm:flex-row p-4 mx-4 sm:mx-48 gap-5">
-               <div className="w-full sm:w-1/2">
-                  <div className="flex justify-center sm:justify-end w-full">
-                     <img src={room.image_url} alt="Room Image" style={{ width: '100%', maxWidth: '500px', height: 'auto' }} />
-                  </div>
+         {loading ? (
+            <Spinner /> // Display the spinner while loading
+         ) : (
+            <>
+               <div className="flex flex-col items-center justify-center my-10 sm:my-20">
+                  <p className="text-3xl sm:text-6xl font-bold border-b-8 border-orange-500 mb-5">LIST KAMAR</p>
                </div>
-               <div className="w-full sm:w-1/2 mt-4 sm:mt-0">
-                  <h2 className="font-extrabold text-2xl sm:text-4xl">{room.name}</h2>
-                  <h2 className="text-xl sm:text-2xl">{room.type}</h2>
-                  <div className="flex flex-wrap gap-2 sm:gap-5 mt-3">
-                     {room.room_facilities.map((rf) => (
-                        <div key={rf.facility_id}>
-                           <img src={rf.facility.image_url} alt="Facility" style={{ width: '50px', height: '50px' }} />
+               {rooms.map((room, index) => (
+                  <div key={room.id} className="flex flex-col sm:flex-row p-4 mx-4 sm:mx-48 gap-5">
+                     <div className="w-full sm:w-1/2">
+                        <div className="flex justify-center sm:justify-end w-full">
+                           <img src={room.image_url} alt="Room Image" style={{ width: '100%', maxWidth: '500px', height: 'auto' }} />
                         </div>
-                     ))}
+                     </div>
+                     <div className="w-full sm:w-1/2 mt-4 sm:mt-0">
+                        <h2 className="font-extrabold text-2xl sm:text-4xl">{room.name}</h2>
+                        <h2 className="text-xl sm:text-2xl">{room.type}</h2>
+                        <div className="flex flex-wrap gap-2 sm:gap-5 mt-3">
+                           {room.room_facilities.map((rf) => (
+                              <div key={rf.facility_id}>
+                                 <img src={rf.facility.image_url} alt="Facility" style={{ width: '50px', height: '50px' }} />
+                              </div>
+                           ))}
+                        </div>
+                        <p className="mt-3 text-xl sm:text-2xl font-bold mb-2">Harga</p>
+                        <p className="inline-block bg-orange-500 font-extrabold text-xl sm:text-3xl text-white rounded-sm border-orange-500 border-2 p-2">
+                           <span>{room.price_per_night.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</span>
+                        </p>
+                        <div className="flex mt-10">
+                           <Link href={`/kamar/${room.id}`}>
+                              <Button className="ml-auto w-1/4 font-extrabold text-lg sm:text-xl py-2 px-4 md:w-1/4" variant={'secondary'}>
+                                 Pesan
+                              </Button>
+                           </Link>
+                        </div>
+                     </div>
                   </div>
-                  <p className="mt-3 text-xl sm:text-2xl font-bold mb-2">Harga</p>
-                  <p className="inline-block bg-orange-500 font-extrabold text-xl sm:text-3xl text-white rounded-sm border-orange-500 border-2 p-2">
-                     <span>{room.price_per_night.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</span>
-                  </p>
-                  <div className="flex mt-10">
-                     <Button className="ml-auto w-1/4 font-extrabold text-lg sm:text-xl py-2 px-4 md:w-1/4" variant={'secondary'}>
-                        <Link href={`/kamar/${room.id}`}>Pesan</Link>
-                     </Button>
-                  </div>
-               </div>
-            </div>
-         ))}
+               ))}
+               <Footer />
+            </>
+         )}
       </div>
    );
 }

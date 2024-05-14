@@ -1,5 +1,7 @@
+import { useUpdateRoomStatus } from '@/components/atoms/roomStore';
 import { deleteRoomAtom } from '@/components/atoms/store';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { ColumnDef } from '@tanstack/react-table';
 import { useAtom } from 'jotai';
 import Link from 'next/link';
@@ -12,7 +14,6 @@ export type Room = {
    price_per_night: number;
    image_url: string;
    room_facilities: RoomFacility[];
-   room_available: string;
 };
 export type RoomFacility = {
    facility_id: number;
@@ -24,7 +25,7 @@ interface Facility {
    image_url: string;
 }
 
-export const columns: ColumnDef<Room>[] = [
+export const columnsRoomAvailable: ColumnDef<Room>[] = [
    {
       id: 'no', // Custom ID for the column
       header: 'No',
@@ -38,10 +39,7 @@ export const columns: ColumnDef<Room>[] = [
       accessorKey: 'type', // Mengakses data menggunakan key 'type'
       header: 'Tipe',
    },
-   //    {
-   //       accessorKey: 'description', // Mengakses data menggunakan key 'description'
-   //       header: 'Deskripsi',
-   //    },
+
    {
       accessorKey: 'price_per_night', // Mengakses data menggunakan key 'price_per_night'
       header: 'Harga ',
@@ -55,28 +53,38 @@ export const columns: ColumnDef<Room>[] = [
          return <img src={url} alt="Room Image" style={{ width: '100px', height: 'auto' }} />;
       },
    },
-   //    {
-   //       id: 'detail', // ID unik untuk kolom
-   //       header: 'Detail',
-   //       cell: ({ row }) => {
-   //          return (
-   //             <Link href={`/admin/rooms/${row.original.id}`} passHref>
-   //                <button>View Details</button>
-   //             </Link>
-   //          );
-   //       },
-   //    },
    {
-      accessorKey: 'delete',
+      accessorKey: 'room_available',
+      header: 'Ketersdiaan Kamar',
+   },
+
+   {
+      accessorKey: 'Action',
       header: 'Aksi',
       cell: ({ row }) => {
-         const [, deleteRoom] = useAtom(deleteRoomAtom);
+         const updateRoomStatus = useUpdateRoomStatus();
          return (
             <div className="flex flex-row items-center justify-center gap-4">
-               <Button onClick={() => deleteRoom(row.original.id)}>Delete</Button>
-               <Link href={`/admin/rooms/edit-rooms/${row.original.id}`} passHref>
-                  <Button>Edit</Button>
-               </Link>
+               <Dialog>
+                  <DialogTrigger asChild>
+                     <Button variant="outline">Ketersediaan</Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                     <DialogHeader>
+                        <DialogTitle>Ketersediaan Kamar</DialogTitle>
+                        <DialogDescription>Ubah Informasi Status Kamar menjadi Tersedia / Tidak Tersedia</DialogDescription>
+                     </DialogHeader>
+                     <div className="grid gap-4 py-4"></div>
+                     <DialogFooter>
+                        <Button onClick={() => updateRoomStatus(row.original.id, 'Tidak Tersedia')} type="submit">
+                           Tidak Tersedia
+                        </Button>
+                        <Button onClick={() => updateRoomStatus(row.original.id, 'Tersedia')} type="submit">
+                           Tersedia
+                        </Button>
+                     </DialogFooter>
+                  </DialogContent>
+               </Dialog>
             </div>
          );
       },
