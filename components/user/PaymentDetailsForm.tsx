@@ -135,7 +135,6 @@ const PaymentDetailsForm = ({ onConfirm, onBack, onNext }: any) => {
          <NavbarUserRegister />
          <div className="flex justify-center items-center flex-col">
             <p className="font-poppins font-bold text-2xl my-5">HOTEL MAEROKOCO</p>
-
             <div className="flex flex-row gap-5">
                <div className="bg-gray-100 rounded-full w-12 h-12 flex items-center justify-center">
                   <span className="text-teal-900 font-bold">1</span>
@@ -147,47 +146,42 @@ const PaymentDetailsForm = ({ onConfirm, onBack, onNext }: any) => {
                   <span className="text-teal-900 font-bold">3</span>
                </div>
             </div>
-            <p className="font-poppins  text-xl my-3 font-semibold">Pembayaran</p>
-            <p className="font-poppins  text-lg ">Silakan isi kolom kosong di bawah ini</p>
+            <p className="font-poppins text-xl my-3 font-semibold">Pembayaran</p>
+            <p className="font-poppins text-lg">Silakan isi kolom kosong di bawah ini</p>
          </div>
-         <div className="flex justify-center items-center">
-            <form onSubmit={handleSubmit(onSubmit)}>
-               <div className="flex flex-row gap-16 mt-5 ">
-                  {' '}
-                  <div className=" w-1/2 flex flex-col gap-16 mt-5 ">
+         <div className="flex justify-center items-center px-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-4xl">
+               <div className="flex flex-col lg:flex-row gap-5 mt-5">
+                  <div className=" w-full md:w-1/2 flex flex-col gap-16 mt-5 items-center justify-center ">
                      {payment.map((item, index) => (
-                        <div key={index} className="flex flex-col gap-16 mt-5">
-                           <div className="w-1/2 flex flex-row justify-end items-end">
-                              <div className="text-xl font-bold flex flex-row gap-5">
-                                 <Image src={item.image_url} alt="Room Image" width={500} height={400} />
+                        <div key={index} className="flex flex-col lg:flex-row gap-5 mt-5 justify-center mitems-center">
+                           <div className="w-full lg:w-1/2 flex flex-row md:justify-end items-center justify-center lg:items-end gap-5">
+                              <Image src={item.image_url} alt="Room Image" width={500} height={400} className="w-full lg:w-auto" />
+                              <div className="text-xl font-bold">
                                  {item.bank_name} <br></br>
                                  {item.account_number}
                               </div>
                            </div>
-
-                           {/* Additional content or separation */}
                         </div>
                      ))}
                   </div>
-                  <div className="bg-gray-300 w-px self-stretch mx-8"></div> {/* Garis pemisah */}
-                  <div className="w-1/2">
-                     <div className="w-1/2 flex justify-start items-start flex-col my-10">
-                        <div className="w-full">
-                           <div className="mb-4">
-                              <Label>Nama Pengirim</Label>
-                              <Input className="w-full" {...register('paymentName', { required: 'Masukan Nama Pengirim' })} placeholder="Nama Pengirim" />
-                              {errors.name && <p className="text-red-500 text-xs">Masukan Nama Pengirim</p>}
-                           </div>
-                           <div className="mb-4">
-                              <Label>Nomer Rekening</Label>
-                              <Input {...register('paymentAccountNumber', { required: 'Nomer Rekening wajib diisi' })} placeholder="Phone Number" />
-                              {errors.paymentAccountNumber && <p className="text-red-500 text-xs">Masukan Nomer Rekening.</p>}
-                           </div>
-                           <div className="mb-4">
-                              <Label htmlFor="image">Butki Pengiriman </Label>
-                              <Input type="file" className="form-input" onChange={handleFileChange} />
-                              {errors.image && <p className="text-red-500 text-xs">Masukan Butki Pengiriman .</p>}
-                           </div>
+                  <div className="bg-gray-300 w-full lg:w-px self-stretch lg:mx-8"></div> {/* Garis pemisah */}
+                  <div className="w-full lg:w-1/2">
+                     <div className="w-full flex flex-col my-10">
+                        <div className="mb-4">
+                           <Label>Nama Pengirim</Label>
+                           <Input className="w-full" {...register('paymentName', { required: 'Masukan Nama Pengirim' })} placeholder="Nama Pengirim" />
+                           {errors.paymentName && <p className="text-red-500 text-xs">Masukan Nama Pengirim</p>}
+                        </div>
+                        <div className="mb-4">
+                           <Label>Nomer Rekening</Label>
+                           <Input className="w-full" {...register('paymentAccountNumber', { required: 'Nomer Rekening wajib diisi' })} placeholder="Nomer Rekening" />
+                           {errors.paymentAccountNumber && <p className="text-red-500 text-xs">Masukan Nomer Rekening.</p>}
+                        </div>
+                        <div className="mb-4">
+                           <Label htmlFor="image">Bukti Pengiriman</Label>
+                           <Input type="file" className="form-input w-full" onChange={handleFileChange} />
+                           {errors.image && <p className="text-red-500 text-xs">Masukan Bukti Pengiriman.</p>}
                         </div>
                      </div>
                   </div>
