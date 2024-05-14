@@ -5,6 +5,11 @@ import { useForm } from 'react-hook-form';
 import SidebarUser from './SidebarUser';
 import { User } from '@supabase/supabase-js';
 import Spinner from '../ui/spinner';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function EditProfile() {
    const supabase = createClient();
@@ -56,64 +61,77 @@ export default function EditProfile() {
       });
 
       if (emailError) {
+         toast.error('Gagal Mengedit Profile.');
          console.error('Error updating email:', emailError);
          return;
       }
 
       fetchUser(); // Refresh user data after update
-      alert('Profile updated successfully!');
+      toast.success('Berhasil Mengedit Profile.');
    };
 
    return (
-      <>
-         <div className="flex mx-[23rem] ">
-            <SidebarUser />
+      <div>
+         <div className="flex flex-col md:flex-row items-start p-4 md:p-8 md:mx-48">
+            <div className="hidden md:block md:w-1/4">
+               <SidebarUser />
+            </div>
+            <div className="w-full md:w-3/4 p-4">
+               <div className="bg-white p-6 border rounded shadow-md">
+                  {loading ? (
+                     <Spinner /> // Display the spinner while loading
+                  ) : (
+                     <>
+                        <div className="text-xl font-semibold mb-6 border-b pb-4">Edit Data Pribadi</div>
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                              <div className="md:col-span-1">
+                                 <div className="font-medium">
+                                    <Label>Nama</Label>
+                                 </div>
+                              </div>
+                              <div className="md:col-span-2">
+                                 <input type="text" {...register('name')} className="w-full p-2 border rounded" />
+                              </div>
+                           </div>
 
-            <div className="bg-white p-8 max-w-4xl my-10 border rounded shadow w-full">
-               {loading ? (
-                  <Spinner /> // Display the spinner while loading
-               ) : (
-                  <>
-                     <div className="text-xl font-semibold mb-6 border-b pb-4">Edit Data Pribadi</div>
-                     <form onSubmit={handleSubmit(onSubmit)}>
-                        <div className="grid grid-cols-3 gap-4 mb-4">
-                           <div className="col-span-1">
-                              <div className="font-medium">Nama</div>
+                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                              <div className="md:col-span-1">
+                                 <div className="font-medium">
+                                    {' '}
+                                    <Label>Alamat Email</Label>
+                                 </div>
+                              </div>
+                              <div className="md:col-span-2">
+                                 <Input type="email" {...register('email')} className="w-full p-2 border rounded" />
+                                 <div className="text-sm text-gray-500 mt-1">Ini email yang Anda gunakan untuk login akun dan melakukan pemesanan kamar.</div>
+                              </div>
                            </div>
-                           <div className="col-span-2">
-                              <input type="text" {...register('name')} className="w-full p-2 border rounded" />
-                           </div>
-                        </div>
 
-                        <div className="grid grid-cols-3 gap-4 mb-4">
-                           <div className="col-span-1">
-                              <div className="font-medium">Alamat Email</div>
+                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                              <div className="md:col-span-1">
+                                 <div className="font-medium">
+                                    {' '}
+                                    <Label>Nomor Telepon</Label>
+                                 </div>
+                              </div>
+                              <div className="md:col-span-2">
+                                 <Input type="text" {...register('phone')} className="w-full p-2 border rounded" />
+                              </div>
                            </div>
-                           <div className="col-span-2">
-                              <input type="email" {...register('email')} className="w-full p-2 border rounded" />
-                              <div className="text-sm text-gray-500 mt-1">Ini email yang Anda gunakan untuk login akun dan melakukan pemesanan kamar.</div>
-                           </div>
-                        </div>
 
-                        <div className="grid grid-cols-3 gap-4 mb-4">
-                           <div className="col-span-1">
-                              <div className="font-medium">Nomor Telepon</div>
+                           <div className="flex justify-end">
+                              <Button type="submit" variant={'secondary'}>
+                                 Simpan
+                              </Button>
                            </div>
-                           <div className="col-span-2">
-                              <input type="text" {...register('phone')} className="w-full p-2 border rounded" />
-                           </div>
-                        </div>
-
-                        <div className="flex justify-end">
-                           <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-                              Simpan
-                           </button>
-                        </div>
-                     </form>
-                  </>
-               )}
+                        </form>
+                     </>
+                  )}
+               </div>
             </div>
          </div>
-      </>
+         <ToastContainer />
+      </div>
    );
 }

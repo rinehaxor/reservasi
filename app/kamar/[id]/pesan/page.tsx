@@ -8,12 +8,19 @@ import PaymentDetailsForm from '@/components/user/PaymentDetailsForm';
 import ConfirmationMessage from '@/components/user/ConfirmationMessage';
 
 import { bookingDetailsAtom, roomDetailsAtom } from '@/components/atoms/bookingStore';
+import useAuth from '@/hooks/useAuth';
+import Spinner from '@/components/ui/spinner';
 
 const BookingPage = () => {
    const [step, setStep] = useState(1);
    const [bookingDetails] = useAtom(bookingDetailsAtom); // Global state booking details
    const [roomDetails] = useAtom(roomDetailsAtom);
+
    const supabase = createClient();
+   const { user, loadingUser } = useAuth();
+   if (loadingUser) {
+      return <Spinner />; // Menampilkan spinner saat sedang memeriksa status autentikasi
+   }
 
    async function handleBooking() {
       const {

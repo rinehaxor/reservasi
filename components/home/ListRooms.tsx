@@ -80,9 +80,9 @@ export default function ListRooms() {
                         <p className="inline-block bg-orange-500 font-extrabold text-xl sm:text-3xl text-white rounded-sm border-orange-500 border-2 p-2">
                            <span>{room.price_per_night.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</span>
                         </p>
-                        <div className="flex mt-10">
+                        <div className="flex mt-10 items-end justify-end">
                            <Link href={`/kamar/${room.id}`}>
-                              <Button className="ml-auto w-1/4 font-extrabold text-lg sm:text-xl py-2 px-4 md:w-1/4" variant={'secondary'}>
+                              <Button className="ml-auto font-extrabold text-lg sm:text-xl py-2 px-4 " variant={'secondary'}>
                                  Pesan
                               </Button>
                            </Link>

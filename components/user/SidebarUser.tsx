@@ -5,6 +5,7 @@ import { HiUserCircle } from 'react-icons/hi';
 import { HiIdentification } from 'react-icons/hi2';
 import { HiLockClosed } from 'react-icons/hi2';
 import { HiMiniArrowRightStartOnRectangle } from 'react-icons/hi2';
+import { HiCollection } from 'react-icons/hi';
 
 export default function SidebarUser() {
    const supabase = createClient();
@@ -18,7 +19,7 @@ export default function SidebarUser() {
       }
    };
    return (
-      <div className="p-4  my-6 w-1/4">
+      <div className="p-4  ">
          <div className="bg-white p-4 border rounded shadow">
             <ul>
                <li className="mb-2 border-b-2">
@@ -58,7 +59,7 @@ export default function SidebarUser() {
                         fill="currentColor"
                         viewBox="0 0 18 18"
                      >
-                        <HiIdentification />
+                        <HiCollection />
                      </svg>
                      Reservasi
                   </Link>
