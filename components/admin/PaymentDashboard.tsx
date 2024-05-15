@@ -14,6 +14,8 @@ import { Room, columns } from '@/app/admin/rooms/columns';
 import Link from 'next/link';
 import { columnsFasilitas } from '@/app/admin/fasilitas/columns';
 import { Payment, columnsPayment } from '@/app/admin/payment/column';
+import { ToastContainer } from 'react-toastify';
+import { DataTableUser } from '@/app/user/reservasi/data-table';
 
 async function fetchPayment(): Promise<Payment[]> {
    const supabase = createClient();
@@ -62,12 +64,12 @@ export default function PaymentDashboard() {
                      </div>
                      <div className="w-[400px] md:w-full py-10 px-10">
                         <div className="flex justify-end items-end mb-10 ">
-                           <Link href="/admin/fasilitas/tambah-payment">
+                           <Link href="/admin/payment/tambah-payment">
                               <Button className="bg-orange-500">Tambah Pembayaran</Button>
                            </Link>
                         </div>
                         <div className=" overflow-x-auto custom-scroll-container">
-                           <DataTable columns={columnsPayment} data={payment} />
+                           <DataTableUser columns={columnsPayment} data={payment} />
                         </div>
                      </div>
                   </>
@@ -87,6 +89,7 @@ export default function PaymentDashboard() {
                   </>
                )}
             </div>
+            <ToastContainer />
          </div>
          <WaveSVG />
       </div>

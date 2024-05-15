@@ -10,6 +10,7 @@ import { WaveSVG } from '@/components/ui/waves';
 import SideBar from '@/components/admin/SideBar';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import useCheckUserRoleAndRedirect from '@/hooks/useCheckUserRoleAndRedirect ';
 
 interface Facility {
    id: number;
@@ -109,6 +110,7 @@ export default function EditFacility({ params }: any) {
          console.error('Error in handleUpdateFacility:', error);
       }
    };
+   useCheckUserRoleAndRedirect();
 
    return (
       <div className="w-full justify-start items-start">

@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect } from 'react';
-import ReadRoom from '@/components/admin/readRoom';
-import NavbarAdmin from '@/components/admin/navbarAdmin';
+
 import { createClient } from '@/utils/supabase/client';
 import SideBar from '@/components/admin/SideBar';
 
@@ -14,6 +13,7 @@ import { Room, columns } from '@/app/admin/rooms/columns';
 import Link from 'next/link';
 import { columnsFasilitas } from '@/app/admin/fasilitas/columns';
 import useCheckUserRoleAndRedirect from '@/hooks/useCheckUserRoleAndRedirect ';
+import { ToastContainer } from 'react-toastify';
 
 async function fetchRooms(): Promise<Room[]> {
    const supabase = createClient();
@@ -44,7 +44,7 @@ export default function FasilitasDashboard() {
          }
       }
       initializeRooms();
-   }, [setFacilities, facilities.length]); // Dependency on rooms.length is to prevent refetching when already loaded
+   }, [setFacilities]); // Dependency on rooms.length is to prevent refetching when already loaded
 
    return (
       <div className=" w-full flex flex-col h-screen ">
@@ -89,6 +89,7 @@ export default function FasilitasDashboard() {
                   </>
                )}
             </div>
+            <ToastContainer />
          </div>
          <WaveSVG />
       </div>

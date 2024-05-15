@@ -12,6 +12,7 @@ import { roomsAtom } from '@/components/atoms/store';
 import { DataTable } from '@/app/admin/rooms/data-table';
 import { Room, columns } from '@/app/admin/rooms/columns';
 import Link from 'next/link';
+import { ToastContainer } from 'react-toastify';
 
 async function fetchRooms(): Promise<Room[]> {
    const supabase = createClient();
@@ -85,6 +86,7 @@ export default function RoomDashboard() {
                   </>
                )}
             </div>
+            <ToastContainer />
          </div>
          <WaveSVG />
       </div>

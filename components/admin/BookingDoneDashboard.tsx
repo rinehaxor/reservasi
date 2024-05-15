@@ -68,7 +68,7 @@ export default function BookingDoneDashboard() {
       initializeBookings();
    }, [updateTrigger]);
 
-   //    useCheckUserRoleAndRedirect();
+   useCheckUserRoleAndRedirect();
 
    return (
       <div className=" w-full flex flex-col h-screen ">

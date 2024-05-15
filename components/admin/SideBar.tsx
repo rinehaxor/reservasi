@@ -6,6 +6,7 @@ import { ImHome2 } from 'react-icons/im';
 import { ImList } from 'react-icons/im';
 import { createClient } from '@/utils/supabase/client';
 import { HiFolderOpen } from 'react-icons/hi2';
+import { HiCurrencyDollar } from 'react-icons/hi';
 
 export default function SideBar() {
    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -79,7 +80,7 @@ export default function SideBar() {
                         </Link>
                      </li>
                      <li>
-                        <Link href="/admin/rooms" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <a href="/admin/rooms" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                            <svg
                               className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                               aria-hidden="true"
@@ -90,7 +91,7 @@ export default function SideBar() {
                               <ImHome2 />
                            </svg>
                            <span className="flex-1 ms-3 whitespace-nowrap">Kamar</span>
-                        </Link>
+                        </a>
                      </li>
                      <li>
                         <Link href="/admin/reservasi" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
@@ -137,7 +138,7 @@ export default function SideBar() {
                         </Link>
                      </li>
                      <li>
-                        <Link href="/admin/fasilitas" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <a href="/admin/fasilitas" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                            <svg
                               className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                               aria-hidden="true"
@@ -148,7 +149,21 @@ export default function SideBar() {
                               <ImList />
                            </svg>
                            <span className="flex-1 ms-3 whitespace-nowrap">Fasilitas</span>
-                        </Link>
+                        </a>
+                     </li>
+                     <li>
+                        <a href="/admin/payment" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                           <svg
+                              className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                              aria-hidden="true"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="currentColor"
+                              viewBox="0 0 18 20"
+                           >
+                              <HiCurrencyDollar />
+                           </svg>
+                           <span className="flex-1 ms-3 whitespace-nowrap">Pembayaran</span>
+                        </a>
                      </li>
                      <li>
                         <Link href="/login" onClick={handleLogout} className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">

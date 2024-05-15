@@ -50,7 +50,7 @@ export const deleteFasilitasAtom = atom(null, async (get, set, facilitiesId) => 
 });
 
 const deletePayment = async (paymentId: any) => {
-   const { data, error } = await supabase.from('payment').delete().match({ id: paymentId });
+   const { data, error } = await supabase.from('payments').delete().match({ id: paymentId });
    if (error) {
       console.error('Error deleting payment:', error);
       return { error };

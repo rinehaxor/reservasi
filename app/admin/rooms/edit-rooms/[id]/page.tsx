@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import useCheckUserRoleAndRedirect from '@/hooks/useCheckUserRoleAndRedirect ';
 interface Room {
    id?: string; // Making id optional
    name: string;
@@ -215,6 +216,7 @@ export default function Page({ params }: any) {
          alert(error);
       }
    };
+   useCheckUserRoleAndRedirect();
 
    return (
       <div className="w-full justify-start items-start">
