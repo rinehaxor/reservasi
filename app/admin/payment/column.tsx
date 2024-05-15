@@ -84,7 +84,7 @@ export const columnsPayment: ColumnDef<Payment>[] = [
                <Button onClick={() => handleDelete(row.original.id)} variant={'destructive'}>
                   <HiTrash className="mr-2" /> Delete
                </Button>
-               <Link href={`/admin/fasilitas/edit-payment/${row.original.id}`} passHref>
+               <Link href={`/admin/payment/edit-payment/${row.original.id}`} passHref>
                   <Button variant={'yellow'}>
                      <HiPencil className="mr-2" /> Edit
                   </Button>

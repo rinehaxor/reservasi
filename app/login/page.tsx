@@ -99,14 +99,26 @@ const LoginForm = () => {
                <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
                      <Label htmlFor="email">Email</Label>
-                     <Input type="email" id="email" {...register('email', { required: true })} placeholder="Email" className="form-input" />
-                     {errors.email && <p className="text-red-500 text-xs md:text-lg">Masukan Email Anda.</p>}
+                     <Input
+                        type="email"
+                        id="email"
+                        {...register('email', {
+                           required: 'Email diperlukan.',
+                           pattern: {
+                              value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                              message: 'Email tidak valid.',
+                           },
+                        })}
+                        placeholder="Email"
+                        className="form-input"
+                     />
+                     {errors.email && <p className="text-red-500 text-xs md:text-xs">Masukan Email Anda.</p>}
                   </div>
 
                   <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
                      <Label htmlFor="password">Password</Label>
                      <Input type="password" id="password" {...register('password', { required: 'Password diperlukan.', minLength: { value: 8, message: 'Password harus minimal 8 karakter.' } })} className="form-input" />
-                     {errors.password && <p className="text-red-500 text-xs md:text-lg">{errors.password.message}</p>}
+                     {errors.password && <p className="text-red-500 text-xs md:text-xs">{errors.password.message}</p>}
                   </div>
                   <div className="mt-5">
                      <p className="text-sm">

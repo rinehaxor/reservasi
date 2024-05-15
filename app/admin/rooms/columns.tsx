@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Swal from 'sweetalert2';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
+import { HiPencil, HiTrash } from 'react-icons/hi2';
 
 export type Room = {
    id: string;
@@ -115,9 +116,13 @@ export const columns: ColumnDef<Room>[] = [
          };
          return (
             <div className="flex flex-row items-center justify-center gap-4">
-               <Button onClick={() => handleDelete(row.original.id)}>Delete</Button>
+               <Button onClick={() => handleDelete(row.original.id)} variant={'destructive'}>
+                  <HiTrash /> Delete
+               </Button>
                <Link href={`/admin/rooms/edit-rooms/${row.original.id}`} passHref>
-                  <Button>Edit</Button>
+                  <Button variant={'yellow'}>
+                     <HiPencil /> Edit
+                  </Button>
                </Link>
             </div>
          );

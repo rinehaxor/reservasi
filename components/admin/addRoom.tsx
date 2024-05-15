@@ -45,6 +45,9 @@ const AddRoom = () => {
 
       fetchFacilities();
    }, []);
+   useEffect(() => {
+      register('image', { required: 'Image file is required' });
+   }, [register]);
 
    //    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
    //       if (event.target.files && event.target.files[0]) {
@@ -138,58 +141,61 @@ const AddRoom = () => {
    const [checked, setChecked] = useState(false);
 
    return (
-      <form onSubmit={handleSubmit(handleAddRoom)} className="flex flex-col gap-4">
-         <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-            <Label htmlFor="name">Nama Kamar</Label>
-            <Input type="text" id="name" placeholder="Nama Kamar" {...register('name', { required: 'Masukan Namar Kamar' })} className="form-input" />
-            {errors.name && <p className="text-red-500 text-xs md:text-md">Masukan Namar Kamar.</p>}
-         </div>
-         <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-            <Label htmlFor="type">Tipe Kamar</Label>
-            <Input type="text" id="type" placeholder="Tipe Kamar" {...register('type', { required: 'Masukan Tipe Kamar' })} className="form-input" />
-            {errors.type && <p className="text-red-500 text-xs md:text-md">Masukan Tipe Kamar.</p>}
-         </div>
-         <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-            <Label htmlFor="type">Deskripsi Kamar</Label>
-            <Textarea id="description" placeholder="Deskripsi" {...register('description', { required: 'Masukan Deskripsi' })} className="form-input" />
-            {errors.description && <p className="text-red-500 text-xs md:text-md">Masukan Deskripsi.</p>}
-         </div>
-         <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-            <Label htmlFor="price">Harga Per Malam</Label>
-            <Input type="number" id="price" placeholder="0" {...register('price', { required: 'Masukan Harga' })} className="form-input" />
-            {errors.price && <p className="text-red-500 text-xs md:text-md">Masukan Harga.</p>}
-         </div>
-         <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-            <Label htmlFor="price">Foto Kamar</Label>
-            <Input type="file" className="form-input" onChange={handleFileChange} />
-            {errors.image && <p className="text-red-500 text-xs">Masukan Gambar.</p>}
-         </div>
-         <div>
-            {facilities.map((facility) => (
-               <Label className="flex items-center gap-2 mb-2" key={facility.id}>
-                  <input type="checkbox" value={facility.id} checked={selectedFacilities.includes(facility.id)} onChange={() => handleFacilityChange(facility.id)} />
+      <div>
+         <p className="text-xl font-bold border-b-2 border-orange-500 mb-5">Tambah Kamar</p>
+         <form onSubmit={handleSubmit(handleAddRoom)} className="flex flex-col gap-4">
+            <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
+               <Label htmlFor="name">Nama Kamar</Label>
+               <Input type="text" id="name" placeholder="Nama Kamar" {...register('name', { required: 'Masukan Namar Kamar' })} className="form-input" />
+               {errors.name && <p className="text-red-500 text-xs md:text-md">Masukan Namar Kamar.</p>}
+            </div>
+            <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
+               <Label htmlFor="type">Tipe Kamar</Label>
+               <Input type="text" id="type" placeholder="Tipe Kamar" {...register('type', { required: 'Masukan Tipe Kamar' })} className="form-input" />
+               {errors.type && <p className="text-red-500 text-xs md:text-md">Masukan Tipe Kamar.</p>}
+            </div>
+            <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
+               <Label htmlFor="type">Deskripsi Kamar</Label>
+               <Textarea id="description" placeholder="Deskripsi" {...register('description', { required: 'Masukan Deskripsi' })} className="form-input" />
+               {errors.description && <p className="text-red-500 text-xs md:text-md">Masukan Deskripsi.</p>}
+            </div>
+            <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
+               <Label htmlFor="price">Harga Per Malam</Label>
+               <Input type="number" id="price" placeholder="0" {...register('price', { required: 'Masukan Harga' })} className="form-input" />
+               {errors.price && <p className="text-red-500 text-xs md:text-md">Masukan Harga.</p>}
+            </div>
+            <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
+               <Label htmlFor="price">Foto Kamar</Label>
+               <Input type="file" className="form-input" onChange={handleFileChange} />
+               {errors.image && <p className="text-red-500 text-xs">Masukan Gambar.</p>}
+            </div>
+            <div>
+               {facilities.map((facility) => (
+                  <Label className="flex items-center gap-2 mb-2" key={facility.id}>
+                     <input type="checkbox" value={facility.id} checked={selectedFacilities.includes(facility.id)} onChange={() => handleFacilityChange(facility.id)} />
 
-                  {facility.name}
-               </Label>
-            ))}
-         </div>
+                     {facility.name}
+                  </Label>
+               ))}
+            </div>
 
-         <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-            <Button variant={'secondary'} type="submit">
-               Tambah Kamar
-            </Button>
-            <ToastContainer />
-         </div>
-         {/* <input type="file" onChange={handleFileChange} />
+            <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
+               <Button variant={'secondary'} type="submit">
+                  Tambah Kamar
+               </Button>
+               <ToastContainer />
+            </div>
+            {/* <input type="file" onChange={handleFileChange} />
          <button onClick={handleAddRoom}>Add Room</button> */}
-         {/* 
+            {/* 
          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Room Number" />
          <input value={type} onChange={(e) => setType(e.target.value)} placeholder="Room Type" />
          <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Description" />
          <input value={price} onChange={(e) => setPrice(e.target.value)} placeholder="Price Per Night" />
     
      */}
-      </form>
+         </form>
+      </div>
    );
 };
 

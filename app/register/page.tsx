@@ -20,6 +20,7 @@ interface FormData {
    name: string;
    phone: string;
 }
+
 const RegisterForm = () => {
    const {
       register,
@@ -42,7 +43,6 @@ const RegisterForm = () => {
          },
       });
 
-      // Logic sama, tapi tambahkan handle untuk nama dan telepon
       if (error) {
          console.error('Sign up error:', error.message);
          setMessage(`Error during sign up: ${error.message}`);
@@ -83,12 +83,9 @@ const RegisterForm = () => {
       const result = await registerUser(data);
 
       if (result.error) {
-         // Handle error
          console.error('Registration failed:', result.error.message);
          setMessage(`Registration failed: ${result.error.message}`);
-         //  toast.error('Pendaftaran Akun Gagal. ');
-         setRegistrationSuccess(false); // Make sure to reset success state in case of error
-         // Additional error handling like showing an error toast or alert can go here
+         setRegistrationSuccess(false);
          if (result.error.message.toLowerCase().includes('already registered')) {
             toast.error('Akun sudah terdaftar. Silakan masuk atau gunakan email lain.');
          } else {
@@ -99,14 +96,10 @@ const RegisterForm = () => {
             description: 'Your message has been sent.',
          });
       } else {
-         // Handle success
          console.log('Registration successful:', result.user);
          toast.success('Pendaftaran Akun Berhasil. ');
-         setMessage('Registration successful!'); // You can use this message or replace it with the Alert component
-         setRegistrationSuccess(true); // Set the success state to true
-         // Here you could redirect the user to another page or clear the form fields if necessary
-         // For example:
-         // history.push('/dashboard'); // If you're using React Router
+         setMessage('Registration successful!');
+         setRegistrationSuccess(true);
       }
    };
 
@@ -114,7 +107,7 @@ const RegisterForm = () => {
       <div className="w-full min-h-screen relative">
          <NavbarUserRegister />
 
-         <div className="w-1/3 mx-auto max-w-sm items-center gap-1.5 ">
+         <div className="w-1/3 mx-auto max-w-sm items-center gap-1.5">
             <div className="mt-20">
                <div className="mt-10">
                   {registrationSuccess && (
@@ -134,20 +127,40 @@ const RegisterForm = () => {
                <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
                      <Label htmlFor="name">Nama</Label>
-                     <Input type="text" id="name" {...register('name', { required: true })} placeholder="Nama Lengkap" className="form-input" />
-                     {errors.name && <p className="text-red-500 text-xs md:text-lg">Masukan Nama Anda.</p>}
+                     <Input type="text" id="name" {...register('name', { required: 'Masukan Nama .' })} placeholder="Nama Lengkap" className="form-input" />
+                     {errors.name && <p className="text-red-500 text-xs md:text-xs">{errors.name.message}</p>}
                   </div>
 
                   <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
                      <Label htmlFor="phone">Nomer HP</Label>
-                     <Input type="tel" id="phone" {...register('phone', { required: true })} placeholder="Nomer HP" className="form-input" />
-                     {errors.name && <p className="text-red-500 text-xs md:text-lg">Masukan Nomer HP Anda.</p>}
+                     <Input
+                        type="tel"
+                        id="phone"
+                        {...register('phone', {
+                           required: 'Masukan Nomer HP .',
+                        })}
+                        placeholder="Nomer HP"
+                        className="form-input"
+                     />
+                     {errors.phone && <p className="text-red-500 text-xs md:text-xs">{errors.phone.message}</p>}
                   </div>
 
                   <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
                      <Label htmlFor="email">Email</Label>
-                     <Input type="email" id="email" {...register('email', { required: true })} placeholder="Email" className="form-input" />
-                     {errors.email && <p className="text-red-500 text-xs md:text-lg">Masukan Email Anda .</p>}
+                     <Input
+                        type="email"
+                        id="email"
+                        {...register('email', {
+                           required: 'Masukan Email .',
+                           pattern: {
+                              value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                              message: 'Email tidak valid.',
+                           },
+                        })}
+                        placeholder="Email"
+                        className="form-input"
+                     />
+                     {errors.email && <p className="text-red-500 text-xs md:text-xs">{errors.email.message}</p>}
                   </div>
 
                   <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
@@ -156,15 +169,18 @@ const RegisterForm = () => {
                         type="password"
                         id="password"
                         placeholder="*******"
-                        {...register('password', { required: 'Password diperlukan.', minLength: { value: 8, message: 'Password harus minimal 8 karakter.' } })}
+                        {...register('password', {
+                           required: 'Masukan Password .',
+                           minLength: { value: 8, message: 'Password harus minimal 8 karakter.' },
+                        })}
                         className="form-input"
                      />
-                     {errors.password && <p className="text-red-500 text-xs md:text-lg">{errors.password.message}</p>}
+                     {errors.password && <p className="text-red-500 text-xs md:text-xs">{errors.password.message}</p>}
                   </div>
                   <div className="mt-5">
                      <p className="text-sm">
                         Sudah Punya Akun?{' '}
-                        <span className="text-blue-500  font-semibold">
+                        <span className="text-blue-500 font-semibold">
                            <Link href="/login">Masuk Sekarang</Link>{' '}
                         </span>
                      </p>

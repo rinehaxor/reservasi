@@ -65,7 +65,9 @@ export default function FasilitasDashboard() {
                      <div className="w-[400px] md:w-full py-10 px-10">
                         <div className="flex justify-end items-end mb-10 ">
                            <Link href="/admin/fasilitas/tambah-fasilitas">
-                              <Button className="bg-orange-500">Tambah Fasilitas</Button>
+                              <Button className="bg-orange-500" variant={'secondary'}>
+                                 Tambah Fasilitas
+                              </Button>
                            </Link>
                         </div>
                         <div className=" overflow-x-auto custom-scroll-container">

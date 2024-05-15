@@ -223,8 +223,8 @@ export default function Page({ params }: any) {
          {' '}
          <SideBar />
          <div className="w-full">
-            <div className="flex-1 w-full flex flex-col gap-20 items-center mt-10">
-               <p className="text-xl font-bold">Edit Kamar</p>
+            <div className="flex-1 w-full flex flex-col  items-center mt-10">
+               <p className="text-xl font-bold border-b-2 border-orange-500 mb-5">Edit Kamar</p>
                <div className="flex flex-row">
                   <form onSubmit={handleSubmit(updateRoom)} className="flex flex-col gap-4">
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
@@ -261,13 +261,14 @@ export default function Page({ params }: any) {
                      </div>
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
                         <Button variant={'secondary'} type="submit">
-                           Tambah Kamar
+                           Edit Kamar
                         </Button>
                      </div>
                   </form>
                   <WaveSVG />
                </div>
             </div>
+            <ToastContainer />
          </div>
       </div>
    );

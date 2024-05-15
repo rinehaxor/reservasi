@@ -62,7 +62,9 @@ export default function RoomDashboard() {
                      <div className="w-[400px] md:w-full py-10 px-10">
                         <div className="flex justify-end items-end mb-10 ">
                            <Link href="/admin/rooms/create-rooms" passHref>
-                              <Button className="bg-orange-500">Tambah Kamar</Button>
+                              <Button className="bg-orange-500" variant={'secondary'}>
+                                 Tambah Kamar
+                              </Button>
                            </Link>
                         </div>
                         <div className=" overflow-x-auto custom-scroll-container">

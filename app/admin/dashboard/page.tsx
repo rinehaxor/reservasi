@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { redirect, useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
 import SideBar from '@/components/admin/SideBar';
 import { WaveSVG } from '@/components/ui/waves';
 import { LuBedDouble, LuCircleDollarSign } from 'react-icons/lu';

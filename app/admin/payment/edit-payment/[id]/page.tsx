@@ -1,7 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
-
 import { useForm } from 'react-hook-form';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -11,6 +10,7 @@ import SideBar from '@/components/admin/SideBar';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useCheckUserRoleAndRedirect from '@/hooks/useCheckUserRoleAndRedirect ';
+// import useCheckUserRoleAndRedirect from '@/hooks/useCheckUserRoleAndRedirect';
 
 interface Payment {
    id: number;
@@ -20,7 +20,7 @@ interface Payment {
    bank_name: string;
 }
 
-export default function EditFacility({ params }: any) {
+export default function EditPayment({ params }: any) {
    const {
       register,
       handleSubmit,
@@ -45,13 +45,16 @@ export default function EditFacility({ params }: any) {
             if (data) {
                setPayment(data);
                setValue('name', data.name);
+               setValue('bank_name', data.bank_name);
+               setValue('account_number', data.account_number);
+               // setValue for other fields as necessary
             }
          }
       }
 
       fetchFacilityDetails();
       register('image');
-   }, [params?.id, register]);
+   }, [params?.id, register, setValue]);
 
    const handleFileChange = (event: any) => {
       const file = event.target.files[0];
@@ -115,34 +118,34 @@ export default function EditFacility({ params }: any) {
          console.error('Error in handleUpdateFacility:', error);
       }
    };
+
    useCheckUserRoleAndRedirect();
 
    return (
       <div className="w-full justify-start items-start">
-         {' '}
          <SideBar />
          <div className="w-full">
-            <div className="flex-1 w-full flex flex-col gap-20 items-center mt-10">
-               <p className="text-xl font-bold">Edit Pembayaran</p>
+            <div className="flex-1 w-full flex flex-col items-center mt-10">
+               <p className="text-xl font-bold border-b-2 border-orange-500 mb-5">Edit Pembayaran</p>
                <div className="flex flex-row">
                   <form onSubmit={handleSubmit(handleUpdatePayment)} className="flex flex-col gap-4">
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
                         <Label htmlFor="bank_name">Nama Pembayaran </Label>
-                        <Input type="text" id="bank_name" placeholder="Facility Name" {...register('bank_name', { required: 'Masukan Nama Pembayaran' })} className="form-input" />
-                        {errors.name && <p className="text-red-500 text-xs">Masukan Nama Pembayaran.</p>}
+                        <Input type="text" id="bank_name" placeholder="Nama Pembayaran" {...register('bank_name', { required: 'Masukan Nama Pembayaran' })} className="form-input" />
+                        {errors.bank_name && <p className="text-red-500 text-xs">Masukan Nama Bank.</p>}
                      </div>
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-                        <Label htmlFor="name">Nomer Rekening Pembayaran </Label>
-                        <Input type="text" id="name" placeholder="Facility Name" {...register('account_number', { required: 'Masukan Nomer Rekening Pembayaran.' })} className="form-input" />
-                        {errors.name && <p className="text-red-500 text-xs">Masukan Nomer Rekening Pembayaran.</p>}
+                        <Label htmlFor="account_number">Nomer Rekening Bank </Label>
+                        <Input type="text" id="account_number" placeholder="Nomer Rekening Bank" {...register('account_number', { required: 'Masukan Nomer Rekening Pembayaran.' })} className="form-input" />
+                        {errors.account_number && <p className="text-red-500 text-xs">Masukan Nomer Rekening.</p>}
                      </div>
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-                        <Label htmlFor="image">Gambar Pembayaran</Label>
+                        <Label htmlFor="image">Masukan Gambar Bank.</Label>
                         <Input type="file" className="form-input" onChange={handleFileChange} />
                      </div>
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
                         <Button variant={'secondary'} type="submit">
-                           Update Facility
+                           Update Pembayaran
                         </Button>
                      </div>
                   </form>

@@ -117,22 +117,22 @@ export default function EditFacility({ params }: any) {
          {' '}
          <SideBar />
          <div className="w-full">
-            <div className="flex-1 w-full flex flex-col gap-20 items-center mt-10">
-               <p className="text-xl font-bold">Edit Fasilitas</p>
+            <div className="flex-1 w-full flex flex-col  items-center mt-10">
+               <p className="text-xl font-bold border-b-2 border-orange-500 mb-5">Edit Fasilitas</p>
                <div className="flex flex-row">
                   <form onSubmit={handleSubmit(handleUpdateFacility)} className="flex flex-col gap-4">
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-                        <Label htmlFor="name">Facility Name</Label>
+                        <Label htmlFor="name">Nama Fasilitas</Label>
                         <Input type="text" id="name" placeholder="Facility Name" {...register('name', { required: 'Enter facility name' })} className="form-input" />
                         {errors.name && <p className="text-red-500 text-xs">Enter facility name.</p>}
                      </div>
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-                        <Label htmlFor="image">Facility Image</Label>
+                        <Label htmlFor="image"> Gambar Fasilitas</Label>
                         <Input type="file" className="form-input" onChange={handleFileChange} />
                      </div>
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
                         <Button variant={'secondary'} type="submit">
-                           Update Facility
+                           Edit Fasilitas
                         </Button>
                      </div>
                      <ToastContainer />

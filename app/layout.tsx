@@ -2,6 +2,7 @@ import { GeistSans } from 'geist/font/sans';
 import './globals.css';
 import { Inter as FontSans } from 'next/font/google';
 import { cn } from '@/lib/utils';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const fontSans = FontSans({
    subsets: ['latin'],
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
          <head />
          <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
             <main className="min-h-screen flex flex-col items-center">{children}</main>
+            <SpeedInsights />
          </body>
       </html>
    );
