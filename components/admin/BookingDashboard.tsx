@@ -16,18 +16,15 @@ import { useUpdatePaymentStatus } from '../atoms/bookingStore';
 
 async function fetchBookings(): Promise<Bookings[]> {
    const supabase = createClient();
-   let { data, error } = await supabase
-      .from('bookings')
-      .select(
-         `
+   let { data, error } = await supabase.from('bookings').select(
+      `
    *,
    room:rooms(id, name,image_url)
 
  `
-      )
-      .not('payment_status', 'eq', 'Disetujui')
-      .eq('booking_status', 'Check-Out');
-
+   );
+   //   .not('payment_status', 'eq', 'Disetujui')
+   //   .neq('booking_status', 'Check-Out');
    if (error) {
       console.error('Error fetching bookings:', error);
       return [];
