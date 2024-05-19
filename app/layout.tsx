@@ -4,6 +4,8 @@ import { Inter as FontSans } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
+import dynamic from 'next/dynamic';
+
 const fontSans = FontSans({
    subsets: ['latin'],
    variable: '--font-sans',
@@ -17,12 +19,17 @@ export const metadata = {
    description: 'The fastest way to build apps with Next.js and Supabase',
 };
 
+const InternetStatusChecker = dynamic(() => import('@/components/InternetStatusChecker'), { ssr: false });
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
    return (
       <html lang="en" suppressHydrationWarning>
          <head />
          <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
-            <main className="min-h-screen flex flex-col items-center">{children}</main>
+            <main className="min-h-screen flex flex-col items-center">
+               {children}
+               <InternetStatusChecker />
+            </main>
             <SpeedInsights />
          </body>
       </html>
