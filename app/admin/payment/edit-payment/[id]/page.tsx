@@ -148,6 +148,7 @@ export default function EditPayment({ params }: any) {
                            Update Pembayaran
                         </Button>
                      </div>
+                     <ToastContainer />
                   </form>
                   <WaveSVG />
                </div>

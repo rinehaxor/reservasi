@@ -19,7 +19,7 @@ export default function DescriptionHome() {
                   width={0}
                   height={0}
                   sizes="100vw"
-                  className="w-full  h-full  "
+                  className="w-full h-full"
                />
             </div>
          </div>
@@ -28,13 +28,13 @@ export default function DescriptionHome() {
                <div className="border-l-4 border-orange-500 mr-5">
                   <p className="text-4xl sm:text-6xl font-bold ml-6">Wisata</p>
                   <p className="text-xl sm:text-3xl font-thin ml-6 mt-5">Hotel Maerokoco berada di lokasi strategis di pusat kota, hanya beberapa langkah dari berbagai atraksi populer.</p>
-                  <Button className="bg-orange-500 border-none ml-6 mt-10 w-full  sm:w-1/4" variant={'secondary'}>
+                  <Button className="bg-orange-500 border-none ml-6 mt-10 w-full sm:w-1/4" variant={'secondary'}>
                      <span className="font-bold text-white">Jelajahi</span>
                   </Button>
                </div>
             </div>
             <div className="w-full sm:w-1/2 flex justify-end items-center">
-               <Image src="/assets/images/deskripsi2.webp" alt="Deskripsi Gambar" width={0} height={0} sizes="100vw" className="w-full  h-full  " />
+               <Image src="/assets/images/deskripsi2.webp" alt="Deskripsi Gambar" width={0} height={0} sizes="100vw" className="w-full h-full" />
             </div>
          </div>
          <div className="flex flex-col items-center justify-center my-10 md:my-20 md:mx-48">

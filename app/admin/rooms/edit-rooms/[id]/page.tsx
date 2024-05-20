@@ -5,14 +5,13 @@ import SideBar from '@/components/admin/SideBar';
 import { WaveSVG } from '@/components/ui/waves';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
-
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useCheckUserRoleAndRedirect from '@/hooks/useCheckUserRoleAndRedirect ';
+
 interface Room {
    id?: string; // Making id optional
    name: string;
@@ -20,6 +19,8 @@ interface Room {
    description: string;
    price_per_night: number;
    image_url?: string;
+   bathroom_image_url?: string;
+   other_image_url?: string;
 }
 
 interface Booking {
@@ -35,20 +36,72 @@ export default function Page({ params }: any) {
       setValue,
       watch,
       formState: { errors },
-   } = useForm({
+   } = useForm<Room>({
       defaultValues: {
          name: '',
          type: '',
          description: '',
-         price: '',
-         image: null,
+         price_per_night: 0,
+         image_url: '',
+         bathroom_image_url: '',
+         other_image_url: '',
       },
    });
 
-   const handleFileChange = (event: any) => {
+   const supabase = createClient();
+   const [room, setRoom] = useState<Room | null>(null);
+   const [loading, setLoading] = useState(true);
+   const [facilities, setFacilities] = useState<Facility[]>([]);
+   const [currentFacilities, setCurrentFacilities] = useState<number[]>([]);
+   const [selectedFacilities, setSelectedFacilities] = useState<number[]>([]);
+
+   useEffect(() => {
+      const fetchFacilities = async () => {
+         const { data, error } = await supabase.from('facilities').select('*');
+         if (error) {
+            console.error('Error fetching facilities:', error);
+         } else {
+            setFacilities(data);
+         }
+      };
+
+      fetchFacilities();
+   }, []);
+
+   useEffect(() => {
+      const fetchRoomDetail = async () => {
+         if (params?.id) {
+            const { data, error } = await supabase.from('rooms').select('*').eq('id', params.id).single();
+            if (data) {
+               setRoom(data);
+               setValue('name', data.name);
+               setValue('type', data.type);
+               setValue('description', data.description);
+               setValue('price_per_night', data.price_per_night);
+               setValue('image_url', data.image_url);
+               setValue('bathroom_image_url', data.bathroom_image_url);
+               setValue('other_image_url', data.other_image_url);
+
+               const { data: facilityData, error: facilityError } = await supabase.from('room_facilities').select('facility_id').eq('room_id', data.id);
+               if (facilityData) {
+                  setCurrentFacilities(facilityData.map((fac) => fac.facility_id));
+               }
+            }
+            setLoading(false);
+         }
+      };
+
+      fetchRoomDetail();
+   }, [params?.id, setValue]);
+
+   useEffect(() => {
+      setSelectedFacilities(currentFacilities);
+   }, [currentFacilities]);
+
+   const handleFileChange = (event: any, fieldName: keyof Room) => {
       const file = event.target.files[0];
       if (file) {
-         setValue('image', file, { shouldValidate: true });
+         setValue(fieldName, file, { shouldValidate: true });
       }
    };
 
@@ -75,162 +128,84 @@ export default function Page({ params }: any) {
       return urlData.publicUrl;
    };
 
-   const [room, setRoom] = useState<Room | null>(null);
-   const [loading, setLoading] = useState(true);
-
-   const [bookings, setBookings] = useState<Booking[]>([]);
-
-   const supabase = createClient();
-
-   const [currentFacilities, setCurrentFacilities] = useState<number[]>([]);
-
-   const [facilities, setFacilities] = useState<Facility[]>([]);
-
-   useEffect(() => {
-      const fetchFacilities = async () => {
-         const { data, error } = await supabase.from('facilities').select('*');
-         if (error) {
-            console.error('Error fetching facilities:', error);
-         } else {
-            setFacilities(data);
-         }
-      };
-
-      fetchFacilities();
-      async function fetchCurrentFacilities() {
-         if (room) {
-            const { data, error } = await supabase.from('room_facilities').select('facility_id').eq('room_id', room.id);
-
-            if (error) {
-               console.error('Error fetching facilities:', error);
-            } else {
-               setCurrentFacilities(data.map((fac) => fac.facility_id));
-            }
-         }
-      }
-
-      fetchCurrentFacilities();
-   }, [room]);
-
-   const [selectedFacilities, setSelectedFacilities] = useState<number[]>([]);
-
-   useEffect(() => {
-      setSelectedFacilities(currentFacilities);
-   }, [currentFacilities]);
-
-   const handleFacilityChange = (facilityId: any) => {
+   const handleFacilityChange = (facilityId: number) => {
       setSelectedFacilities((prev) => (prev.includes(facilityId) ? prev.filter((id) => id !== facilityId) : [...prev, facilityId]));
    };
 
-   useEffect(() => {
-      async function fetchRoomDetail() {
-         if (params?.id) {
-            const { data, error } = await supabase.from('rooms').select('*').eq('id', params.id).single();
-            if (data) {
-               setRoom(data);
-               setValue('name', data.name); // Set the name in the form
-               setValue('type', data.type); // Set the type in the form
-               setValue('description', data.description); // Set the description in the form
-               setValue('price', data.price_per_night.toString()); // Set the price in the form
-            }
-            setRoom(data);
+   const updateRoom = async (formData: Room) => {
+      const { name, type, description, price_per_night, image_url, bathroom_image_url, other_image_url } = formData;
 
-            setLoading(false);
-         }
-      }
+      let updatedImageUrl = room?.image_url;
+      let updatedBathroomImageUrl = room?.bathroom_image_url;
+      let updatedOtherImageUrl = room?.other_image_url;
 
-      fetchRoomDetail();
-   }, [params?.id]);
-
-   useEffect(() => {
-      async function fetchBookingHistory() {
-         const {
-            data: { user },
-            error: userError,
-         } = await supabase.auth.getUser();
-
-         if (userError) {
-            console.error('Error fetching user:', userError.message);
-            return;
-         }
-
-         if (user) {
-            const { data: bookingsData, error: bookingsError } = await supabase.from('bookings').select('*').eq('user_id', user.id);
-
-            if (bookingsError) {
-               console.error('Error fetching booking history:', bookingsError.message);
-            } else {
-               setBookings(bookingsData);
-            }
-         }
-      }
-
-      fetchBookingHistory();
-   }, []);
-   const updateRoom = async (formData: any) => {
-      const { name, type, description, price, image } = formData;
-
-      let imageUrl = room?.image_url; // Default to existing image URL
-      if (image instanceof File) {
-         // Check if a new file was uploaded
-         const uploadedImageUrl = await uploadImage(image);
+      if (image_url && typeof image_url !== 'string') {
+         const uploadedImageUrl = await uploadImage(image_url);
          if (uploadedImageUrl) {
-            imageUrl = uploadedImageUrl;
-         } else {
-            console.error('Failed to upload new image');
-            alert('Failed to upload new image');
-            return;
+            updatedImageUrl = uploadedImageUrl;
          }
       }
 
+      if (bathroom_image_url && typeof bathroom_image_url !== 'string') {
+         const uploadedBathroomImageUrl = await uploadImage(bathroom_image_url);
+         if (uploadedBathroomImageUrl) {
+            updatedBathroomImageUrl = uploadedBathroomImageUrl;
+         }
+      }
+
+      if (other_image_url && typeof other_image_url !== 'string') {
+         const uploadedOtherImageUrl = await uploadImage(other_image_url);
+         if (uploadedOtherImageUrl) {
+            updatedOtherImageUrl = uploadedOtherImageUrl;
+         }
+      }
       const updatedData = {
          name,
          type,
          description,
-         price_per_night: parseInt(price, 10),
-         image_url: imageUrl,
+         price_per_night,
+         image_url: updatedImageUrl,
+         bathroom_image_url: updatedBathroomImageUrl,
+         other_image_url: updatedOtherImageUrl,
       };
 
       try {
-         // Update room details
          const { data: roomData, error: roomError } = await supabase.from('rooms').update(updatedData).match({ id: room?.id });
          if (roomError) throw new Error(`Error updating room: ${roomError.message}`);
 
-         // Update room facilities
-         // First, delete existing facilities
          const { error: deleteError } = await supabase.from('room_facilities').delete().match({ room_id: room?.id });
          if (deleteError) throw new Error(`Error deleting old facilities: ${deleteError.message}`);
 
-         // Insert updated facilities
          const facilityInserts = selectedFacilities.map((facilityId) => ({
             room_id: room?.id,
             facility_id: facilityId,
          }));
          const { error: insertError } = await supabase.from('room_facilities').insert(facilityInserts);
          if (insertError) throw new Error(`Error inserting new facilities: ${insertError.message}`);
-
          toast.success('Berhasil Mengedit Kamar');
-         setRoom({ ...room, ...updatedData }); // Update local state to reflect changes
+
+         //  alert('Berhasil Mengedit Kamar');
+         setRoom({ ...room, ...updatedData });
       } catch (error) {
          toast.error('Gagal Mengedit Kamar');
          alert(error);
       }
    };
+
    useCheckUserRoleAndRedirect();
 
    return (
       <div className="w-full justify-start items-start">
-         {' '}
          <SideBar />
          <div className="w-full">
-            <div className="flex-1 w-full flex flex-col  items-center mt-10">
+            <div className="flex-1 w-full flex flex-col items-center mt-10">
                <p className="text-xl font-bold border-b-2 border-orange-500 mb-5">Edit Kamar</p>
                <div className="flex flex-row">
                   <form onSubmit={handleSubmit(updateRoom)} className="flex flex-col gap-4">
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
                         <Label htmlFor="name">Nama Kamar</Label>
-                        <Input type="text" id="name" placeholder="Nama Kamar" {...register('name', { required: 'Masukan Namar Kamar' })} className="form-input" />
-                        {errors.name && <p className="text-red-500 text-xs md:text-md">Masukan Namar Kamar.</p>}
+                        <Input type="text" id="name" placeholder="Nama Kamar" {...register('name', { required: 'Masukan Nama Kamar' })} className="form-input" />
+                        {errors.name && <p className="text-red-500 text-xs md:text-md">Masukan Nama Kamar.</p>}
                      </div>
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
                         <Label htmlFor="type">Tipe Kamar</Label>
@@ -238,18 +213,26 @@ export default function Page({ params }: any) {
                         {errors.type && <p className="text-red-500 text-xs md:text-md">Masukan Tipe Kamar.</p>}
                      </div>
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-                        <Label htmlFor="type">Deskripsi Kamar</Label>
+                        <Label htmlFor="description">Deskripsi Kamar</Label>
                         <Textarea id="description" placeholder="Deskripsi" {...register('description', { required: 'Masukan Deskripsi' })} className="form-input" />
                         {errors.description && <p className="text-red-500 text-xs md:text-md">Masukan Deskripsi.</p>}
                      </div>
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
                         <Label htmlFor="price">Harga Per Malam</Label>
-                        <Input type="number" id="price" placeholder="0" {...register('price', { required: 'Masukan Harga' })} className="form-input" />
-                        {errors.price && <p className="text-red-500 text-xs md:text-md">Masukan Harga.</p>}
+                        <Input type="number" id="price" placeholder="0" {...register('price_per_night', { required: 'Masukan Harga' })} className="form-input" />
+                        {errors.price_per_night && <p className="text-red-500 text-xs md:text-md">Masukan Harga.</p>}
                      </div>
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-                        <Label htmlFor="price">Foto Kamar</Label>
-                        <Input type="file" className="form-input" onChange={handleFileChange} />
+                        <Label htmlFor="image">Foto Kamar</Label>
+                        <Input type="file" className="form-input" onChange={(e) => handleFileChange(e, 'image_url')} />
+                     </div>
+                     <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
+                        <Label htmlFor="bathroom_image">Foto Kamar Mandi</Label>
+                        <Input type="file" className="form-input" onChange={(e) => handleFileChange(e, 'bathroom_image_url')} />
+                     </div>
+                     <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
+                        <Label htmlFor="other_image">Foto Lainnya</Label>
+                        <Input type="file" className="form-input" onChange={(e) => handleFileChange(e, 'other_image_url')} />
                      </div>
                      <div>
                         {facilities.map((facility) => (

@@ -10,6 +10,16 @@ import { Facility } from '@/app/admin/rooms/edit-rooms/[id]/page';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+type FormData = {
+   name: string;
+   type: string;
+   description: string;
+   price: string;
+   image: File | null;
+   bathroom_image: File | null;
+   other_image: File | null;
+};
+
 const AddRoom = () => {
    const {
       register,
@@ -18,13 +28,15 @@ const AddRoom = () => {
       watch,
       reset,
       formState: { errors },
-   } = useForm({
+   } = useForm<FormData>({
       defaultValues: {
          name: '',
          type: '',
          description: '',
          price: '',
          image: null,
+         bathroom_image: null,
+         other_image: null,
       },
    });
 
@@ -45,24 +57,21 @@ const AddRoom = () => {
 
       fetchFacilities();
    }, []);
+
    useEffect(() => {
       register('image', { required: 'Image file is required' });
+      register('bathroom_image', { required: 'Bathroom image is required' });
+      register('other_image', { required: 'Other room view image is required' });
    }, [register]);
 
-   //    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-   //       if (event.target.files && event.target.files[0]) {
-   //          setImage(event.target.files[0]); // Now safely assigning File to state
-   //       }
-   //    };
-
-   const handleFileChange = (event: any) => {
-      const file = event.target.files[0];
+   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, fieldName: keyof FormData) => {
+      const file = event.target.files?.[0] || null;
       if (file) {
-         setValue('image', file, { shouldValidate: true });
+         setValue(fieldName, file, { shouldValidate: true });
       }
    };
 
-   const uploadImage = async (file: any) => {
+   const uploadImage = async (file: File | null) => {
       if (!file) return null;
 
       const fileExt = file.name.split('.').pop();
@@ -85,22 +94,24 @@ const AddRoom = () => {
       return urlData.publicUrl;
    };
 
-   const handleFacilityChange = (facilityId: any) => {
+   const handleFacilityChange = (facilityId: number) => {
       setSelectedFacilities((current) => (current.includes(facilityId) ? current.filter((id) => id !== facilityId) : [...current, facilityId]));
    };
 
    const generateRandomIntegerId = () => {
-      // Menentukan nilai maksimum yang diinginkan untuk ID
       const maxIdValue = 1000000000;
       return Math.floor(Math.random() * maxIdValue);
    };
 
-   const handleAddRoom = async (formData: any) => {
-      const { name, type, description, price, image } = formData;
+   const handleAddRoom = async (formData: FormData) => {
+      const { name, type, description, price, image, bathroom_image, other_image } = formData;
       try {
          const imageUrl = await uploadImage(image);
-         if (!imageUrl) {
-            console.error('Failed to get the image URL');
+         const bathroomImageUrl = await uploadImage(bathroom_image);
+         const otherImageUrl = await uploadImage(other_image);
+
+         if (!imageUrl || !bathroomImageUrl || !otherImageUrl) {
+            console.error('Failed to get one or more image URLs');
             return;
          }
 
@@ -114,11 +125,14 @@ const AddRoom = () => {
                description,
                price_per_night: parseInt(price, 10),
                image_url: imageUrl,
+               bathroom_image_url: bathroomImageUrl,
+               other_image_url: otherImageUrl,
             },
          ]);
 
          if (error) {
             console.error('Error adding room:', error);
+            toast.error('Gagal Menambahkan Kamar');
          } else {
             const facilityInserts = selectedFacilities.map((facilityId) => ({
                room_id: roomId,
@@ -127,18 +141,19 @@ const AddRoom = () => {
 
             const { error: facilitiesError } = await supabase.from('room_facilities').insert(facilityInserts);
             if (facilitiesError) {
-               toast.error('Gagal Menambahkan Kamar');
+               toast.error('Gagal Menambahkan Fasilitas Kamar');
                console.error('Error adding room facilities:', facilitiesError);
                return;
             }
-            toast.success('Berhasil Menambahkan Pembayran');
+
             reset();
+            toast.success('Berhasil Menambahkan Kamar');
          }
       } catch (error) {
          console.error('Error in handleAddRoom:', error);
+         toast.error('Terjadi Kesalahan saat Menambahkan Kamar');
       }
    };
-   const [checked, setChecked] = useState(false);
 
    return (
       <div>
@@ -146,8 +161,8 @@ const AddRoom = () => {
          <form onSubmit={handleSubmit(handleAddRoom)} className="flex flex-col gap-4">
             <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
                <Label htmlFor="name">Nama Kamar</Label>
-               <Input type="text" id="name" placeholder="Nama Kamar" {...register('name', { required: 'Masukan Namar Kamar' })} className="form-input" />
-               {errors.name && <p className="text-red-500 text-xs md:text-md">Masukan Namar Kamar.</p>}
+               <Input type="text" id="name" placeholder="Nama Kamar" {...register('name', { required: 'Masukan Nama Kamar' })} className="form-input" />
+               {errors.name && <p className="text-red-500 text-xs md:text-md">Masukan Nama Kamar.</p>}
             </div>
             <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
                <Label htmlFor="type">Tipe Kamar</Label>
@@ -155,7 +170,7 @@ const AddRoom = () => {
                {errors.type && <p className="text-red-500 text-xs md:text-md">Masukan Tipe Kamar.</p>}
             </div>
             <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-               <Label htmlFor="type">Deskripsi Kamar</Label>
+               <Label htmlFor="description">Deskripsi Kamar</Label>
                <Textarea id="description" placeholder="Deskripsi" {...register('description', { required: 'Masukan Deskripsi' })} className="form-input" />
                {errors.description && <p className="text-red-500 text-xs md:text-md">Masukan Deskripsi.</p>}
             </div>
@@ -165,38 +180,51 @@ const AddRoom = () => {
                {errors.price && <p className="text-red-500 text-xs md:text-md">Masukan Harga.</p>}
             </div>
             <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-               <Label htmlFor="price">Foto Kamar</Label>
-               <Input type="file" className="form-input" onChange={handleFileChange} />
-               {errors.image && <p className="text-red-500 text-xs">Masukan Gambar.</p>}
+               <Label htmlFor="image">Foto Kamar</Label>
+               <Input type="file" className="form-input" onChange={(e) => handleFileChange(e, 'image')} />
+               {errors.image && <p className="text-red-500 text-xs">Masukan Gambar Kamar.</p>}
+            </div>
+            <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
+               <Label htmlFor="bathroom_image">Foto Kamar Mandi</Label>
+               <Input type="file" className="form-input" onChange={(e) => handleFileChange(e, 'bathroom_image')} />
+               {errors.bathroom_image && <p className="text-red-500 text-xs">Masukan Gambar Kamar Mandi.</p>}
+            </div>
+            <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
+               <Label htmlFor="other_image">Foto Lainnya</Label>
+               <Input type="file" className="form-input" onChange={(e) => handleFileChange(e, 'other_image')} />
+               {errors.other_image && <p className="text-red-500 text-xs">Masukan Gambar Lainnya.</p>}
             </div>
             <div>
                {facilities.map((facility) => (
                   <Label className="flex items-center gap-2 mb-2" key={facility.id}>
                      <input type="checkbox" value={facility.id} checked={selectedFacilities.includes(facility.id)} onChange={() => handleFacilityChange(facility.id)} />
-
                      {facility.name}
                   </Label>
                ))}
             </div>
-
             <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
                <Button variant={'secondary'} type="submit">
                   Tambah Kamar
                </Button>
-               <ToastContainer />
+               <ToastContainer autoClose={3000} />
             </div>
-            {/* <input type="file" onChange={handleFileChange} />
-         <button onClick={handleAddRoom}>Add Room</button> */}
-            {/* 
-         <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Room Number" />
-         <input value={type} onChange={(e) => setType(e.target.value)} placeholder="Room Type" />
-         <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Description" />
-         <input value={price} onChange={(e) => setPrice(e.target.value)} placeholder="Price Per Night" />
-    
-     */}
          </form>
       </div>
    );
 };
 
 export default AddRoom;
+
+{
+   /* <input type="file" onChange={handleFileChange} />
+         <button onClick={handleAddRoom}>Add Room</button> */
+}
+{
+   /* 
+         <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Room Number" />
+         <input value={type} onChange={(e) => setType(e.target.value)} placeholder="Room Type" />
+         <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Description" />
+         <input value={price} onChange={(e) => setPrice(e.target.value)} placeholder="Price Per Night" />
+    
+     */
+}

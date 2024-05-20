@@ -17,6 +17,8 @@ export type Room = {
    image_url: string;
    room_facilities: RoomFacility[];
    room_available: string;
+   other_image_url: string;
+   bathroom_image_url: string;
 };
 export type RoomFacility = {
    facility_id: number;
@@ -90,7 +92,7 @@ export const columns: ColumnDef<Room>[] = [
             if (result.isConfirmed) {
                try {
                   await deleteRoom(id);
-                  toast.success('Fasilitas berhasil dihapus!', {
+                  toast.success('Kamar berhasil dihapus!', {
                      position: 'top-right',
                      autoClose: 5000,
                      hideProgressBar: false,
@@ -101,7 +103,7 @@ export const columns: ColumnDef<Room>[] = [
                      theme: 'light',
                   });
                } catch (error) {
-                  toast.error('Terjadi kesalahan saat menghapus fasilitas', {
+                  toast.error('Terjadi kesalahan saat menghapus Kamar', {
                      position: 'top-right',
                      autoClose: 5000,
                      hideProgressBar: false,
