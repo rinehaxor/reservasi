@@ -4,17 +4,18 @@ import { createClient } from '@/utils/supabase/client';
 import SideBar from '@/components/admin/SideBar';
 import { WaveSVG } from '@/components/ui/waves';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { useAtom } from 'jotai';
 import { bookingsAtom, updateTriggerAtom } from '@/components/atoms/store';
 import { DataTable } from '@/app/admin/rooms/data-table';
 import { Bookings, columnsBookings } from '@/app/admin/reservasi/column';
-
 import { useUpdatePaymentStatus } from '../atoms/bookingStore';
 import useCheckUserRoleAndRedirect from '@/hooks/useCheckUserRoleAndRedirect ';
+import { DataTableUser } from '@/app/user/reservasi/data-table';
 
 async function fetchBookings(): Promise<Bookings[]> {
    const supabase = createClient();
-   let { data, error } = await supabase
+   const { data, error } = await supabase
       .from('bookings')
       .select(
          `
@@ -35,6 +36,8 @@ async function fetchBookings(): Promise<Bookings[]> {
 export default function BookingsDashboard() {
    const [bookings, setBookings] = useAtom(bookingsAtom);
    const [loading, setLoading] = React.useState(true);
+   const [searchTerm, setSearchTerm] = useState('');
+   const [filteredBookings, setFilteredBookings] = useState<Bookings[]>([]);
    const updateBookingStatus = useUpdatePaymentStatus();
    const [updateTrigger, setUpdateTrigger] = useAtom(updateTriggerAtom);
 
@@ -43,16 +46,36 @@ export default function BookingsDashboard() {
          setLoading(true);
          const fetchedBookings = await fetchBookings();
          setBookings(fetchedBookings);
+         localStorage.setItem('bookings', JSON.stringify(fetchedBookings));
          setLoading(false);
       }
 
-      initializeBookings();
+      const storedBookings = localStorage.getItem('bookings');
+      if (storedBookings) {
+         setBookings(JSON.parse(storedBookings));
+         setLoading(false);
+      } else {
+         initializeBookings();
+      }
    }, [updateTrigger]);
+
+   useEffect(() => {
+      const storedBookings = localStorage.getItem('bookings');
+      if (storedBookings) {
+         const bookingsData: Bookings[] = JSON.parse(storedBookings);
+         const filtered = bookingsData.filter((booking) => booking.invoice_number.toLowerCase().includes(searchTerm.toLowerCase()));
+         setFilteredBookings(filtered);
+      }
+   }, [searchTerm]);
 
    useCheckUserRoleAndRedirect();
 
+   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchTerm(event.target.value);
+   };
+
    return (
-      <div className=" w-full flex flex-col h-screen ">
+      <div className="w-full flex flex-col h-screen">
          <div className="w-full">
             <div className="flex w-full">
                {loading ? (
@@ -61,18 +84,21 @@ export default function BookingsDashboard() {
                   </div>
                ) : bookings.length > 0 ? (
                   <>
-                     <div className="w-[14%] ">
+                     <div className="w-[14%]">
                         <SideBar />
                      </div>
-                     <div className="w-[400px] md:w-full py-10 px-10">
-                        <div className="overflow-x-auto custom-scroll-container">
-                           <DataTable columns={columnsBookings} data={bookings} />
+                     <div className=" md:w-full md:ml-[14%] py-10 px-10">
+                        <div className="mb-5">
+                           <Input type="text" placeholder="Cari Invoice Reservasi" value={searchTerm} onChange={handleSearchChange} className="w-full md:w-1/4" />
+                        </div>
+                        <div className="overflow-x-auto custom-scroll-container w-[120rem]">
+                           <DataTableUser columns={columnsBookings} data={filteredBookings.length > 0 ? filteredBookings : bookings} />
                         </div>
                      </div>
                   </>
                ) : (
                   <>
-                     <div className="w-[14%] flex justify-start items-start ">
+                     <div className="w-[14%] flex justify-start items-start">
                         <SideBar />
                      </div>
                      <div className="w-full py-10 px-10">

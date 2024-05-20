@@ -118,8 +118,8 @@ export default function Page({ params }: any) {
                <div className="flex justify-center flex-col md:flex-row">
                   <div className="">{room && <Image src={room.image_url} alt="Room Image" width={'500'} height={'400'} className="w-[700px] h-auto" />}</div>
                   <div className="flex-row md:flex-col">
-                     <div className="">{room && <Image src={room.bathroom_image_url} alt="Room Image" width={'250'} height={'200'} className="w-full md:w-[350px] h-auto" />}</div>
-                     <div className="">{room && <Image src={room.other_image_url} alt="Room Image" width={'250'} height={'200'} className="w-full md:w-[350px] h-auto" />}</div>
+                     <div className="">{room && <Image src={room?.bathroom_image_url} alt="Room Image" width={'250'} height={'200'} className="w-full md:w-[350px] h-auto" />}</div>
+                     <div className="">{room && <Image src={room?.other_image_url} alt="Room Image" width={'250'} height={'200'} className="w-full md:w-[350px] h-auto" />}</div>
                   </div>
                </div>
                {room && (
@@ -153,10 +153,13 @@ export default function Page({ params }: any) {
                            <p className={`font-extrabold text-xl md:text-3xl mt-5 ${room?.room_available === 'Tersedia' ? 'text-white bg-green-500 p-2 rounded-md' : 'text-white bg-red-500 p-2 rounded-md'}`}>Kamar {room?.room_available}</p>
                         </div>
 
-                        <div className="flex justify-end mt-10">
+                        <div className="flex justify-end mt-10 flex-col items-end">
                            <Button variant={'secondary'} size={'lg'} className="text-bold w-40 text-white " disabled={!dateRange?.from || !dateRange?.to || room?.room_available !== 'Tersedia' || !user}>
                               <Link href={`/kamar/${room.id}/pesan`}>Pesan</Link>
                            </Button>
+                           <li className="md:font-bold md:text-xs text-xs font-bold mt-2">
+                              <i>Catatan : Sebelum memesan harap login terlebih dahulu</i>
+                           </li>
                         </div>
                      </div>
                   </div>

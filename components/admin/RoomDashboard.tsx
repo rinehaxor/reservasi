@@ -44,7 +44,7 @@ export default function RoomDashboard() {
    }, [setRooms, rooms.length]); // Dependency on rooms.length is to prevent refetching when already loaded
 
    return (
-      <div className=" w-full flex flex-col h-screen ">
+      <div className=" w-[100rem] md:w-full flex flex-col h-screen ">
          <div className="w-full">
             {/* <NavbarAdmin /> */}
             <div className="flex w-full">
@@ -59,7 +59,7 @@ export default function RoomDashboard() {
                      <div className="w-[14%] ">
                         <SideBar />
                      </div>
-                     <div className="w-[400px] md:w-full py-10 px-10">
+                     <div className=" md:w-full py-10 px-10">
                         <div className="flex justify-end items-end mb-10 ">
                            <Link href="/admin/rooms/create-rooms" passHref>
                               <Button className="bg-orange-500" variant={'secondary'}>
@@ -67,7 +67,7 @@ export default function RoomDashboard() {
                               </Button>
                            </Link>
                         </div>
-                        <div className=" overflow-x-auto custom-scroll-container">
+                        <div className="overflow-x-auto custom-scroll-container w-[100rem]">
                            <DataTable columns={columns} data={rooms} />
                         </div>
                      </div>

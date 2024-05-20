@@ -42,7 +42,7 @@ export default function NavbarHome() {
 
    return (
       <div className="w-full flex flex-col items-center text-white relative z-50">
-         <nav className="w-full flex justify-center h-16 bg-orange-700">
+         <nav className="w-full flex justify-center h-16 bg-orange-500">
             <div className="flex justify-between items-center w-full px-4 h-16 md:mx-48">
                <div className="flex items-center space-x-4 flex-grow">
                   <Link href="/" className="flex items-center py-5 px-2 text-white hover:text-gray-100">
