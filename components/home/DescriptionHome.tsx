@@ -47,6 +47,7 @@ export default function DescriptionHome() {
                allowFullScreen={true}
                loading="lazy"
                referrerPolicy="no-referrer-when-downgrade"
+               title="Lokasi Hotel Maerokoco di Google Maps"
             ></iframe>
          </motion.div>
       </div>
