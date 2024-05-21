@@ -10,6 +10,7 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import useAuth from '@/hooks/useAuth';
 
 export default function EditProfile() {
    const supabase = createClient();
@@ -69,6 +70,7 @@ export default function EditProfile() {
       fetchUser(); // Refresh user data after update
       toast.success('Berhasil Mengedit Profile.');
    };
+   useAuth();
 
    return (
       <div>

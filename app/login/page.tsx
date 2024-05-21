@@ -112,13 +112,19 @@ const LoginForm = () => {
                         placeholder="Email"
                         className="form-input"
                      />
-                     {errors.email && <p className="text-red-500 text-xs md:text-xs">Masukan Email Anda.</p>}
+                     {errors.email && <p className="text-red-500 text-xs font-bold md:text-xs">Masukan Email Anda.</p>}
                   </div>
 
                   <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
                      <Label htmlFor="password">Password</Label>
-                     <Input type="password" id="password" {...register('password', { required: 'Password diperlukan.', minLength: { value: 8, message: 'Password harus minimal 8 karakter.' } })} className="form-input" />
-                     {errors.password && <p className="text-red-500 text-xs md:text-xs">{errors.password.message}</p>}
+                     <Input
+                        type="password"
+                        placeholder="*******"
+                        id="password"
+                        {...register('password', { required: 'Password diperlukan.', minLength: { value: 8, message: 'Password harus minimal 8 karakter.' } })}
+                        className="form-input"
+                     />
+                     {errors.password && <p className="text-red-500 text-xs  font-bold md:text-xs">{errors.password.message}</p>}
                   </div>
                   <div className="mt-5">
                      <p className="text-sm">

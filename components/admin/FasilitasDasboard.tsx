@@ -8,12 +8,12 @@ import { Input } from '@/components/ui/input';
 import { useAtom } from 'jotai';
 import { roomsAtom } from '@/components/atoms/store';
 import { DataTable } from '@/app/admin/rooms/data-table';
-
 import Link from 'next/link';
-import useCheckUserRoleAndRedirect from '@/hooks/useCheckUserRoleAndRedirect ';
+
 import { ToastContainer } from 'react-toastify';
 import { Room } from '@/app/admin/rooms/columns';
 import { columnsFasilitas } from '@/app/admin/fasilitas/columns';
+import useCheckUserRoleAndRedirect from '@/hooks/useCheckUserRoleAndRedirect ';
 
 async function fetchRooms(): Promise<Room[]> {
    const supabase = createClient();
@@ -29,7 +29,7 @@ async function fetchRooms(): Promise<Room[]> {
 
 export default function FasilitasDashboard() {
    const [facilities, setFacilities] = useAtom(roomsAtom);
-   const [loading, setLoading] = React.useState(true);
+   const [loading, setLoading] = useState(true);
    const [searchTerm, setSearchTerm] = useState('');
    const [filteredFacilities, setFilteredFacilities] = useState<Room[]>([]);
 
@@ -44,30 +44,23 @@ export default function FasilitasDashboard() {
          setLoading(false);
       }
 
-      const storedFacilities = localStorage.getItem('facilities');
-      if (storedFacilities) {
-         setFacilities(JSON.parse(storedFacilities));
-         setLoading(false);
-      } else {
-         initializeRooms();
-      }
-   }, [setFacilities]);
+      initializeRooms();
+   }, []);
 
    useEffect(() => {
-      const storedFacilities = localStorage.getItem('facilities');
-      if (storedFacilities) {
-         const facilitiesData: Room[] = JSON.parse(storedFacilities);
-         const filtered = facilitiesData.filter((facility) => facility.name.toLowerCase().includes(searchTerm.toLowerCase()));
+      if (facilities.length > 0) {
+         localStorage.setItem('facilities', JSON.stringify(facilities));
+         const filtered = facilities.filter((facility) => facility.name.toLowerCase().includes(searchTerm.toLowerCase()));
          setFilteredFacilities(filtered);
       }
-   }, [searchTerm]);
+   }, [facilities, searchTerm]);
 
    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchTerm(event.target.value);
    };
 
    return (
-      <div className=" w-[100rem] md:w-full flex flex-col h-screen ">
+      <div className="w-[100rem] md:w-full flex flex-col h-screen">
          <div className="w-full">
             <div className="flex w-full">
                {loading ? (
@@ -79,7 +72,7 @@ export default function FasilitasDashboard() {
                      <div className="w-[14%]">
                         <SideBar />
                      </div>
-                     <div className=" md:w-full py-10 px-10 ">
+                     <div className="md:w-full py-10 px-10">
                         <div className="flex justify-end items-end mb-10">
                            <Link href="/admin/fasilitas/tambah-fasilitas">
                               <Button className="bg-orange-500" variant={'secondary'}>
@@ -88,10 +81,10 @@ export default function FasilitasDashboard() {
                            </Link>
                         </div>
                         <div className="ml-10">
-                           <div className="mb-5 ">
+                           <div className="mb-5">
                               <Input type="text" placeholder="Cari Fasilitas" value={searchTerm} onChange={handleSearchChange} className="w-1/4 md:w-1/4" />
                            </div>
-                           <div className="overflow-x-auto custom-scroll-container w-[100rem]  md:w-full">
+                           <div className="overflow-x-auto custom-scroll-container w-[100rem] md:w-full">
                               <DataTable columns={columnsFasilitas} data={filteredFacilities.length > 0 ? filteredFacilities : facilities} />
                            </div>
                         </div>

@@ -8,6 +8,7 @@ import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import useAuth from '@/hooks/useAuth';
 
 export default function ChangePassword() {
    const supabase = createClient();
@@ -103,6 +104,7 @@ export default function ChangePassword() {
 
       toast.success('Berhasil Mengganti Password dan memperbarui sesi.');
    };
+   useAuth();
 
    return (
       <div>

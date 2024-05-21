@@ -5,6 +5,7 @@ import NavbarHome from '../home/NavbarHome';
 import SidebarUser from './SidebarUser';
 import { User } from '@supabase/supabase-js';
 import Spinner from '../ui/spinner';
+import useAuth from '@/hooks/useAuth';
 
 // A simple Spinner component (you can customize this as needed)
 
@@ -29,6 +30,7 @@ export default function Profile() {
       setUser(user); // Store the user object in state
       setLoading(false); // Stop loading
    }
+   useAuth();
 
    useEffect(() => {
       fetchUser(); // Call fetchUser when the component mounts

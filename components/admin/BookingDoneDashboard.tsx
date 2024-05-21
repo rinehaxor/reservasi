@@ -19,7 +19,7 @@ async function fetchBookings(): Promise<Bookings[]> {
       .select(
          `
          *,
-         room:rooms(id, name,image_url)
+         room:rooms(id, name, image_url)
       `
       )
       .eq('payment_status', 'Disetujui')
@@ -35,7 +35,7 @@ async function fetchBookings(): Promise<Bookings[]> {
 
 export default function BookingDoneDashboard() {
    const [bookings, setBookings] = useAtom(bookingsAtom);
-   const [loading, setLoading] = React.useState(true);
+   const [loading, setLoading] = useState(true);
    const [searchTerm, setSearchTerm] = useState('');
    const [filteredBookings, setFilteredBookings] = useState<Bookings[]>([]);
    const updateBookingStatus = useUpdatePaymentStatus();
@@ -50,23 +50,16 @@ export default function BookingDoneDashboard() {
          setLoading(false);
       }
 
-      const storedBookings = localStorage.getItem('bookings_done');
-      if (storedBookings) {
-         setBookings(JSON.parse(storedBookings));
-         setLoading(false);
-      } else {
-         initializeBookings();
-      }
+      initializeBookings();
    }, [updateTrigger]);
 
    useEffect(() => {
-      const storedBookings = localStorage.getItem('bookings_done');
-      if (storedBookings) {
-         const bookingsData: Bookings[] = JSON.parse(storedBookings);
-         const filtered = bookingsData.filter((booking) => booking.invoice_number.toLowerCase().includes(searchTerm.toLowerCase()));
+      if (bookings.length > 0) {
+         localStorage.setItem('bookings_done', JSON.stringify(bookings));
+         const filtered = bookings.filter((booking) => booking.invoice_number.toLowerCase().includes(searchTerm.toLowerCase()));
          setFilteredBookings(filtered);
       }
-   }, [searchTerm]);
+   }, [bookings, searchTerm]);
 
    useCheckUserRoleAndRedirect();
 

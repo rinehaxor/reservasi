@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { createClient } from '@/utils/supabase/client';
 import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
 import { ColumnDef } from '@tanstack/react-table';
+import { format } from 'date-fns';
 import { useAtom } from 'jotai';
 import Image from 'next/image';
 
@@ -90,7 +91,16 @@ export const columnsBookingsUser: ColumnDef<Bookings>[] = [
    {
       id: 'dates',
       header: 'Tgl. Checkin / Tgl. Checkout',
-      cell: ({ row }) => `${row.original.checkindate} / ${row.original.checkoutdate}`,
+      cell: ({ row }) => {
+         const checkinDate = format(new Date(row.original.checkindate), 'yyyy-MM-dd');
+         const checkoutDate = format(new Date(row.original.checkoutdate), 'yyyy-MM-dd');
+         return (
+            <div>
+               <div>{checkinDate} / </div>
+               <div>{checkoutDate}</div>
+            </div>
+         );
+      },
    },
    {
       accessorKey: 'total_price',

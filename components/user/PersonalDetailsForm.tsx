@@ -73,7 +73,7 @@ const PersonalDetailsForm = ({ onNext }: any) => {
             <div className="flex flex-col lg:flex-row gap-5 mt-5 w-full px-4">
                {roomDetails && (
                   <div className="flex flex-col lg:w-1/2 items-center lg:items-end">
-                     <Image src={roomDetails.image_url} alt="Room Image" width={500} height={400} />
+                     <Image src={roomDetails.image_url} alt="Room Image" width={500} height={400} className="w-auto md:ml-[18.5rem]" />
                      <div className="flex flex-col lg:flex-row justify-between items-center w-full mt-4 lg:mt-0">
                         <div className="flex flex-col items-center lg:items-start lg:w-1/2 md:ml-[17.5rem]">
                            <div className="text-xl font-bold">{roomDetails.name}</div>

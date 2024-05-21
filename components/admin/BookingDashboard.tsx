@@ -10,8 +10,9 @@ import { bookingsAtom, updateTriggerAtom } from '@/components/atoms/store';
 import { DataTable } from '@/app/admin/rooms/data-table';
 import { Bookings, columnsBookings } from '@/app/admin/reservasi/column';
 import { useUpdatePaymentStatus } from '../atoms/bookingStore';
-import useCheckUserRoleAndRedirect from '@/hooks/useCheckUserRoleAndRedirect ';
+
 import { DataTableUser } from '@/app/user/reservasi/data-table';
+import useCheckUserRoleAndRedirect from '@/hooks/useCheckUserRoleAndRedirect ';
 
 async function fetchBookings(): Promise<Bookings[]> {
    const supabase = createClient();
@@ -35,7 +36,7 @@ async function fetchBookings(): Promise<Bookings[]> {
 
 export default function BookingsDashboard() {
    const [bookings, setBookings] = useAtom(bookingsAtom);
-   const [loading, setLoading] = React.useState(true);
+   const [loading, setLoading] = useState(true);
    const [searchTerm, setSearchTerm] = useState('');
    const [filteredBookings, setFilteredBookings] = useState<Bookings[]>([]);
    const updateBookingStatus = useUpdatePaymentStatus();
@@ -50,23 +51,16 @@ export default function BookingsDashboard() {
          setLoading(false);
       }
 
-      const storedBookings = localStorage.getItem('bookings');
-      if (storedBookings) {
-         setBookings(JSON.parse(storedBookings));
-         setLoading(false);
-      } else {
-         initializeBookings();
-      }
+      initializeBookings();
    }, [updateTrigger]);
 
    useEffect(() => {
-      const storedBookings = localStorage.getItem('bookings');
-      if (storedBookings) {
-         const bookingsData: Bookings[] = JSON.parse(storedBookings);
-         const filtered = bookingsData.filter((booking) => booking.invoice_number.toLowerCase().includes(searchTerm.toLowerCase()));
+      if (bookings.length > 0) {
+         localStorage.setItem('bookings', JSON.stringify(bookings));
+         const filtered = bookings.filter((booking) => booking.invoice_number.toLowerCase().includes(searchTerm.toLowerCase()));
          setFilteredBookings(filtered);
       }
-   }, [searchTerm]);
+   }, [bookings, searchTerm]);
 
    useCheckUserRoleAndRedirect();
 
@@ -112,17 +106,3 @@ export default function BookingsDashboard() {
       </div>
    );
 }
-
-//    useEffect(() => {
-//       async function initializeBookings() {
-//          if (bookings.length === 0) {
-//             setLoading(true);
-//             const fetchedBookings = await fetchBookings();
-//             setBookings(fetchedBookings);
-//             setLoading(false);
-//          }
-//       }
-//       console.log(updateTrigger);
-
-//       initializeBookings();
-//    }, [setBookings, bookings.length, updateTrigger]);

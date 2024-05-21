@@ -158,7 +158,13 @@ export default function Page({ params }: any) {
                               <Link href={`/kamar/${room.id}/pesan`}>Pesan</Link>
                            </Button>
                            <li className="md:font-bold md:text-xs text-xs font-bold mt-2">
-                              <i>Catatan : Sebelum memesan harap login terlebih dahulu</i>
+                              <i>
+                                 Catatan : Sebelum memesan harap{' '}
+                                 <span className="text-orange-500 border-b-2 border-orange-500">
+                                    <Link href="/login">login</Link>
+                                 </span>{' '}
+                                 terlebih dahulu
+                              </i>
                            </li>
                         </div>
                      </div>
