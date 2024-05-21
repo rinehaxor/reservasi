@@ -33,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
          <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
             <main className="min-h-screen flex flex-col items-center">
                {children}
-               <InternetStatusChecker />
+               {/* <InternetStatusChecker /> */}
             </main>
             <SpeedInsights />
          </body>

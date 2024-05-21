@@ -28,6 +28,9 @@ export type Bookings = {
    checkindate: any;
    checkoutdate: any;
    payment_proof_url: string;
+   room: {
+      name: string;
+   };
 };
 
 //handle aprove pembayran

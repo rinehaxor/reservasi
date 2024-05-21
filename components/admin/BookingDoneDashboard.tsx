@@ -11,6 +11,8 @@ import { DataTable } from '@/app/admin/rooms/data-table';
 import { Bookings, columnsBookings } from '@/app/admin/reservasi/column';
 import { useUpdatePaymentStatus } from '../atoms/bookingStore';
 import useCheckUserRoleAndRedirect from '@/hooks/useCheckUserRoleAndRedirect ';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import ExportPDF from './ExportReservasiPDF';
 
 async function fetchBookings(): Promise<Bookings[]> {
    const supabase = createClient();
@@ -81,8 +83,11 @@ export default function BookingDoneDashboard() {
                         <SideBar />
                      </div>
                      <div className=" md:w-full md:ml-[14%] py-10 px-10">
-                        <div className="mb-5">
+                        <div className="flex justify-between mb-5">
                            <Input type="text" placeholder="Cari Invoice Reservasi" value={searchTerm} onChange={handleSearchChange} className="w-full md:w-1/4" />
+                           <PDFDownloadLink document={<ExportPDF bookings={filteredBookings.length > 0 ? filteredBookings : bookings} />} fileName="Laporan_Reservasi_Selesai.pdf">
+                              {({ blob, url, loading, error }) => (loading ? 'Loading document...' : <Button variant={'secondary'}>Download Laporan</Button>)}
+                           </PDFDownloadLink>
                         </div>
                         <div className="overflow-x-auto custom-scroll-container w-[120rem]">
                            <DataTable columns={columnsBookings} data={filteredBookings.length > 0 ? filteredBookings : bookings} />
