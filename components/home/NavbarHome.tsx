@@ -116,11 +116,11 @@ export default function NavbarHome() {
                            <Link href="/user/edit-profile">
                               <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Edit Profile</button>
                            </Link>
-                           <Link href="/user/change-password">
-                              <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Change Password</button>
+                           <Link href="/user/ganti-password">
+                              <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Ganti Password</button>
                            </Link>
-                           <Link href="/user/reservations">
-                              <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Reservations</button>
+                           <Link href="/user/reservasi">
+                              <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Reservasi</button>
                            </Link>
                            <button onClick={handleLogout} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">
                               Logout

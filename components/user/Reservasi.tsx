@@ -82,8 +82,10 @@ export default function UserBookingHistory() {
                      <div className="mb-5">
                         <Input type="text" placeholder="Cari Invoice" value={searchTerm} onChange={handleSearchChange} className="w-full md:w-1/2" />
                      </div>
-                     <div className="overflow-x-auto custom-scroll-container">
-                        <DataTableUser columns={columnsBookingsUser} data={filteredBookings.length > 0 ? filteredBookings : bookings} />
+                     <div className="overflow-x-auto custom-scroll-container ">
+                        <div className="w-[80rem]">
+                           <DataTableUser columns={columnsBookingsUser} data={filteredBookings.length > 0 ? filteredBookings : bookings} />
+                        </div>
                      </div>
                   </>
                ) : (

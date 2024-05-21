@@ -35,8 +35,10 @@ export default function Hero() {
                   <span className="mr-2">S</span>
                </p>
                <p className="text-sm md:text-xl font-thin mt-7">
-                  Pesan penginapan Anda dan nikmatilah <br />
-                  Senang dengan harga paling terjangkau.
+                  {/* Pesan penginapan Anda dan nikmatilah <br />
+                  Senang dengan harga paling terjangkau. */}
+                  Pesan penginapan anda sekarang, <br />
+                  dan nikmati suasana nyaman dengan harga paling terjangkau
                </p>
             </div>
             <div className="absolute flex flex-col justify-center items-center w-full h-full mb-5">

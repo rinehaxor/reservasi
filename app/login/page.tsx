@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { createClient } from '@/utils/supabase/client'; // Pastikan ini mengarah ke file yang benar!
 import NavbarUserRegister from '@/components/user/NavbarUserRegister';
@@ -26,6 +26,22 @@ const LoginForm = () => {
    } = useForm<FormData>();
 
    const [message, setMessage] = useState('');
+   const supabase = createClient();
+
+   useEffect(() => {
+      async function checkUser() {
+         const {
+            data: { user },
+         } = await supabase.auth.getUser();
+
+         if (user) {
+            // If the user is logged in, redirect them away from the login page
+            router.push('/');
+         }
+      }
+
+      checkUser();
+   }, [supabase, router]);
 
    async function loginUser(data: FormData) {
       const { email, password } = data;
@@ -49,7 +65,7 @@ const LoginForm = () => {
             return;
          }
 
-         return data.role_id; // asumsikan role_id 1 adalah 'user', 2 adalah 'admin'
+         return data.role_id; //  role_id 1 adalah 'user', 2 adalah 'admin'
       }
       const {
          data: { user },
@@ -93,8 +109,8 @@ const LoginForm = () => {
    return (
       <div className="w-full min-h-screen relative">
          <NavbarUserRegister />
-         <div className="w-1/3 mx-auto max-w-sm items-center gap-1.5">
-            <div className="mt-20">
+         <div className="w-full  md:w-1/3 mx-auto max-w-sm items-center gap-1.5">
+            <div className="mt-20 md:mx-0 mx-10">
                <h1 className="font-extrabold mb-10 text-lg md:text-2xl">Login Akun</h1>
                <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">

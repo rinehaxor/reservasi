@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { createClient } from '@/utils/supabase/client'; // Pastikan ini mengarah ke file yang benar!
 import NavbarUserRegister from '@/components/user/NavbarUserRegister';
@@ -12,6 +12,7 @@ import Link from 'next/link';
 import { WaveSVG } from '@/components/ui/waves';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from 'next/navigation';
 
 interface FormData {
    user: any;
@@ -22,12 +23,28 @@ interface FormData {
 }
 
 const RegisterForm = () => {
+   const router = useRouter();
    const {
       register,
       handleSubmit,
       formState: { errors },
    } = useForm<FormData>();
    const { shadtoast } = useToast();
+   const supabase = createClient();
+   useEffect(() => {
+      async function checkUser() {
+         const {
+            data: { user },
+         } = await supabase.auth.getUser();
+
+         if (user) {
+            // If the user is logged in, redirect them away from the login page
+            router.push('/');
+         }
+      }
+
+      checkUser();
+   }, [supabase, router]);
 
    const [message, setMessage] = useState('');
    const [registrationSuccess, setRegistrationSuccess] = useState(false);
@@ -107,8 +124,8 @@ const RegisterForm = () => {
       <div className="w-full min-h-screen relative">
          <NavbarUserRegister />
 
-         <div className="w-1/3 mx-auto max-w-sm items-center gap-1.5">
-            <div className="mt-20">
+         <div className=" w-full md:w-1/3 mx-auto max-w-sm items-center gap-1.5">
+            <div className="mt-20 md:mx-0 mx-10">
                <div className="mt-10">
                   {registrationSuccess && (
                      <Alert variant="primary">
