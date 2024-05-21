@@ -178,7 +178,7 @@ const PaymentDetailsForm = ({ onConfirm, onBack, onNext }: any) => {
                            </div>
                            <div className="mb-4">
                               <Label>Nomer Rekening</Label>
-                              <Input className="w-full" {...register('paymentAccountNumber', { required: 'Nomer Rekening wajib diisi' })} placeholder="Nomer Rekening" />
+                              <Input type="number" className="w-full" {...register('paymentAccountNumber', { required: 'Nomer Rekening wajib diisi' })} placeholder="Nomer Rekening" />
                               {errors.paymentAccountNumber && <p className="text-red-500 text-xs">Masukan Nomer Rekening.</p>}
                            </div>
                            <div className="mb-4">

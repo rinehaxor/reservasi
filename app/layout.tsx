@@ -16,7 +16,10 @@ const defaultUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` 
 export const metadata = {
    metadataBase: new URL(defaultUrl),
    title: 'Hotel Maerokoco - Kota Blitar',
-   description: 'The fastest way to build apps with Next.js and Supabase',
+   description: 'Hotel Maerokoco Nyaman di Kota Blitar',
+   icons: {
+      icon: '/assets/favicon.ico',
+   },
 };
 
 const InternetStatusChecker = dynamic(() => import('@/components/InternetStatusChecker'), { ssr: false });
@@ -24,7 +27,9 @@ const InternetStatusChecker = dynamic(() => import('@/components/InternetStatusC
 export default function RootLayout({ children }: { children: React.ReactNode }) {
    return (
       <html lang="en" suppressHydrationWarning>
-         <head />
+         <head>
+            <link rel="icon" href="/assets/favicon.ico" />
+         </head>
          <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
             <main className="min-h-screen flex flex-col items-center">
                {children}

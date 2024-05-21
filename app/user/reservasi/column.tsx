@@ -117,7 +117,7 @@ export const columnsBookingsUser: ColumnDef<Bookings>[] = [
          const updateBookingStatus = useUpdateBookingStatus();
          return (
             <div className="flex flex-row items-center justify-center gap-4">
-               <Dialog>
+               {/* <Dialog>
                   <DialogTrigger asChild>
                      <Button onClick={() => setIsPreviewOpen(true)}>Invoice</Button>
                   </DialogTrigger>
@@ -139,10 +139,10 @@ export const columnsBookingsUser: ColumnDef<Bookings>[] = [
                         </BlobProvider>
                      </div>
                   </DialogContent>
-               </Dialog>
-               {/* <PDFDownloadLink document={<MyDocument bookingData={row.original} />} fileName={`booking-${row.original.id}.pdf`}>
-                  {({ loading }) => (loading ? 'Preparing document...' : 'Download PDF')}
-               </PDFDownloadLink> */}
+               </Dialog> */}
+               <PDFDownloadLink document={<MyDocument bookingData={row.original} />} fileName={`booking-${row.original.id}.pdf`}>
+                  {({ loading }) => (loading ? 'Preparing document...' : <Button variant={'secondary'}>Download </Button>)}
+               </PDFDownloadLink>
             </div>
          );
       },
