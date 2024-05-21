@@ -42,26 +42,26 @@ export default function NavbarHome() {
 
    return (
       <div className="w-full flex flex-col items-center text-white relative z-50">
-         <nav className="w-full flex justify-center h-16 bg-orange-500">
+         <nav className="w-full flex justify-center h-16 bg-orange-500 shadow-md">
             <div className="flex justify-between items-center w-full px-4 h-16 md:mx-48">
                <div className="flex items-center space-x-4 flex-grow">
-                  <Link href="/" className="flex items-center py-5 px-2 text-white hover:text-gray-100">
-                     <span className="font-bold">MAEROKOCO</span>
+                  <Link href="/" className="flex items-center py-5 px-2 text-white hover:text-gray-100 transition duration-200">
+                     <span className="font-bold text-xl">MAEROKOCO</span>
                   </Link>
                </div>
                <div className="hidden md:flex items-center space-x-1">
-                  <Link href="/" className="py-5 px-3 text-white hover:text-gray-100">
+                  <Link href="/" className="py-5 px-3 font-semibold text-white hover:text-gray-100 transition duration-200">
                      Home
                   </Link>
-                  <Link href="/list-kamar" className="py-5 px-3 text-white hover:text-gray-100">
+                  <Link href="/list-kamar" className="py-5 px-3 font-semibold text-white hover:text-gray-100 transition duration-200">
                      Room
                   </Link>
-                  <Link href="/contact" className="py-5 px-3 text-white hover:text-gray-100">
+                  <Link href="/contact" className="py-5 px-3 font-semibold text-white hover:text-gray-100 transition duration-200">
                      Contact
                   </Link>
                   {user ? (
                      <div className="relative">
-                        <button onClick={toggleLogoutMenu} className="py-2 px-4 rounded-md no-underline bg-orange-700 hover:bg-orange-600 text-white">
+                        <button onClick={toggleLogoutMenu} className="py-2 px-4 rounded-md bg-orange-500 hover:bg-orange-500 text-white transition duration-200">
                            {user?.email}
                         </button>
                         {showLogout && (
@@ -82,7 +82,7 @@ export default function NavbarHome() {
                         )}
                      </div>
                   ) : (
-                     <Link href="/login" className="py-2 px-3 rounded-md no-underline bg-orange-700 hover:bg-orange-600 text-white">
+                     <Link href="/login" className="py-2 px-3 rounded-md bg-orange-700 hover:bg-orange-600 text-white transition duration-200">
                         Login
                      </Link>
                   )}
@@ -95,14 +95,14 @@ export default function NavbarHome() {
                   </button>
                </div>
             </div>
-            <div className={`${isOpen ? 'block' : 'hidden'} absolute w-full bg-orange-700 z-40 md:hidden pt-3`}>
-               <Link href="/" className="block py-2 px-4 text-sm text-white hover:bg-orange-500">
+            <div className={`${isOpen ? 'block' : 'hidden'} absolute w-full bg-orange-500 z-40 md:hidden pt-3 transition duration-200`}>
+               <Link href="/" className="block py-2 px-4 text-sm text-white hover:bg-orange-500 transition duration-200">
                   Home
                </Link>
-               <Link href="/list-kamar" className="block py-2 px-4 text-sm text-white hover:bg-orange-500">
+               <Link href="/list-kamar" className="block py-2 px-4 text-sm text-white hover:bg-orange-500 transition duration-200">
                   Room
                </Link>
-               <Link href="/contact" className="block py-2 px-4 text-sm text-white hover:bg-orange-500">
+               <Link href="/contact" className="block py-2 px-4 text-sm text-white hover:bg-orange-500 transition duration-200">
                   Contact
                </Link>
                {user ? (
@@ -111,16 +111,16 @@ export default function NavbarHome() {
                      {showLogout && (
                         <div className="bg-white rounded-md shadow-xl mt-2">
                            <Link href="/user/profile">
-                              <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Profil</button>
+                              <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Profile</button>
                            </Link>
                            <Link href="/user/edit-profile">
-                              <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Edit Profil</button>
+                              <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Edit Profile</button>
                            </Link>
-                           <Link href="/user/ganti-password">
-                              <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Ganti Password</button>
+                           <Link href="/user/change-password">
+                              <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Change Password</button>
                            </Link>
-                           <Link href="/user/reservasi">
-                              <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Reservasi</button>
+                           <Link href="/user/reservations">
+                              <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Reservations</button>
                            </Link>
                            <button onClick={handleLogout} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">
                               Logout
@@ -129,7 +129,7 @@ export default function NavbarHome() {
                      )}
                   </div>
                ) : (
-                  <Link href="/login" className="py-2 px-3 flex rounded-md no-underline bg-orange-700 hover:bg-orange-600 text-white">
+                  <Link href="/login" className="py-2 px-3 flex rounded-md bg-orange-700 hover:bg-orange-600 text-white transition duration-200">
                      Login
                   </Link>
                )}
