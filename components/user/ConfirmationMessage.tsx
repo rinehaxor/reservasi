@@ -47,7 +47,7 @@ const ConfirmationMessage = () => {
                   Terima kasih, {bookingDetails.name}. Pemesanan Anda telah dikonfirmasi untuk tanggal {formatDate(bookingDetails.checkinDate)} - {formatDate(bookingDetails.checkoutDate)}.
                </p>
                <div className="flex items-center justify-center mt-10">
-                  <Link href="/list-kamar">
+                  <Link href="/user/reservasi">
                      <Button variant={'secondary'} className="w-32 mb-5">
                         Selesai
                      </Button>

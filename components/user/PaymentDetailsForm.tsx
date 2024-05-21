@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect } from 'react';
 import { useAtom } from 'jotai';
-
 import { Button } from '@/components/ui/button';
 import { bookingDetailsAtom } from '../atoms/bookingStore';
 import NavbarUserRegister from './NavbarUserRegister';
@@ -12,6 +11,7 @@ import { Payment } from '@/app/admin/payment/column';
 import { createClient } from '@/utils/supabase/client';
 import { paymentAtom } from '../atoms/store';
 import Image from 'next/image';
+import Spinner from '../ui/spinner';
 
 async function fetchPayment(): Promise<Payment[]> {
    const supabase = createClient();
@@ -150,51 +150,55 @@ const PaymentDetailsForm = ({ onConfirm, onBack, onNext }: any) => {
             <p className="font-poppins text-lg">Silakan isi kolom kosong di bawah ini</p>
          </div>
          <div className="flex justify-center items-center px-4">
-            <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-4xl">
-               <div className="flex flex-col lg:flex-row gap-5 mt-5">
-                  <div className=" w-full md:w-1/2 flex flex-col gap-16 mt-5 items-center justify-center ">
-                     {payment.map((item, index) => (
-                        <div key={index} className="flex flex-col lg:flex-row gap-5 mt-5 justify-center mitems-center">
-                           <div className="w-full lg:w-1/2 flex flex-row md:justify-end items-center justify-center lg:items-end gap-5">
-                              <Image src={item.image_url} alt="Room Image" width={500} height={400} className="w-full lg:w-auto" />
-                              <div className="text-xl font-bold">
-                                 {item.bank_name} <br></br>
-                                 {item.account_number}
+            {loading ? ( // Display spinner while loading
+               <Spinner />
+            ) : (
+               <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-4xl">
+                  <div className="flex flex-col lg:flex-row gap-5 mt-5">
+                     <div className=" w-full md:w-1/2 flex flex-col gap-16 mt-5 items-center justify-center ">
+                        {payment.map((item, index) => (
+                           <div key={index} className="flex flex-col lg:flex-row gap-5 mt-5 justify-center mitems-center">
+                              <div className="w-full lg:w-1/2 flex flex-row md:justify-end items-center justify-center lg:items-end gap-5">
+                                 <Image src={item.image_url} alt="Room Image" width={500} height={400} className="w-full lg:w-auto" />
+                                 <div className="text-xl font-bold">
+                                    {item.bank_name} <br></br>
+                                    {item.account_number}
+                                 </div>
                               </div>
                            </div>
-                        </div>
-                     ))}
-                  </div>
-                  <div className="bg-gray-300 w-full lg:w-px self-stretch lg:mx-8"></div> {/* Garis pemisah */}
-                  <div className="w-full lg:w-1/2">
-                     <div className="w-full flex flex-col my-10">
-                        <div className="mb-4">
-                           <Label>Nama Pengirim</Label>
-                           <Input className="w-full" {...register('paymentName', { required: 'Masukan Nama Pengirim' })} placeholder="Nama Pengirim" />
-                           {errors.paymentName && <p className="text-red-500 text-xs">Masukan Nama Pengirim</p>}
-                        </div>
-                        <div className="mb-4">
-                           <Label>Nomer Rekening</Label>
-                           <Input className="w-full" {...register('paymentAccountNumber', { required: 'Nomer Rekening wajib diisi' })} placeholder="Nomer Rekening" />
-                           {errors.paymentAccountNumber && <p className="text-red-500 text-xs">Masukan Nomer Rekening.</p>}
-                        </div>
-                        <div className="mb-4">
-                           <Label htmlFor="image">Bukti Pengiriman</Label>
-                           <Input type="file" className="form-input w-full" onChange={handleFileChange} />
-                           {errors.image && <p className="text-red-500 text-xs">Masukan Bukti Pengiriman.</p>}
+                        ))}
+                     </div>
+                     <div className="bg-gray-300 w-full lg:w-px self-stretch lg:mx-8"></div> {/* Garis pemisah */}
+                     <div className="w-full lg:w-1/2">
+                        <div className="w-full flex flex-col my-10">
+                           <div className="mb-4">
+                              <Label>Nama Pengirim</Label>
+                              <Input className="w-full" {...register('paymentName', { required: 'Masukan Nama Pengirim' })} placeholder="Nama Pengirim" />
+                              {errors.paymentName && <p className="text-red-500 text-xs">Masukan Nama Pengirim</p>}
+                           </div>
+                           <div className="mb-4">
+                              <Label>Nomer Rekening</Label>
+                              <Input className="w-full" {...register('paymentAccountNumber', { required: 'Nomer Rekening wajib diisi' })} placeholder="Nomer Rekening" />
+                              {errors.paymentAccountNumber && <p className="text-red-500 text-xs">Masukan Nomer Rekening.</p>}
+                           </div>
+                           <div className="mb-4">
+                              <Label htmlFor="image">Bukti Pengiriman</Label>
+                              <Input type="file" className="form-input w-full" onChange={handleFileChange} />
+                              {errors.image && <p className="text-red-500 text-xs">Masukan Bukti Pengiriman.</p>}
+                           </div>
                         </div>
                      </div>
                   </div>
-               </div>
-               <div className="flex flex-col items-center justify-center mt-10">
-                  <Button variant={'secondary'} type="submit" className="w-32 mb-5">
-                     Next
-                  </Button>
-                  <Button className="w-32" variant={'destructive'} onClick={onBack}>
-                     Back
-                  </Button>
-               </div>
-            </form>
+                  <div className="flex flex-col items-center justify-center mt-10">
+                     <Button variant={'secondary'} type="submit" className="w-32 mb-5">
+                        Next
+                     </Button>
+                     <Button className="w-32" variant={'destructive'} onClick={onBack}>
+                        Back
+                     </Button>
+                  </div>
+               </form>
+            )}
          </div>
       </div>
    );

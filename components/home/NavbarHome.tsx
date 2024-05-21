@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Button } from '../ui/button';
 import { User } from '@supabase/auth-js';
 import { useRouter } from 'next/navigation';
+import { GoChevronDown } from 'react-icons/go';
 
 // Initialize Supabase client
 const supabase = createClient();
@@ -62,7 +63,12 @@ export default function NavbarHome() {
                   {user ? (
                      <div className="relative">
                         <button onClick={toggleLogoutMenu} className="py-2 px-4 rounded-md bg-orange-500 hover:bg-orange-500 text-white transition duration-200">
-                           {user?.email}
+                           <div className="flex flex-row items-center">
+                              {user?.email}
+                              <span className="ml-2">
+                                 <GoChevronDown />
+                              </span>
+                           </div>
                         </button>
                         {showLogout && (
                            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-50">
@@ -73,8 +79,23 @@ export default function NavbarHome() {
                                     </Link>
                                  </li>
                                  <li>
+                                    <Link href="/user/edit-profile">
+                                       <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Edit Profile</button>
+                                    </Link>
+                                 </li>
+                                 <li>
+                                    <Link href="/user/ganti-password">
+                                       <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Ganti Password</button>
+                                    </Link>
+                                 </li>
+                                 <li>
+                                    <Link href="/user/reservasi">
+                                       <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Reservasi</button>
+                                    </Link>
+                                 </li>
+                                 <li>
                                     <button onClick={handleLogout} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">
-                                       Logout
+                                       Keluar
                                     </button>
                                  </li>
                               </ul>
@@ -107,7 +128,15 @@ export default function NavbarHome() {
                </Link>
                {user ? (
                   <div className="py-2 px-4 text-sm text-white">
-                     <button onClick={toggleLogoutMenu}>{user.email}</button>
+                     <button onClick={toggleLogoutMenu}>
+                        <div className="flex flex-row items-center">
+                           {user?.email}
+
+                           <span className="ml-2">
+                              <GoChevronDown />
+                           </span>
+                        </div>
+                     </button>
                      {showLogout && (
                         <div className="bg-white rounded-md shadow-xl mt-2">
                            <Link href="/user/profile">
