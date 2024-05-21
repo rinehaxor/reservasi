@@ -202,7 +202,7 @@ const RegisterForm = () => {
                         </span>
                      </p>
                   </div>
-                  <Button type="submit" className="w-full mt-5" variant={'secondary'}>
+                  <Button type="submit" className="w-full mt-5">
                      Daftar
                   </Button>
                   {/* <div className="mt-2">{message}</div> */}

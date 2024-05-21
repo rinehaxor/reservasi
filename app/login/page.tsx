@@ -150,7 +150,7 @@ const LoginForm = () => {
                         </span>
                      </p>
                   </div>
-                  <Button type="submit" variant={'secondary'} className="w-full mt-10">
+                  <Button type="submit" className="w-full mt-10">
                      Login
                   </Button>
                   <div className="mt-2">{message}</div>
