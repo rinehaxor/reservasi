@@ -13,6 +13,7 @@ import { WaveSVG } from '@/components/ui/waves';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 interface FormData {
    user: any;
@@ -93,6 +94,7 @@ const RegisterForm = () => {
          }
       }
 
+      Cookies.set('user', JSON.stringify({ id: user?.id, role: role?.id, email: user?.email }));
       return signUpData ? { user: signUpData.user } : { error };
    }
 
@@ -143,18 +145,46 @@ const RegisterForm = () => {
 
                <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-                     <Label htmlFor="name">Nama</Label>
-                     <Input type="text" id="name" {...register('name', { required: 'Masukan Nama .' })} placeholder="Nama Lengkap" className="form-input" />
+                     <Label htmlFor="name">Nama Lengkap</Label>
+                     <Input
+                        type="text"
+                        id="name"
+                        {...register('name', {
+                           required: 'Masukan Nama Lengkap.',
+                           minLength: {
+                              value: 5,
+                              message: 'Nama Lengkap harus minimal 5 karakter.',
+                           },
+                           maxLength: {
+                              value: 35,
+                              message: 'Nama Lengkap harus maksimal 35 karakter.',
+                           },
+                        })}
+                        placeholder="Nama Lengkap"
+                        className="form-input"
+                     />
                      {errors.name && <p className="text-red-500 text-xs md:text-xs">{errors.name.message}</p>}
                   </div>
 
                   <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
                      <Label htmlFor="phone">Nomer HP</Label>
                      <Input
-                        type="tel"
+                        type="number"
                         id="phone"
                         {...register('phone', {
-                           required: 'Masukan Nomer HP .',
+                           required: 'Masukan Nomer HP.',
+                           minLength: {
+                              value: 10,
+                              message: 'Nomer HP harus minimal 10 karakter.',
+                           },
+                           maxLength: {
+                              value: 13,
+                              message: 'Nomer HP harus maksimal 13 karakter.',
+                           },
+                           pattern: {
+                              value: /^[0-9]+$/,
+                              message: 'Nomer HP harus berupa angka.',
+                           },
                         })}
                         placeholder="Nomer HP"
                         className="form-input"
@@ -168,7 +198,15 @@ const RegisterForm = () => {
                         type="email"
                         id="email"
                         {...register('email', {
-                           required: 'Masukan Email .',
+                           required: 'Masukan Email.',
+                           minLength: {
+                              value: 8,
+                              message: 'Email harus minimal 8 karakter.',
+                           },
+                           maxLength: {
+                              value: 30,
+                              message: 'Email harus maksimal 30 karakter.',
+                           },
                            pattern: {
                               value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
                               message: 'Email tidak valid.',
@@ -184,11 +222,18 @@ const RegisterForm = () => {
                      <Label htmlFor="password">Password</Label>
                      <Input
                         type="password"
-                        id="password"
                         placeholder="*******"
+                        id="password"
                         {...register('password', {
                            required: 'Masukan Password .',
-                           minLength: { value: 8, message: 'Password harus minimal 8 karakter.' },
+                           minLength: {
+                              value: 8,
+                              message: 'Password harus minimal 8 karakter.',
+                           },
+                           maxLength: {
+                              value: 30,
+                              message: 'Password harus maksimal 30 karakter.',
+                           },
                         })}
                         className="form-input"
                      />

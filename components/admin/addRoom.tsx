@@ -156,54 +156,59 @@ const AddRoom = () => {
    };
 
    return (
-      <div>
-         <p className="text-xl font-bold border-b-2 border-orange-500 mb-5">Tambah Kamar</p>
-         <form onSubmit={handleSubmit(handleAddRoom)} className="flex flex-col gap-4">
-            <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-               <Label htmlFor="name">Nama Kamar</Label>
-               <Input type="text" id="name" placeholder="Nama Kamar" {...register('name', { required: 'Masukan Nama Kamar' })} className="form-input" />
-               {errors.name && <p className="text-red-500 text-xs md:text-md">Masukan Nama Kamar.</p>}
+      <div className="max-w-3xl mx-auto p-8 bg-white shadow-md rounded-md">
+         <p className="text-2xl font-bold border-b-2 border-orange-500 mb-5">Tambah Kamar</p>
+         <form onSubmit={handleSubmit(handleAddRoom)} className="space-y-4">
+            <div className="grid gap-4 md:grid-cols-2">
+               <div>
+                  <Label htmlFor="name">Nama Kamar</Label>
+                  <Input type="text" id="name" placeholder="Nama Kamar" {...register('name', { required: 'Masukan Nama Kamar' })} />
+                  {errors.name && <p className="text-red-500 text-xs">Masukan Nama Kamar.</p>}
+               </div>
+               <div>
+                  <Label htmlFor="type">Tipe Kamar</Label>
+                  <Input type="text" id="type" placeholder="Tipe Kamar" {...register('type', { required: 'Masukan Tipe Kamar' })} />
+                  {errors.type && <p className="text-red-500 text-xs">Masukan Tipe Kamar.</p>}
+               </div>
             </div>
-            <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-               <Label htmlFor="type">Tipe Kamar</Label>
-               <Input type="text" id="type" placeholder="Tipe Kamar" {...register('type', { required: 'Masukan Tipe Kamar' })} className="form-input" />
-               {errors.type && <p className="text-red-500 text-xs md:text-md">Masukan Tipe Kamar.</p>}
-            </div>
-            <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
+            <div>
                <Label htmlFor="description">Deskripsi Kamar</Label>
-               <Textarea id="description" placeholder="Deskripsi" {...register('description', { required: 'Masukan Deskripsi' })} className="form-input" />
-               {errors.description && <p className="text-red-500 text-xs md:text-md">Masukan Deskripsi.</p>}
+               <Textarea id="description" placeholder="Deskripsi" {...register('description', { required: 'Masukan Deskripsi' })} />
+               {errors.description && <p className="text-red-500 text-xs">Masukan Deskripsi.</p>}
             </div>
-            <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
+            <div>
                <Label htmlFor="price">Harga Per Malam</Label>
-               <Input type="number" id="price" placeholder="0" {...register('price', { required: 'Masukan Harga' })} className="form-input" />
-               {errors.price && <p className="text-red-500 text-xs md:text-md">Masukan Harga.</p>}
+               <Input type="number" id="price" placeholder="0" {...register('price', { required: 'Masukan Harga' })} />
+               {errors.price && <p className="text-red-500 text-xs">Masukan Harga.</p>}
             </div>
-            <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
+            <div>
                <Label htmlFor="image">Foto Kamar</Label>
                <Input type="file" className="form-input" onChange={(e) => handleFileChange(e, 'image')} />
                {errors.image && <p className="text-red-500 text-xs">Masukan Gambar Kamar.</p>}
             </div>
-            <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
+            <div>
                <Label htmlFor="bathroom_image">Foto Kamar Mandi</Label>
                <Input type="file" className="form-input" onChange={(e) => handleFileChange(e, 'bathroom_image')} />
                {errors.bathroom_image && <p className="text-red-500 text-xs">Masukan Gambar Kamar Mandi.</p>}
             </div>
-            <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
+            <div>
                <Label htmlFor="other_image">Foto Lainnya</Label>
                <Input type="file" className="form-input" onChange={(e) => handleFileChange(e, 'other_image')} />
                {errors.other_image && <p className="text-red-500 text-xs">Masukan Gambar Lainnya.</p>}
             </div>
             <div>
-               {facilities.map((facility) => (
-                  <Label className="flex items-center gap-2 mb-2" key={facility.id}>
-                     <input type="checkbox" value={facility.id} checked={selectedFacilities.includes(facility.id)} onChange={() => handleFacilityChange(facility.id)} />
-                     {facility.name}
-                  </Label>
-               ))}
+               <Label>Fasilitas</Label>
+               <div className="grid gap-2 md:grid-cols-3">
+                  {facilities.map((facility) => (
+                     <Label className="flex items-center gap-2" key={facility.id}>
+                        <input type="checkbox" value={facility.id} checked={selectedFacilities.includes(facility.id)} onChange={() => handleFacilityChange(facility.id)} />
+                        {facility.name}
+                     </Label>
+                  ))}
+               </div>
             </div>
-            <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-               <Button variant={'secondary'} type="submit">
+            <div className="mt-4">
+               <Button variant="secondary" type="submit" className="w-full">
                   Tambah Kamar
                </Button>
                <ToastContainer autoClose={3000} />

@@ -92,18 +92,75 @@ const PersonalDetailsForm = ({ onNext }: any) => {
                      <div className="w-full">
                         <div className="mb-4 w-full md:w-1/2">
                            <Label>Nama Lengkap</Label>
-                           <Input {...register('name', { required: 'Nama Lengkap wajib diisi' })} placeholder="Full Name" />
-                           {errors.name && <p className="text-red-500 text-xs">Masukan Nama Lengkap.</p>}
+                           <Input
+                              type="text"
+                              id="name"
+                              {...register('name', {
+                                 required: 'Masukan Nama Lengkap.',
+                                 minLength: {
+                                    value: 5,
+                                    message: 'Nama Lengkap harus minimal 5 karakter.',
+                                 },
+                                 maxLength: {
+                                    value: 35,
+                                    message: 'Nama Lengkap harus maksimal 35 karakter.',
+                                 },
+                              })}
+                              placeholder="Nama Lengkap"
+                              className="form-input"
+                           />
+                           {errors.name && <p className="text-red-500 text-xs md:text-xs">{errors.name.message as string}</p>}
                         </div>
                         <div className="mb-4 w-full md:w-1/2">
                            <Label>Nomer HP</Label>
-                           <Input {...register('phoneNumber', { required: 'Nomer HP wajib diisi' })} placeholder="Phone Number" />
-                           {errors.phoneNumber && <p className="text-red-500 text-xs">Masukan Nomer HP.</p>}
+
+                           <Input
+                              type="number"
+                              id="phone"
+                              {...register('phoneNumber', {
+                                 required: 'Masukan Nomer HP.',
+                                 minLength: {
+                                    value: 10,
+                                    message: 'Nomer HP harus minimal 10 karakter.',
+                                 },
+                                 maxLength: {
+                                    value: 13,
+                                    message: 'Nomer HP harus maksimal 13 karakter.',
+                                 },
+                                 pattern: {
+                                    value: /^[0-9]+$/,
+                                    message: 'Nomer HP harus berupa angka.',
+                                 },
+                              })}
+                              placeholder="Nomer HP"
+                              className="form-input"
+                           />
+                           {errors.phoneNumber && <p className="text-red-500 text-xs md:text-xs">{errors.phoneNumber.message as string}</p>}
                         </div>
                         <div className="mb-4 w-full md:w-1/2">
                            <Label>Email</Label>
-                           <Input {...register('email', { required: 'Email wajib diisi' })} placeholder="Email" />
-                           {errors.email && <p className="text-red-500 text-xs">Masukan Email.</p>}
+                           <Input
+                              type="email"
+                              id="email"
+                              {...register('email', {
+                                 required: 'Masukan Email.',
+                                 minLength: {
+                                    value: 8,
+                                    message: 'Email harus minimal 8 karakter.',
+                                 },
+                                 maxLength: {
+                                    value: 30,
+                                    message: 'Email harus maksimal 30 karakter.',
+                                 },
+                                 pattern: {
+                                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                                    message: 'Email tidak valid.',
+                                 },
+                              })}
+                              placeholder="Email"
+                              className="form-input"
+                           />
+                           {errors.email && <p className="text-red-500 text-xs  md:text-xs">{errors.email.message as string}</p>}
                         </div>
                      </div>
                   </div>

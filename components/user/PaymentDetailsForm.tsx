@@ -39,7 +39,7 @@ const PaymentDetailsForm = ({ onConfirm, onBack, onNext }: any) => {
    const [loading, setLoading] = React.useState(true);
    useEffect(() => {
       if (!payment || Object.keys(payment).length === 0) {
-         setLoading(true);
+         setLoading(false);
          fetchPayment().then((fetchedPayment) => {
             setPayment(fetchedPayment);
             setLoading(false);
@@ -173,13 +173,46 @@ const PaymentDetailsForm = ({ onConfirm, onBack, onNext }: any) => {
                         <div className="w-full flex flex-col my-10">
                            <div className="mb-4">
                               <Label>Nama Pengirim</Label>
-                              <Input className="w-full" {...register('paymentName', { required: 'Masukan Nama Pengirim' })} placeholder="Nama Pengirim" />
-                              {errors.paymentName && <p className="text-red-500 text-xs">Masukan Nama Pengirim</p>}
+                              <Input
+                                 className="w-full"
+                                 {...register('paymentName', {
+                                    required: 'Masukan Nama Pengirim.',
+                                    minLength: {
+                                       value: 5,
+                                       message: 'Nama Pengirim harus minimal 5 karakter.',
+                                    },
+                                    maxLength: {
+                                       value: 35,
+                                       message: 'Nama Pengirim harus maksimal 35 karakter.',
+                                    },
+                                 })}
+                                 placeholder="Nama Pengirim"
+                              />
+                              {errors.paymentName && <p className="text-red-500 text-xs">{errors.paymentName.message as string}</p>}
                            </div>
                            <div className="mb-4">
-                              <Label>Nomer Rekening</Label>
-                              <Input type="number" className="w-full" {...register('paymentAccountNumber', { required: 'Nomer Rekening wajib diisi' })} placeholder="Nomer Rekening" />
-                              {errors.paymentAccountNumber && <p className="text-red-500 text-xs">Masukan Nomer Rekening.</p>}
+                              <Input
+                                 type="text"
+                                 id="paymentAccountNumber"
+                                 {...register('paymentAccountNumber', {
+                                    required: 'Masukan Nomer Rekening.',
+                                    minLength: {
+                                       value: 10,
+                                       message: 'Nomer Rekening harus minimal 10 karakter.',
+                                    },
+                                    maxLength: {
+                                       value: 20,
+                                       message: 'Nomer Rekening harus maksimal 20 karakter.',
+                                    },
+                                    pattern: {
+                                       value: /^[0-9]+$/,
+                                       message: 'Nomer Rekening harus berupa angka.',
+                                    },
+                                 })}
+                                 placeholder="Nomer Rekening"
+                                 className="form-input"
+                              />
+                              {errors.paymentAccountNumber && <p className="text-red-500 text-xs">{errors.paymentAccountNumber.message as string}</p>}
                            </div>
                            <div className="mb-4">
                               <Label htmlFor="image">Bukti Pengiriman</Label>

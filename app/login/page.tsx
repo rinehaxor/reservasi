@@ -122,7 +122,15 @@ const LoginForm = () => {
                         type="email"
                         id="email"
                         {...register('email', {
-                           required: 'Email diperlukan.',
+                           required: 'Masukan Email.',
+                           minLength: {
+                              value: 8,
+                              message: 'Email harus minimal 8 karakter.',
+                           },
+                           maxLength: {
+                              value: 30,
+                              message: 'Email harus maksimal 30 karakter.',
+                           },
                            pattern: {
                               value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
                               message: 'Email tidak valid.',
@@ -131,7 +139,7 @@ const LoginForm = () => {
                         placeholder="Email"
                         className="form-input"
                      />
-                     {errors.email && <p className="text-red-500 text-xs font-bold md:text-xs">Masukan Email Anda.</p>}
+                     {errors.email && <p className="text-red-500 text-xs font-bold md:text-xs">{errors.email.message}</p>}
                   </div>
 
                   <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
@@ -140,11 +148,22 @@ const LoginForm = () => {
                         type="password"
                         placeholder="*******"
                         id="password"
-                        {...register('password', { required: 'Password diperlukan.', minLength: { value: 8, message: 'Password harus minimal 8 karakter.' } })}
+                        {...register('password', {
+                           required: 'Masukan Password .',
+                           minLength: {
+                              value: 8,
+                              message: 'Password harus minimal 8 karakter.',
+                           },
+                           maxLength: {
+                              value: 30,
+                              message: 'Password harus maksimal 30 karakter.',
+                           },
+                        })}
                         className="form-input"
                      />
-                     {errors.password && <p className="text-red-500 text-xs  font-bold md:text-xs">{errors.password.message}</p>}
+                     {errors.password && <p className="text-red-500 text-xs font-bold md:text-xs">{errors.password.message}</p>}
                   </div>
+
                   <div className="mt-5">
                      <p className="text-sm">
                         Tidak Punya Akun?{' '}
