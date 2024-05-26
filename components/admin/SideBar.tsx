@@ -7,6 +7,8 @@ import { ImList } from 'react-icons/im';
 import { createClient } from '@/utils/supabase/client';
 import { HiFolderOpen } from 'react-icons/hi2';
 import { HiCurrencyDollar } from 'react-icons/hi';
+import { redirect } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 export default function SideBar() {
    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -35,8 +37,9 @@ export default function SideBar() {
       if (error) {
          console.error('Logout Failed:', error.message);
       } else {
+         Cookies.remove('user');
          console.log('Logged out successfully');
-         // Redirect user or handle user state change
+         redirect('/');
       }
    };
    return (

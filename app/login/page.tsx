@@ -7,10 +7,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { WaveSVG } from '@/components/ui/waves';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
+import Cookies from 'js-cookie';
 
 interface FormData {
    email: string;
@@ -53,11 +54,12 @@ const LoginForm = () => {
 
       if (error) {
          toast.error('Email atau Password Salah');
-         //  return redirect('/login?message=Could not authenticate user');
+         return;
       }
+
       async function getUserRole(userId: any) {
          const supabase = createClient();
-         const { data, error } = await supabase.from('user_roles').select(`role_id`).eq('user_id', userId).single();
+         const { data, error } = await supabase.from('user_roles').select('role_id').eq('user_id', userId).single();
 
          if (error) {
             toast.error('Login failed: ' + error.message);
@@ -65,18 +67,20 @@ const LoginForm = () => {
             return;
          }
 
-         return data.role_id; //  role_id 1 adalah 'user', 2 adalah 'admin'
+         return data.role_id; // role_id 1 adalah 'user', 2 adalah 'admin'
       }
+
       const {
          data: { user },
       } = await supabase.auth.getUser();
 
       if (!user) {
-         //  toast.error('Login failed: User does not exist');
          console.log('User does not exist');
          return;
       }
-      const roleId = await getUserRole(user?.id);
+
+      const roleId = await getUserRole(user.id);
+      Cookies.set('user', JSON.stringify({ id: user.id, role: roleId, email: user.email }));
 
       if (roleId !== 2) {
          toast.success('Login berhasil!', {
@@ -89,7 +93,6 @@ const LoginForm = () => {
             progress: undefined,
             theme: 'light',
          });
-         // asumsikan 2 adalah 'admin'
          // Redirect user biasa ke homepage atau halaman lain
          setTimeout(() => {
             router.push('/');
@@ -109,7 +112,7 @@ const LoginForm = () => {
    return (
       <div className="w-full min-h-screen relative">
          <NavbarUserRegister />
-         <div className="w-full  md:w-1/3 mx-auto max-w-sm items-center gap-1.5">
+         <div className="w-full md:w-1/3 mx-auto max-w-sm items-center gap-1.5">
             <div className="mt-20 md:mx-0 mx-10">
                <h1 className="font-extrabold mb-10 text-lg md:text-2xl">Login Akun</h1>
                <form onSubmit={handleSubmit(onSubmit)}>

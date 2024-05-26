@@ -6,6 +6,7 @@ import { Button } from '../ui/button';
 import { User } from '@supabase/auth-js';
 import { useRouter } from 'next/navigation';
 import { GoChevronDown } from 'react-icons/go';
+import Cookies from 'js-cookie';
 
 // Initialize Supabase client
 const supabase = createClient();
@@ -32,6 +33,8 @@ export default function NavbarHome() {
    };
 
    const handleLogout = async () => {
+      Cookies.remove('user');
+
       setUser(null);
       await supabase.auth.signOut();
       router.push('/');

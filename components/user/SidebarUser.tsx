@@ -1,5 +1,7 @@
 import { createClient } from '@/utils/supabase/client';
+import Cookies from 'js-cookie';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import React from 'react';
 import { HiCollection, HiUserCircle } from 'react-icons/hi';
 import { HiArrowRightOnRectangle, HiIdentification, HiLockClosed } from 'react-icons/hi2';
@@ -11,8 +13,9 @@ export default function SidebarUser() {
       if (error) {
          console.error('Logout Failed:', error.message);
       } else {
+         Cookies.remove('user');
          console.log('Logged out successfully');
-         // Redirect user or handle user state change
+         redirect('/');
       }
    };
    return (
