@@ -11,10 +11,12 @@ import NavbarUserRegister from './NavbarUserRegister';
 import { Label } from '../ui/label';
 import { differenceInCalendarDays } from 'date-fns';
 import { useForm } from 'react-hook-form';
+import Spinner from '../ui/spinner';
 
 const PersonalDetailsForm = ({ onNext }: any) => {
    const [roomDetails] = useAtom(roomDetailsAtom);
    const router = useRouter();
+   const [loading, setLoading] = React.useState(true);
 
    const {
       register,
@@ -71,7 +73,7 @@ const PersonalDetailsForm = ({ onNext }: any) => {
          </div>
          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center">
             <div className="flex flex-col lg:flex-row gap-5 mt-5 w-full px-4">
-               {roomDetails && (
+               {roomDetails ? (
                   <div className="flex flex-col lg:w-1/2 items-center lg:items-end">
                      <Image src={roomDetails.image_url} alt="Room Image" width={500} height={400} className="w-auto md:ml-[18.5rem]" />
                      <div className="flex flex-col lg:flex-row justify-between items-center w-full mt-4 lg:mt-0">
@@ -84,6 +86,10 @@ const PersonalDetailsForm = ({ onNext }: any) => {
                            <p className="text-lg font-semibold">{days} Malam</p>
                         </div>
                      </div>
+                  </div>
+               ) : (
+                  <div className="flex justify-center items-center w-full lg:w-1/2">
+                     <Spinner />
                   </div>
                )}
                <div className="bg-gray-300 w-full lg:w-px self-stretch lg:mx-8"></div> {/* Garis pemisah */}

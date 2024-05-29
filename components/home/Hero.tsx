@@ -5,7 +5,7 @@ import { Button } from '../ui/button';
 import { LuBackpack } from 'react-icons/lu';
 import Link from 'next/link';
 
-export default function Hero() {
+export default function Hero({ faqRef }: { faqRef: React.RefObject<HTMLDivElement> }) {
    return (
       <div className="relative w-screen h-screen flex justify-center">
          <Image
@@ -19,7 +19,7 @@ export default function Hero() {
          <div className="absolute inset-0 bg-black opacity-50"></div>
          {/* Navbar */}
          <div className="absolute w-full">
-            <NavbarHome />
+            <NavbarHome faqRef={faqRef} />
          </div>
          {/* Welcome Text */}
          <div className="absolute w-full mt-56 md:mt-24">

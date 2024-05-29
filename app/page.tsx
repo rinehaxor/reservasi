@@ -7,6 +7,8 @@ import Header from '@/components/Header';
 import Hero from '@/components/home/Hero';
 import DescriptionHome from '@/components/home/DescriptionHome';
 import Footer from '@/components/home/Footer';
+import Faq from '@/components/home/Faq';
+import Home from '@/components/home/Home';
 
 export default async function Index() {
    const canInitSupabaseClient = () => {
@@ -39,15 +41,17 @@ export default async function Index() {
             </main>
          </div> */}
 
-         <div>
+         {/* <div>
             {' '}
             <Hero />
          </div>
          <div>
             <DescriptionHome />
          </div>
+         <Faq />
 
-         <Footer />
+         <Footer /> */}
+         <Home />
          {/* <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
             <p>
                Powered by{' '}

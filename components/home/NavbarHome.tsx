@@ -1,21 +1,22 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import Link from 'next/link';
 import { Button } from '../ui/button';
 import { User } from '@supabase/auth-js';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { GoChevronDown } from 'react-icons/go';
 import Cookies from 'js-cookie';
 
 // Initialize Supabase client
 const supabase = createClient();
 
-export default function NavbarHome() {
+export default function NavbarHome({ faqRef }: { faqRef?: React.RefObject<HTMLDivElement> }) {
    const [isOpen, setIsOpen] = useState(false);
    const [user, setUser] = useState<User | null>(null);
    const [showLogout, setShowLogout] = useState(false);
    const router = useRouter();
+   const pathname = usePathname();
 
    useEffect(() => {
       const fetchUser = async () => {
@@ -40,6 +41,9 @@ export default function NavbarHome() {
       router.push('/');
    };
 
+   const scrollToFaq = () => {
+      faqRef?.current?.scrollIntoView({ behavior: 'smooth' });
+   };
    const toggleLogoutMenu = () => {
       setShowLogout(!showLogout);
    };
@@ -61,8 +65,13 @@ export default function NavbarHome() {
                      Room
                   </Link>
                   <Link href="/contact" className="py-5 px-3 font-semibold text-white hover:text-gray-100 transition duration-200">
-                     Contact
+                     Kontak
                   </Link>
+                  {pathname === '/' && (
+                     <button className="py-5 px-3 font-semibold text-white hover:text-gray-100 transition duration-200" onClick={scrollToFaq}>
+                        Faq
+                     </button>
+                  )}
                   {user ? (
                      <div className="relative">
                         <button onClick={toggleLogoutMenu} className="py-2 px-4 rounded-md bg-orange-500 hover:bg-orange-500 text-white transition duration-200">
@@ -129,6 +138,11 @@ export default function NavbarHome() {
                <Link href="/contact" className="block py-2 px-4 text-sm text-white hover:bg-orange-500 transition duration-200">
                   Contact
                </Link>
+               {pathname === '/' && (
+                  <button className="block py-2 px-4 text-sm text-white hover:bg-orange-500 transition duration-200" onClick={scrollToFaq}>
+                     Faq
+                  </button>
+               )}
                {user ? (
                   <div className="py-2 px-4 text-sm text-white">
                      <button onClick={toggleLogoutMenu}>

@@ -14,18 +14,29 @@ import useCheckUserRoleAndRedirect from '@/hooks/useCheckUserRoleAndRedirect ';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import ExportPDF from './ExportReservasiPDF';
 
-async function fetchBookings(): Promise<Bookings[]> {
+import { DateRange } from 'react-day-picker';
+import { DatePickerWithRange } from '../ui/rangePicker';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select';
+
+async function fetchBookings(dateRange?: DateRange): Promise<Bookings[]> {
    const supabase = createClient();
-   const { data, error } = await supabase
+   let query = supabase
       .from('bookings')
       .select(
          `
-         *,
-         room:rooms(id, name, image_url)
-      `
+          *,
+          room:rooms(id, name, image_url)
+       `
       )
       .eq('payment_status', 'Disetujui')
-      .eq('booking_status', 'Check-Out');
+      .eq('booking_status', 'Check-Out')
+      .order('created_at', { ascending: false });
+
+   if (dateRange?.from && dateRange?.to) {
+      query = query.gte('created_at', dateRange.from.toISOString()).lte('created_at', dateRange.to.toISOString());
+   }
+
+   const { data, error } = await query;
 
    if (error) {
       console.error('Error fetching bookings:', error);
@@ -42,6 +53,7 @@ export default function BookingDoneDashboard() {
    const [filteredBookings, setFilteredBookings] = useState<Bookings[]>([]);
    const updateBookingStatus = useUpdatePaymentStatus();
    const [updateTrigger, setUpdateTrigger] = useAtom(updateTriggerAtom);
+   const [dateRange, setDateRange] = useState<DateRange | undefined>();
 
    useEffect(() => {
       async function initializeBookings() {
@@ -53,7 +65,22 @@ export default function BookingDoneDashboard() {
       }
 
       initializeBookings();
-   }, [updateTrigger]);
+   }, []);
+
+   // Effect to reload bookings when dateRange changes and both dates are selected
+   useEffect(() => {
+      async function reloadBookings() {
+         if (dateRange?.from && dateRange?.to) {
+            setLoading(true);
+            const fetchedBookings = await fetchBookings(dateRange);
+            setBookings(fetchedBookings);
+            localStorage.setItem('bookings_done', JSON.stringify(fetchedBookings));
+            setLoading(false);
+         }
+      }
+
+      reloadBookings();
+   }, [dateRange, updateTrigger]);
 
    useEffect(() => {
       if (bookings.length > 0) {
@@ -84,12 +111,15 @@ export default function BookingDoneDashboard() {
                      </div>
                      <div className=" md:w-full md:ml-[14%] py-10 px-10">
                         <div className="flex justify-between mb-5">
-                           <Input type="text" placeholder="Cari Invoice Reservasi" value={searchTerm} onChange={handleSearchChange} className="w-full md:w-1/4" />
+                           <div className="flex flex-row gap-5">
+                              <Input type="text" placeholder="Cari Invoice Reservasi" value={searchTerm} onChange={handleSearchChange} className="w-full md:w-full" />
+                              <DatePickerWithRange date={dateRange} setDate={setDateRange} />
+                           </div>
                            <PDFDownloadLink document={<ExportPDF bookings={filteredBookings.length > 0 ? filteredBookings : bookings} />} fileName="Laporan_Reservasi_Selesai.pdf">
                               {({ blob, url, loading, error }) => (loading ? 'Loading document...' : <Button variant={'secondary'}>Download Laporan</Button>)}
                            </PDFDownloadLink>
                         </div>
-                        <div className="overflow-x-auto custom-scroll-container w-[120rem]">
+                        <div className="overflow-x-auto custom-scroll-container w-[90rem]">
                            <DataTable columns={columnsBookings} data={filteredBookings.length > 0 ? filteredBookings : bookings} />
                         </div>
                      </div>
@@ -99,8 +129,16 @@ export default function BookingDoneDashboard() {
                      <div className="w-[14%] flex justify-start items-start">
                         <SideBar />
                      </div>
-                     <div className="w-full py-10 px-10">
-                        <div className="flex justify-center items-center h-screen">No data available.</div>
+                     <div className=" md:w-full md:ml-[14%] py-10 px-10">
+                        <div className="flex justify-between mb-5">
+                           <div className="flex flex-row gap-5">
+                              <Input type="text" placeholder="Cari Invoice Reservasi" value={searchTerm} onChange={handleSearchChange} className="w-full md:w-full" />
+                              <DatePickerWithRange date={dateRange} setDate={setDateRange} />
+                           </div>
+                        </div>
+                        <div className="w-full py-10 px-10">
+                           <div className="flex justify-center items-center h-screen">No data available.</div>
+                        </div>
                      </div>
                   </>
                )}

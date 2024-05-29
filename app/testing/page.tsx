@@ -3,9 +3,5 @@ import NavbarHome from '@/components/home/NavbarHome';
 import React from 'react';
 
 export default function page() {
-   return (
-      <div>
-         <Hero />
-      </div>
-   );
+   return <div>{/* <Hero /> */}</div>;
 }

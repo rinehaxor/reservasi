@@ -7,7 +7,7 @@ import NavbarHome from '@/components/home/NavbarHome';
 import Image from 'next/image';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { SlashIcon } from 'lucide-react';
-import { DatePickerWithRange } from '@/components/ui/datePickerWithRange';
+
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { roomDetailsAtom } from '@/components/atoms/bookingStore';
@@ -15,6 +15,7 @@ import { useAtom } from 'jotai';
 import Spinner from '@/components/ui/spinner';
 import { DateRange } from 'react-day-picker';
 import { User } from '@supabase/supabase-js';
+import { DatePickerWithRange } from '@/components/ui/datePickerWithRange';
 
 interface Booking {
    room: any;
@@ -93,7 +94,7 @@ export default function Page({ params }: any) {
       <>
          <div className="w-full">
             <div className="bg-orange-500 h-16 w-full">
-               <NavbarHome />
+               <NavbarHome faqRef={undefined} />
             </div>
             <div className="mx-4 sm:mx-24 md:mx-48 mb-5">
                <Breadcrumb className="ml-5 font-thin">

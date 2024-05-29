@@ -37,13 +37,16 @@ const PaymentDetailsForm = ({ onConfirm, onBack, onNext }: any) => {
 
    const [payment, setPayment] = useAtom(paymentAtom);
    const [loading, setLoading] = React.useState(true);
+
    useEffect(() => {
-      if (!payment || Object.keys(payment).length === 0) {
-         setLoading(false);
+      if (!payment || payment.length === 0) {
+         setLoading(true);
          fetchPayment().then((fetchedPayment) => {
             setPayment(fetchedPayment);
             setLoading(false);
          });
+      } else {
+         setLoading(false);
       }
    }, [setPayment, payment]);
 

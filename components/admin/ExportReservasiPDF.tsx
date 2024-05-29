@@ -101,22 +101,22 @@ const ExportPDF = ({ bookings }: any) => {
                            <Text style={styles.tableCell}>{index + 1}</Text>
                         </View>
                         <View style={styles.tableCol}>
-                           <Text style={styles.tableCell}>{booking.invoice_number}</Text>
+                           <Text style={styles.tableCell}>{booking?.invoice_number}</Text>
                         </View>
                         <View style={styles.tableCol}>
-                           <Text style={styles.tableCell}>{booking.room.name}</Text>
+                           <Text style={styles.tableCell}>{booking?.room?.name}</Text>
                         </View>
                         <View style={styles.tableCol}>
-                           <Text style={styles.tableCell}>{booking.booking_status}</Text>
+                           <Text style={styles.tableCell}>{booking?.booking_status}</Text>
                         </View>
                         <View style={styles.tableCol}>
-                           <Text style={styles.tableCell}>{booking.payment_status}</Text>
+                           <Text style={styles.tableCell}>{booking?.payment_status}</Text>
                         </View>
                         <View style={styles.tableCol}>
-                           <Text style={styles.tableCell}>{`${booking.checkindate} / ${booking.checkoutdate}`}</Text>
+                           <Text style={styles.tableCell}>{`${booking?.checkindate} / ${booking?.checkoutdate}`}</Text>
                         </View>
                         <View style={styles.tableCol}>
-                           <Text style={styles.tableCell}>{booking.total_price.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</Text>
+                           <Text style={styles.tableCell}>{booking?.total_price.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</Text>
                         </View>
                      </View>
                   ))}
