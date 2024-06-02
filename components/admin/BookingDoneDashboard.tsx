@@ -10,27 +10,33 @@ import { bookingsAtom, updateTriggerAtom } from '@/components/atoms/store';
 import { DataTable } from '@/app/admin/rooms/data-table';
 import { Bookings, columnsBookings } from '@/app/admin/reservasi/column';
 import { useUpdatePaymentStatus } from '../atoms/bookingStore';
-import useCheckUserRoleAndRedirect from '@/hooks/useCheckUserRoleAndRedirect ';
+
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import ExportPDF from './ExportReservasiPDF';
 
 import { DateRange } from 'react-day-picker';
 import { DatePickerWithRange } from '../ui/rangePicker';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select';
+import useCheckUserRoleAndRedirect from '@/hooks/useCheckUserRoleAndRedirect ';
+import ExportExcel from './ExportReservasiExcel';
 
-async function fetchBookings(dateRange?: DateRange): Promise<Bookings[]> {
+async function fetchBookings(dateRange?: DateRange, roomType?: string): Promise<Bookings[]> {
    const supabase = createClient();
    let query = supabase
       .from('bookings')
       .select(
          `
-          *,
-          room:rooms(id, name, image_url)
-       `
+      *,
+      room:rooms!inner(id, name, image_url)
+      `
       )
       .eq('payment_status', 'Disetujui')
       .eq('booking_status', 'Check-Out')
       .order('created_at', { ascending: false });
+
+   if (roomType) {
+      query = query.eq('rooms.name', roomType); // Filter untuk nama ruangan
+   }
 
    if (dateRange?.from && dateRange?.to) {
       query = query.gte('created_at', dateRange.from.toISOString()).lte('created_at', dateRange.to.toISOString());
@@ -46,6 +52,16 @@ async function fetchBookings(dateRange?: DateRange): Promise<Bookings[]> {
    return data || [];
 }
 
+async function fetchRoomTypes() {
+   const supabase = createClient();
+   const { data, error } = await supabase.from('rooms').select('name');
+   if (error) {
+      console.error('Error fetching room types:', error);
+      return [];
+   }
+   return data.map((room) => room.name) || [];
+}
+
 export default function BookingDoneDashboard() {
    const [bookings, setBookings] = useAtom(bookingsAtom);
    const [loading, setLoading] = useState(true);
@@ -54,25 +70,29 @@ export default function BookingDoneDashboard() {
    const updateBookingStatus = useUpdatePaymentStatus();
    const [updateTrigger, setUpdateTrigger] = useAtom(updateTriggerAtom);
    const [dateRange, setDateRange] = useState<DateRange | undefined>();
+   const [roomType, setRoomType] = useState<string | undefined>();
+   const [roomTypes, setRoomTypes] = useState<string[]>([]);
 
    useEffect(() => {
-      async function initializeBookings() {
+      async function initializeData() {
          setLoading(true);
-         const fetchedBookings = await fetchBookings();
+         const fetchedRoomTypes = await fetchRoomTypes();
+         setRoomTypes(fetchedRoomTypes);
+         const fetchedBookings = await fetchBookings(undefined, roomType);
          setBookings(fetchedBookings);
          localStorage.setItem('bookings_done', JSON.stringify(fetchedBookings));
          setLoading(false);
       }
 
-      initializeBookings();
-   }, []);
+      initializeData();
+   }, [roomType]);
 
    // Effect to reload bookings when dateRange changes and both dates are selected
    useEffect(() => {
       async function reloadBookings() {
          if (dateRange?.from && dateRange?.to) {
             setLoading(true);
-            const fetchedBookings = await fetchBookings(dateRange);
+            const fetchedBookings = await fetchBookings(dateRange, roomType);
             setBookings(fetchedBookings);
             localStorage.setItem('bookings_done', JSON.stringify(fetchedBookings));
             setLoading(false);
@@ -80,7 +100,7 @@ export default function BookingDoneDashboard() {
       }
 
       reloadBookings();
-   }, [dateRange, updateTrigger]);
+   }, [dateRange, updateTrigger, roomType]);
 
    useEffect(() => {
       if (bookings.length > 0) {
@@ -94,6 +114,10 @@ export default function BookingDoneDashboard() {
 
    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchTerm(event.target.value);
+   };
+
+   const handleRoomTypeChange = (value: string) => {
+      setRoomType(value);
    };
 
    return (
@@ -112,12 +136,32 @@ export default function BookingDoneDashboard() {
                      <div className=" md:w-full md:ml-[14%] py-10 px-10">
                         <div className="flex justify-between mb-5">
                            <div className="flex flex-row gap-5">
-                              <Input type="text" placeholder="Cari Invoice Reservasi" value={searchTerm} onChange={handleSearchChange} className="w-full md:w-full" />
+                              <Input type="text" placeholder="Cari Invoice Reservasi" value={searchTerm} onChange={handleSearchChange} className="w-1/3" />
                               <DatePickerWithRange date={dateRange} setDate={setDateRange} />
+                              <div className="w-1/3">
+                                 <Select onValueChange={handleRoomTypeChange}>
+                                    <SelectTrigger className="">
+                                       <SelectValue placeholder="Tipe Kamar" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                       <SelectGroup>
+                                          <SelectLabel>Tipe Kamar</SelectLabel>
+                                          {roomTypes.map((type) => (
+                                             <SelectItem key={type} value={type}>
+                                                {type}
+                                             </SelectItem>
+                                          ))}
+                                       </SelectGroup>
+                                    </SelectContent>
+                                 </Select>
+                              </div>
                            </div>
-                           <PDFDownloadLink document={<ExportPDF bookings={filteredBookings.length > 0 ? filteredBookings : bookings} />} fileName="Laporan_Reservasi_Selesai.pdf">
-                              {({ blob, url, loading, error }) => (loading ? 'Loading document...' : <Button variant={'secondary'}>Download Laporan</Button>)}
-                           </PDFDownloadLink>
+                           <div className="flex flex-row gap-5">
+                              <PDFDownloadLink document={<ExportPDF bookings={filteredBookings.length > 0 ? filteredBookings : bookings} />} fileName="Laporan_Reservasi_Selesai.pdf">
+                                 {({ blob, url, loading, error }) => (loading ? 'Loading document...' : <Button variant={'secondary'}>Download Laporan</Button>)}
+                              </PDFDownloadLink>
+                              <ExportExcel bookings={filteredBookings.length > 0 ? filteredBookings : bookings} /> {/* Tambahkan tombol ekspor ke Excel */}
+                           </div>
                         </div>
                         <div className="overflow-x-auto custom-scroll-container w-[90rem]">
                            <DataTable columns={columnsBookings} data={filteredBookings.length > 0 ? filteredBookings : bookings} />
@@ -126,17 +170,34 @@ export default function BookingDoneDashboard() {
                   </>
                ) : (
                   <>
-                     <div className="w-[14%] flex justify-start items-start">
+                     <div className="w-[14%] ">
                         <SideBar />
                      </div>
                      <div className=" md:w-full md:ml-[14%] py-10 px-10">
                         <div className="flex justify-between mb-5">
                            <div className="flex flex-row gap-5">
-                              <Input type="text" placeholder="Cari Invoice Reservasi" value={searchTerm} onChange={handleSearchChange} className="w-full md:w-full" />
+                              <Input type="text" placeholder="Cari Invoice Reservasi" value={searchTerm} onChange={handleSearchChange} className="w-1/3" />
                               <DatePickerWithRange date={dateRange} setDate={setDateRange} />
+                              <div className="w-1/3">
+                                 <Select onValueChange={handleRoomTypeChange}>
+                                    <SelectTrigger className="">
+                                       <SelectValue placeholder="Tipe Kamar" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                       <SelectGroup>
+                                          <SelectLabel>Tipe Kamar</SelectLabel>
+                                          {roomTypes.map((type) => (
+                                             <SelectItem key={type} value={type}>
+                                                {type}
+                                             </SelectItem>
+                                          ))}
+                                       </SelectGroup>
+                                    </SelectContent>
+                                 </Select>
+                              </div>
                            </div>
                         </div>
-                        <div className="w-full py-10 px-10">
+                        <div className="w-full py-10">
                            <div className="flex justify-center items-center h-screen">No data available.</div>
                         </div>
                      </div>
