@@ -9,6 +9,7 @@ import { HiFolderOpen } from 'react-icons/hi2';
 import { HiCurrencyDollar } from 'react-icons/hi';
 import { redirect } from 'next/navigation';
 import Cookies from 'js-cookie';
+import Image from 'next/image';
 
 export default function SideBar() {
    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -63,7 +64,17 @@ export default function SideBar() {
 
             <aside ref={sidebarRef} id="default-sidebar" className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform ${isSidebarOpen ? '' : '-translate-x-full sm:translate-x-0'}`} aria-label="Sidebar">
                <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-                  <p className="text-center text-xl font-thin my-5">MAEROKOCO</p>
+                  <div className="text-center text-xl font-bold font-poppins my-5 flex flex-row items-center justify-center">
+                     <Image
+                        src="/assets/images/logo.png" // Path relative to the image
+                        alt="logo"
+                        width={50}
+                        height={50}
+                        className="w-50 h-50 mr-3" // Tambahkan margin kanan agar ada jarak antara logo dan teks
+                     />
+                     <span>MAEROKOCO</span>
+                  </div>
+
                   <ul className="space-y-2 font-medium">
                      <li>
                         <Link href="/admin/dashboard" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">

@@ -19,6 +19,7 @@ import { DatePickerWithRange } from '../ui/rangePicker';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select';
 import useCheckUserRoleAndRedirect from '@/hooks/useCheckUserRoleAndRedirect ';
 import ExportExcel from './ExportReservasiExcel';
+import { FaRegFilePdf } from 'react-icons/fa';
 
 async function fetchBookings(dateRange?: DateRange, roomType?: string): Promise<Bookings[]> {
    const supabase = createClient();
@@ -158,7 +159,16 @@ export default function BookingDoneDashboard() {
                            </div>
                            <div className="flex flex-row gap-5">
                               <PDFDownloadLink document={<ExportPDF bookings={filteredBookings.length > 0 ? filteredBookings : bookings} />} fileName="Laporan_Reservasi_Selesai.pdf">
-                                 {({ blob, url, loading, error }) => (loading ? 'Loading document...' : <Button variant={'secondary'}>Download Laporan</Button>)}
+                                 {({ blob, url, loading, error }) =>
+                                    loading ? (
+                                       'Loading document...'
+                                    ) : (
+                                       <Button className="bg-red-500 text-white">
+                                          <FaRegFilePdf className="w-5 h-5" />
+                                          <span className="ml-2">Export PDF</span>
+                                       </Button>
+                                    )
+                                 }
                               </PDFDownloadLink>
                               <ExportExcel bookings={filteredBookings.length > 0 ? filteredBookings : bookings} /> {/* Tambahkan tombol ekspor ke Excel */}
                            </div>

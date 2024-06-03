@@ -7,6 +7,7 @@ import { User } from '@supabase/auth-js';
 import { usePathname, useRouter } from 'next/navigation';
 import { GoChevronDown } from 'react-icons/go';
 import Cookies from 'js-cookie';
+import Image from 'next/image';
 
 // Initialize Supabase client
 const supabase = createClient();
@@ -54,6 +55,13 @@ export default function NavbarHome({ faqRef }: { faqRef?: React.RefObject<HTMLDi
             <div className="flex justify-between items-center w-full px-4 h-16 md:mx-48">
                <div className="flex items-center space-x-4 flex-grow">
                   <Link href="/" className="flex items-center py-5 px-2 text-white hover:text-gray-100 transition duration-200">
+                     <Image
+                        src="/assets/images/logo.png" // Path relative to the image
+                        alt="logo"
+                        width={70}
+                        height={70}
+                        className="w-50 h-50 mr-3" // Tambahkan margin kanan agar ada jarak antara logo dan teks
+                     />
                      <span className="font-bold text-xl">MAEROKOCO</span>
                   </Link>
                </div>

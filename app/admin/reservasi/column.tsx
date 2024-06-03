@@ -3,8 +3,7 @@ import { useUpdateBookingStatus, useUpdatePaymentStatus } from '@/components/ato
 import { deleteFasilitasAtom, deletePaymentAtom } from '@/components/atoms/store';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+
 import { createClient } from '@/utils/supabase/client';
 import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
 import { ColumnDef } from '@tanstack/react-table';
@@ -13,6 +12,13 @@ import Image from 'next/image';
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { IoCheckmarkDoneCircleOutline } from 'react-icons/io5';
+import { TiDeleteOutline } from 'react-icons/ti';
+import { FaMoneyBillWaveAlt } from 'react-icons/fa';
+import { MdOutlineBedroomChild } from 'react-icons/md';
+import { LuCalendarCheck } from 'react-icons/lu';
+import { RiCalendarCloseLine } from 'react-icons/ri';
+import { IoCloseCircleOutline } from 'react-icons/io5';
 
 export type Bookings = {
    id: string;
@@ -112,7 +118,39 @@ export const columnsBookings: ColumnDef<Bookings>[] = [
             <div className="flex flex-row items-center justify-center gap-4">
                <Dialog>
                   <DialogTrigger asChild>
-                     <Button variant="outline">Pembayaran</Button>
+                     <Button variant="outline">
+                        <MdOutlineBedroomChild className="w-5 h-5 mr-2" />
+                        Reservasi
+                     </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                     <DialogHeader>
+                        <DialogTitle>Reservasi</DialogTitle>
+                        <DialogDescription>Ubah Informasi Booking Status Check In / Check Out / Cancel</DialogDescription>
+                     </DialogHeader>
+                     <div className="grid gap-4 py-4"></div>
+                     <DialogFooter>
+                        <Button onClick={() => updateBookingStatus(row.original.id, 'Check-In')} type="submit" className="bg-green-500 text-white">
+                           <LuCalendarCheck className="w-5 h-5 mr-2" />
+                           Check-In
+                        </Button>
+                        <Button onClick={() => updateBookingStatus(row.original.id, 'Check-Out')} type="submit" className="bg-yellow-500 text-white">
+                           <RiCalendarCloseLine className="w-5 h-5 mr-2" />
+                           Check-Out
+                        </Button>
+                        <Button onClick={() => updateBookingStatus(row.original.id, 'Cancel')} type="submit" className="bg-red-500 text-white">
+                           <IoCloseCircleOutline className="w-5 h-5 mr-2" />
+                           Cancel
+                        </Button>
+                     </DialogFooter>
+                  </DialogContent>
+               </Dialog>
+               <Dialog>
+                  <DialogTrigger asChild>
+                     <Button variant="outline">
+                        <FaMoneyBillWaveAlt className="w-5 h-5 mr-2" />
+                        Pembayaran
+                     </Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[425px]">
                      <DialogHeader>
@@ -122,39 +160,17 @@ export const columnsBookings: ColumnDef<Bookings>[] = [
                         <Image src={row.original.payment_proof_url} alt="Room Image" width={500} height={400} />
                      </div>
                      <DialogFooter>
-                        <Button onClick={() => updatePaymentStatus(row.original.id, 'Disetujui')} type="submit">
-                           Setujui
+                        <Button onClick={() => updatePaymentStatus(row.original.id, 'Disetujui')} type="submit" className="bg-green-500 text-white">
+                           <IoCheckmarkDoneCircleOutline />
+                           <span className="ml-2">Setujui</span>
                         </Button>
-                        <Button onClick={() => updatePaymentStatus(row.original.id, 'Ditolak')} type="submit">
+                        <Button onClick={() => updatePaymentStatus(row.original.id, 'Ditolak')} type="submit" className="bg-red-500 text-white">
+                           <TiDeleteOutline />
                            Tolak
                         </Button>
                      </DialogFooter>
                   </DialogContent>
                </Dialog>
-               <Dialog>
-                  <DialogTrigger asChild>
-                     <Button variant="outline">Reservasi</Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[425px]">
-                     <DialogHeader>
-                        <DialogTitle>Reservasi</DialogTitle>
-                        <DialogDescription>Ubah Informasi Booking Status Check In / Check Out / Cancel</DialogDescription>
-                     </DialogHeader>
-                     <div className="grid gap-4 py-4"></div>
-                     <DialogFooter>
-                        <Button onClick={() => updateBookingStatus(row.original.id, 'Check-In')} type="submit">
-                           Check-In
-                        </Button>
-                        <Button onClick={() => updateBookingStatus(row.original.id, 'Check-Out')} type="submit">
-                           Check-Out
-                        </Button>
-                        <Button onClick={() => updateBookingStatus(row.original.id, 'Cancel')} type="submit">
-                           Cancel
-                        </Button>
-                     </DialogFooter>
-                  </DialogContent>
-               </Dialog>
-
                <Dialog>
                   <DialogTrigger asChild>
                      <Button onClick={() => setIsPreviewOpen(true)}>Invoice</Button>

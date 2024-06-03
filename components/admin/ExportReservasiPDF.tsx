@@ -1,6 +1,5 @@
-// components/ExportPDF.js
 import React from 'react';
-import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
 import { Bookings } from '@/app/admin/reservasi/column';
 
 const styles = StyleSheet.create({
@@ -14,11 +13,22 @@ const styles = StyleSheet.create({
       padding: 10,
       flexGrow: 1,
    },
-   header: {
-      fontSize: 24,
-      marginBottom: 20,
+   headerContainer: {
       textAlign: 'center',
-      textDecoration: 'underline',
+      marginBottom: 20,
+   },
+   headerImage: {
+      width: 50,
+      height: 50,
+      marginBottom: 10,
+   },
+   headerTitle: {
+      fontSize: 24,
+      fontWeight: 'ultrabold',
+   },
+   headerSubtitle: {
+      fontSize: 16,
+      marginBottom: 20,
    },
    text: {
       fontSize: 12,
@@ -69,8 +79,12 @@ const ExportPDF = ({ bookings }: any) => {
    return (
       <Document>
          <Page size="A4" style={styles.page}>
+            <View style={styles.headerContainer}>
+               <Image style={styles.headerImage} src="/assets/images/logo.png" />
+               <Text style={styles.headerTitle}>HOTEL MAEROKOCO</Text>
+               <Text style={styles.headerSubtitle}>Riwayat Reservasi</Text>
+            </View>
             <View style={styles.section}>
-               <Text style={styles.header}>Laporan Reservasi Selesai</Text>
                <View style={styles.table}>
                   <View style={styles.tableRow}>
                      <View style={styles.tableColHeader}>
