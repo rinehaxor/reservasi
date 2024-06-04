@@ -8,6 +8,7 @@ import { Room } from '@/app/admin/rooms/columns';
 import Link from 'next/link';
 import Spinner from '../ui/spinner';
 import Footer from './Footer';
+import StarRating from '../user/StarRating ';
 
 export default function ListRooms() {
    const [rooms, setRooms] = useState<Room[]>([]);
@@ -15,13 +16,18 @@ export default function ListRooms() {
    const supabase = createClient();
 
    const fetchRoomsAndFacilities = async () => {
-      const { data, error } = await supabase.from('rooms').select(`
+      const { data, error } = await supabase
+         .from('rooms')
+         .select(
+            `
             *,
             room_facilities!inner(
               facility_id,
               facility:facilities(id, name, image_url)
             )
-          `);
+          `
+         )
+         .order('price_per_night', { ascending: false });
 
       if (error) {
          console.error('error fetching rooms and facilities', error);
@@ -80,7 +86,8 @@ export default function ListRooms() {
                         <p className="inline-block bg-orange-500 font-extrabold text-xl sm:text-3xl text-white rounded-sm border-orange-500 border-2 p-2">
                            <span>{room.price_per_night.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</span>
                         </p>
-                        <div className="flex mt-10 items-end justify-end">
+                        <div className="flex mt-10 justify-between">
+                           <div className="">{room.average_rating ? <StarRating rating={room.average_rating} /> : <p className="text-xl font-bold">Belum ada rating</p>}</div>
                            <Link href={`/kamar/${room.id}`}>
                               <Button className="ml-auto font-extrabold text-lg sm:text-xl py-2 px-4 " variant={'secondary'}>
                                  Pesan

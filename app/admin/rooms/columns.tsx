@@ -18,6 +18,7 @@ export type Room = {
    room_facilities: RoomFacility[];
    room_available: string;
    other_image_url: string;
+   average_rating: number;
    bathroom_image_url: string;
 };
 export type RoomFacility = {

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { createClient } from '@/utils/supabase/client';
 import { BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
 import { ColumnDef } from '@tanstack/react-table';
@@ -29,11 +30,10 @@ export type Bookings = {
    checkindate: any;
    checkoutdate: any;
    payment_proof_url: string;
+   rating: number; // Kolom untuk rating individual
 };
 
-//handle aprove pembayran
-
-export const columnsBookingsUser: ColumnDef<Bookings>[] = [
+export const columnsBookingsUser = (handleRatingChange: (bookingId: string, roomId: number, newRating: number) => void): ColumnDef<Bookings>[] => [
    {
       id: 'no',
       header: 'No',
@@ -47,7 +47,6 @@ export const columnsBookingsUser: ColumnDef<Bookings>[] = [
       accessorKey: 'room.name',
       header: 'Jenis Kamar',
    },
-
    {
       accessorKey: 'booking_status',
       header: 'Status Reservasi',
@@ -87,7 +86,6 @@ export const columnsBookingsUser: ColumnDef<Bookings>[] = [
          return <span className={`${bgColor} text-white font-bold p-2 rounded-xl`}>{row.original.payment_status}</span>;
       },
    },
-
    {
       id: 'dates',
       header: 'Tgl. Checkin / Tgl. Checkout',
@@ -108,66 +106,115 @@ export const columnsBookingsUser: ColumnDef<Bookings>[] = [
       cell: ({ row }) => `${row.original.total_price.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}`,
    },
    {
+      id: 'rating',
+      header: 'Rating',
+      cell: ({ row }) => {
+         const [rating, setRating] = useState(row.original.rating);
+
+         const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+            const newRating = parseInt(event.target.value, 10);
+            setRating(newRating);
+            handleRatingChange(row.original.id, row.original.room_id, newRating);
+         };
+         const canRate = row.original.booking_status === 'Check-Out' && row.original.payment_status === 'Disetujui';
+         return (
+            <Dialog>
+               <DialogTrigger asChild>
+                  <Button variant="outline" disabled={!canRate}>
+                     Rating
+                  </Button>
+               </DialogTrigger>
+               <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                     <DialogTitle className="text-center font-bold text-xl">Beri Niali Reservasi</DialogTitle>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                     <RadioGroup
+                        value={rating?.toString()}
+                        onValueChange={(value) => {
+                           const newRating = parseInt(value, 10);
+                           setRating(newRating);
+                           handleRatingChange(row.original.id, row.original.room_id, newRating);
+                        }}
+                     >
+                        <div className="flex felx-row gap-5 items-center justify-center">
+                           <div className="flex flex-col items-center ">
+                              <RadioGroupItem value="1" id="r1" className="w-5 h-5" />
+                              <Label htmlFor="r1" className="text-lg">
+                                 1
+                              </Label>
+                           </div>
+                           <div className="flex flex-col items-center ">
+                              <RadioGroupItem value="2" id="r2" className="w-5 h-5" />
+                              <Label htmlFor="r2" className="text-lg">
+                                 2
+                              </Label>
+                           </div>
+                           <div className="flex flex-col items-center ">
+                              <RadioGroupItem value="3" id="r3" className="w-5 h-5" />
+                              <Label htmlFor="r3" className="text-lg">
+                                 3
+                              </Label>
+                           </div>
+                           <div className="flex flex-col items-center ">
+                              <RadioGroupItem value="4" id="r4" className="w-5 h-5" />
+                              <Label htmlFor="r4" className="text-lg">
+                                 4
+                              </Label>
+                           </div>
+                           <div className="flex flex-col items-center ">
+                              <RadioGroupItem value="5" id="r5" className="w-5 h-5" />
+                              <Label htmlFor="r5" className="text-lg">
+                                 5
+                              </Label>
+                           </div>
+                        </div>
+                     </RadioGroup>
+                  </div>
+                  <DialogFooter></DialogFooter>
+               </DialogContent>
+            </Dialog>
+         );
+      },
+   },
+   {
       id: 'Aksi',
       header: 'Aksi',
       cell: ({ row }) => {
          const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
-         const updatePaymentStatus = useUpdatePaymentStatus();
-         const updateBookingStatus = useUpdateBookingStatus();
+         //  const updatePaymentStatus = useUpdatePaymentStatus();
+         //  const updateBookingStatus = useUpdateBookingStatus();
          return (
             <div className="flex flex-row items-center justify-center gap-4">
-               {/* <Dialog>
-                  <DialogTrigger asChild>
-                     <Button onClick={() => setIsPreviewOpen(true)}>Invoice</Button>
-                  </DialogTrigger>
-                  <DialogContent className="w-full">
-                     <DialogHeader>
-                        <DialogTitle>Pembayaran</DialogTitle>
-                     </DialogHeader>
-                     <div className="grid gap-4 py-4">
-                        <BlobProvider document={<MyDocument bookingData={row.original} />}>
-                           {({ url, loading, error }) => {
-                              if (loading) return <p>Loading...</p>;
-                              if (error) return <p>Error loading PDF: {error.message}</p>;
-                              return (
-                                 <>
-                                    <iframe src={url || ''} style={{ width: '100%', height: '500px' }} title="PDF Preview" />
-                                 </>
-                              );
-                           }}
-                        </BlobProvider>
-                     </div>
-                  </DialogContent>
-               </Dialog> */}
                <PDFDownloadLink document={<MyDocument bookingData={row.original} />} fileName={`booking-${row.original.id}.pdf`}>
-                  {({ loading }) => (loading ? 'Preparing document...' : <Button variant={'secondary'}>Download </Button>)}
+                  {({ loading }) => (loading ? 'Preparing document...' : <Button variant={'secondary'}>Download Invoice </Button>)}
                </PDFDownloadLink>
             </div>
          );
       },
    },
-   //    {
-   //       accessorKey: 'image_url',
-   //       header: 'Gambar',
-   //       cell: ({ getValue }) => {
-   //          const url: string = getValue() as string;
-   //          return <img src={url} alt="Facility Image" style={{ width: '100px', height: 'auto' }} />;
-   //       },
-   //    },
-   //    {
-   //       accessorKey: 'delete',
-   //       header: 'Aksi',
-   //       cell: ({ row }) => {
-   //          const [, deletePayment] = useAtom(deletePaymentAtom);
-   //          return (
-   //             <div className="flex flex-row items-center justify-center gap-4">
-   //                <Button onClick={() => deletePayment(row.original.id)}>Delete</Button>
-   //                <Link href={`/admin/fasilitas/edit-payment/${row.original.id}`} passHref>
-   //                   <Button>Edit</Button>
-   //                </Link>
-   //             </div>
-   //          );
-   //       },
-   //    },
 ];
+//    {
+//       accessorKey: 'image_url',
+//       header: 'Gambar',
+//       cell: ({ getValue }) => {
+//          const url: string = getValue() as string;
+//          return <img src={url} alt="Facility Image" style={{ width: '100px', height: 'auto' }} />;
+//       },
+//    },
+//    {
+//       accessorKey: 'delete',
+//       header: 'Aksi',
+//       cell: ({ row }) => {
+//          const [, deletePayment] = useAtom(deletePaymentAtom);
+//          return (
+//             <div className="flex flex-row items-center justify-center gap-4">
+//                <Button onClick={() => deletePayment(row.original.id)}>Delete</Button>
+//                <Link href={`/admin/fasilitas/edit-payment/${row.original.id}`} passHref>
+//                   <Button>Edit</Button>
+//                </Link>
+//             </div>
+//          );
+//       },
+//    },

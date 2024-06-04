@@ -22,6 +22,7 @@ export type Booking = {
    checkindate: string;
    checkoutdate: string;
    payment_proof_url: string;
+   rating: number; // Kolom untuk rating individual
 };
 
 export default function UserBookingHistory() {
@@ -44,7 +45,7 @@ export default function UserBookingHistory() {
          }
 
          if (user) {
-            const { data: bookingsData, error: bookingsError } = await supabase.from('bookings').select('*, room:rooms(id, name, image_url)').eq('user_id', user.id);
+            const { data: bookingsData, error: bookingsError } = await supabase.from('bookings').select('*, room:rooms(id, name, image_url)').eq('user_id', user.id).order('price_per_night', { ascending: true });
 
             if (bookingsError) {
                console.error('Error fetching booking history:', bookingsError.message);
@@ -65,6 +66,43 @@ export default function UserBookingHistory() {
 
    const filteredBookings = bookings.filter((booking) => booking.invoice_number.toLowerCase().includes(searchTerm.toLowerCase()));
 
+   const handleRatingChange = async (bookingId: string, roomId: number, newRating: number) => {
+      const {
+         data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // Update rating in the bookings table
+      const { error: ratingError } = await supabase.from('bookings').update({ rating: newRating }).eq('id', bookingId);
+
+      if (ratingError) {
+         console.error('Error updating rating:', ratingError.message);
+         return;
+      }
+
+      // Fetch all ratings for this room
+      const { data: roomBookings, error: roomFetchError } = await supabase.from('bookings').select('rating').eq('room_id', roomId);
+
+      if (roomFetchError) {
+         console.error('Error fetching room ratings:', roomFetchError.message);
+         return;
+      }
+
+      // Calculate the average rating for this room
+      const validRatings = roomBookings.filter((booking) => booking.rating !== null);
+      const roomAverageRating = validRatings.reduce((acc, booking) => acc + booking.rating, 0) / validRatings.length;
+
+      // Update the average rating in the rooms table
+      const { error: updateRoomError } = await supabase.from('rooms').update({ average_rating: roomAverageRating }).eq('id', roomId);
+
+      if (updateRoomError) {
+         console.error('Error updating room average rating:', updateRoomError.message);
+         return;
+      }
+
+      setBookings((prevBookings) => prevBookings.map((booking) => (booking.id === bookingId ? { ...booking, rating: newRating } : booking)));
+   };
+
    return (
       <div className="flex flex-col md:flex-row md:mx-48">
          <div className="hidden md:block md:w-1/4 p-4">
@@ -84,7 +122,7 @@ export default function UserBookingHistory() {
                      </div>
                      <div className="overflow-x-auto custom-scroll-container ">
                         <div className="w-[80rem]">
-                           <DataTableUser columns={columnsBookingsUser} data={filteredBookings.length > 0 ? filteredBookings : bookings} />
+                           <DataTableUser columns={columnsBookingsUser(handleRatingChange)} data={filteredBookings.length > 0 ? filteredBookings : bookings} />
                         </div>
                      </div>
                   </>
