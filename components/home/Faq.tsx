@@ -1,6 +1,10 @@
-// Faq.tsx
 'use client';
 import { useState, forwardRef } from 'react';
+import { motion } from 'framer-motion';
+const cardVariants = {
+   hidden: { opacity: 0, y: 100 },
+   visible: { opacity: 2, y: 0, transition: { duration: 1 } },
+};
 
 const faqData = [
    {
@@ -33,7 +37,7 @@ const Faq = forwardRef<HTMLDivElement>((props, ref) => {
    };
 
    return (
-      <div className="w-full mt-8 p-4 bg-white rounded-lg" ref={ref}>
+      <motion.div className="w-full mt-8 p-4 bg-white rounded-lg" ref={ref} variants={cardVariants}>
          <h2 className="text-2xl font-bold mb-4 text-center">Tanya Jawab Umum</h2>
          {faqData.map((item, index) => (
             <div key={index} className="mb-4 md:mx-40">
@@ -44,7 +48,7 @@ const Faq = forwardRef<HTMLDivElement>((props, ref) => {
                {openIndex === index && <div className="mt-2 px-4 text-xl">{item.answer}</div>}
             </div>
          ))}
-      </div>
+      </motion.div>
    );
 });
 

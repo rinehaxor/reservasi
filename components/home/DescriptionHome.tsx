@@ -20,7 +20,7 @@ export default function DescriptionHome() {
                </div>
             </div>
             <div className="w-full sm:w-1/2 flex justify-end items-center">
-               <Image src="/assets/images/deskripsi1.jpg" alt="Deskripsi Gambar" width={0} height={0} sizes="100vw" className="w-full h-full" />
+               <Image src="/assets/images/deskripsi1.jpg" alt="Deskripsi Gambar" layout="responsive" width={600} height={400} className="w-full h-full" />
             </div>
          </motion.div>
          <motion.div className="card flex flex-col sm:flex-row gap-4 sm:gap-10 p-4 sm:mx-24 md:mx-48 mt-10 md:mt-20" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={cardVariants}>
@@ -34,7 +34,7 @@ export default function DescriptionHome() {
                </div>
             </div>
             <div className="w-full sm:w-1/2 flex justify-end items-center">
-               <Image src="/assets/images/deskripsi2.webp" alt="Deskripsi Gambar" width={0} height={0} sizes="100vw" className="w-full h-full" />
+               <Image src="/assets/images/deskripsi2.webp" alt="Deskripsi Gambar" layout="responsive" width={600} height={400} className="w-full h-full" />
             </div>
          </motion.div>
          <motion.div className="flex flex-col items-center justify-center my-10 md:my-20 md:mx-48">
