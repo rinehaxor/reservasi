@@ -1,11 +1,9 @@
 'use client';
 import { useRef } from 'react';
-import dynamic from 'next/dynamic';
-
-const Hero = dynamic(() => import('@/components/home/Hero'), { ssr: false });
-const DescriptionHome = dynamic(() => import('@/components/home/DescriptionHome'), { ssr: false });
-const Footer = dynamic(() => import('@/components/home/Footer'), { ssr: false });
-const Faq = dynamic(() => import('@/components/home/Faq'), { ssr: false });
+import Hero from '@/components/home/Hero';
+import DescriptionHome from '@/components/home/DescriptionHome';
+import Footer from '@/components/home/Footer';
+import Faq from '@/components/home/Faq';
 
 export default function Home() {
    const faqRef = useRef<HTMLDivElement>(null);
