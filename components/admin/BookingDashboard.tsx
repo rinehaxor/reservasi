@@ -86,9 +86,21 @@ export default function BookingDoneDashboard() {
             setLoading(false);
          }
       }
-
+      console.log(updateTrigger);
       reloadBookings();
-   }, [dateRange, updateTrigger]);
+   }, [dateRange, updateTrigger, roomType]);
+
+   useEffect(() => {
+      async function reloadBookings() {
+         setLoading(true);
+         const fetchedBookings = await fetchBookings(dateRange);
+         setBookings(fetchedBookings);
+         localStorage.setItem('bookings', JSON.stringify(fetchedBookings));
+         setLoading(false);
+      }
+      console.log(updateTrigger);
+      reloadBookings();
+   }, [updateTrigger, roomType]);
 
    useEffect(() => {
       if (bookings.length > 0) {

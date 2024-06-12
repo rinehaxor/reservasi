@@ -45,7 +45,7 @@ export default function UserBookingHistory() {
          }
 
          if (user) {
-            const { data: bookingsData, error: bookingsError } = await supabase.from('bookings').select('*, room:rooms(id, name, image_url)').eq('user_id', user.id).order('price_per_night', { ascending: true });
+            const { data: bookingsData, error: bookingsError } = await supabase.from('bookings').select('*, room:rooms(id, name, image_url)').eq('user_id', user.id).order('created_at', { ascending: false });
 
             if (bookingsError) {
                console.error('Error fetching booking history:', bookingsError.message);

@@ -93,15 +93,27 @@ export default function BookingDoneDashboard() {
       async function reloadBookings() {
          if (dateRange?.from && dateRange?.to) {
             setLoading(true);
-            const fetchedBookings = await fetchBookings(dateRange, roomType);
+            const fetchedBookings = await fetchBookings(dateRange);
             setBookings(fetchedBookings);
-            localStorage.setItem('bookings_done', JSON.stringify(fetchedBookings));
+            localStorage.setItem('bookings', JSON.stringify(fetchedBookings));
             setLoading(false);
          }
       }
-
+      console.log(updateTrigger);
       reloadBookings();
    }, [dateRange, updateTrigger, roomType]);
+
+   useEffect(() => {
+      async function reloadBookings() {
+         setLoading(true);
+         const fetchedBookings = await fetchBookings(dateRange);
+         setBookings(fetchedBookings);
+         localStorage.setItem('bookings', JSON.stringify(fetchedBookings));
+         setLoading(false);
+      }
+      console.log(updateTrigger);
+      reloadBookings();
+   }, [updateTrigger, roomType]);
 
    useEffect(() => {
       if (bookings.length > 0) {
