@@ -12,7 +12,7 @@ import Image from 'next/image';
 // Initialize Supabase client
 const supabase = createClient();
 
-export default function NavbarHome({ faqRef }: { faqRef?: React.RefObject<HTMLDivElement> }) {
+export default function NavbarHome({ faqRef, contactRef }: { faqRef?: React.RefObject<HTMLDivElement>; contactRef?: React.RefObject<HTMLDivElement> }) {
    const [isOpen, setIsOpen] = useState(false);
    const [user, setUser] = useState<User | null>(null);
    const [showLogout, setShowLogout] = useState(false);
@@ -45,6 +45,9 @@ export default function NavbarHome({ faqRef }: { faqRef?: React.RefObject<HTMLDi
    const scrollToFaq = () => {
       faqRef?.current?.scrollIntoView({ behavior: 'smooth' });
    };
+   const scrollToContact = () => {
+      contactRef?.current?.scrollIntoView({ behavior: 'smooth' });
+   };
    const toggleLogoutMenu = () => {
       setShowLogout(!showLogout);
    };
@@ -72,13 +75,16 @@ export default function NavbarHome({ faqRef }: { faqRef?: React.RefObject<HTMLDi
                   <Link href="/list-kamar" className="py-5 px-3 font-semibold text-white hover:text-gray-100 transition duration-200">
                      Room
                   </Link>
-                  <Link href="/contact" className="py-5 px-3 font-semibold text-white hover:text-gray-100 transition duration-200">
-                     Kontak
-                  </Link>
+
                   {pathname === '/' && (
-                     <button className="py-5 px-3 font-semibold text-white hover:text-gray-100 transition duration-200" onClick={scrollToFaq}>
-                        Faq
-                     </button>
+                     <>
+                        <button className="py-5 px-3 font-semibold text-white hover:text-gray-100 transition duration-200" onClick={scrollToContact}>
+                           Hubungi Kami
+                        </button>
+                        <button className="py-5 px-3 font-semibold text-white hover:text-gray-100 transition duration-200" onClick={scrollToFaq}>
+                           Faq
+                        </button>
+                     </>
                   )}
                   {user ? (
                      <div className="relative">
@@ -143,13 +149,16 @@ export default function NavbarHome({ faqRef }: { faqRef?: React.RefObject<HTMLDi
                <Link href="/list-kamar" className="block py-2 px-4 text-sm text-white hover:bg-orange-500 transition duration-200">
                   Room
                </Link>
-               <Link href="/contact" className="block py-2 px-4 text-sm text-white hover:bg-orange-500 transition duration-200">
-                  Contact
-               </Link>
+
                {pathname === '/' && (
-                  <button className="block py-2 px-4 text-sm text-white hover:bg-orange-500 transition duration-200" onClick={scrollToFaq}>
-                     Faq
-                  </button>
+                  <>
+                     <button className="block py-2 px-4 text-sm text-white hover:bg-orange-500 transition duration-200" onClick={scrollToContact}>
+                        Hubungi Kami
+                     </button>
+                     <button className="block py-2 px-4 text-sm text-white hover:bg-orange-500 transition duration-200" onClick={scrollToFaq}>
+                        Faq
+                     </button>
+                  </>
                )}
                {user ? (
                   <div className="py-2 px-4 text-sm text-white">

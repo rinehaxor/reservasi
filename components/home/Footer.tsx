@@ -14,7 +14,7 @@ export default function Footer() {
             </div>
             <div className="md:w-1/2 mt-5">
                <h3 className="font-bold text-xl">Hubungi Kami</h3>
-               <p className="font-thin text-lg mt-5">Jl. Dr. Moh. Hatta No.3, Sentul, Kec. Kepanjenkidul, Kota Blitar, Jawa Timur 66113</p>
+               <p className="font-thin text-lg mt-5">Jl. Dr. Moh. Hatta No.3, Sentul, Kec. Kepanjenkidul, Kota Blitar, Jawa Timur 66113 Indonesia</p>
                <p className="font-thin text-lg mt-5">
                   <span className="font-bold">Telp:</span> +62 342 801427
                </p>

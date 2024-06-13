@@ -7,13 +7,13 @@ import Link from 'next/link';
 
 const NavbarHome = dynamic(() => import('./NavbarHome'), { ssr: false });
 
-export default function Hero({ faqRef }: { faqRef: React.RefObject<HTMLDivElement> }) {
+export default function Hero({ faqRef, contactRef }: { faqRef: React.RefObject<HTMLDivElement>; contactRef: React.RefObject<HTMLDivElement> }) {
    return (
       <div className="relative w-screen h-screen flex justify-center">
          <Image src="/assets/images/hero.jpeg" alt="Deskripsi Gambar" layout="fill" objectFit="cover" className="opacity-50" priority={true} />
          <div className="absolute inset-0 bg-black opacity-50"></div>
          <div className="absolute w-full">
-            <NavbarHome faqRef={faqRef} />
+            <NavbarHome faqRef={faqRef} contactRef={contactRef} />
          </div>
          <div className="absolute w-full mt-56 md:mt-24">
             <div className="text-white font-bold px-4 md:mx-52">

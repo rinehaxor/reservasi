@@ -7,11 +7,12 @@ import Faq from '@/components/home/Faq';
 
 export default function Home() {
    const faqRef = useRef<HTMLDivElement>(null);
+   const contactRef = useRef<HTMLDivElement>(null);
 
    return (
       <>
-         <Hero faqRef={faqRef} />
-         <DescriptionHome />
+         <Hero faqRef={faqRef} contactRef={contactRef} />
+         <DescriptionHome contactRef={contactRef} />
          <Faq ref={faqRef} />
          <Footer />
       </>
