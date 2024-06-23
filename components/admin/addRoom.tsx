@@ -18,6 +18,7 @@ type FormData = {
    image: File | null;
    bathroom_image: File | null;
    other_image: File | null;
+   room_count: number;
 };
 
 const AddRoom = () => {
@@ -104,7 +105,7 @@ const AddRoom = () => {
    };
 
    const handleAddRoom = async (formData: FormData) => {
-      const { name, type, description, price, image, bathroom_image, other_image } = formData;
+      const { name, type, description, price, image, bathroom_image, other_image, room_count } = formData;
       try {
          const imageUrl = await uploadImage(image);
          const bathroomImageUrl = await uploadImage(bathroom_image);
@@ -127,6 +128,7 @@ const AddRoom = () => {
                image_url: imageUrl,
                bathroom_image_url: bathroomImageUrl,
                other_image_url: otherImageUrl,
+               room_count,
             },
          ]);
 
@@ -162,24 +164,97 @@ const AddRoom = () => {
             <div className="grid gap-4 md:grid-cols-2">
                <div>
                   <Label htmlFor="name">Nama Kamar</Label>
-                  <Input type="text" id="name" placeholder="Nama Kamar" {...register('name', { required: 'Masukan Nama Kamar' })} />
-                  {errors.name && <p className="text-red-500 text-xs">Masukan Nama Kamar.</p>}
+                  <Input
+                     type="text"
+                     id="name"
+                     placeholder="Nama Kamar"
+                     {...register('name', {
+                        required: 'Masukan Nama Kamar',
+                        minLength: {
+                           value: 8,
+                           message: 'Nama kamar minimal 8 karakter',
+                        },
+                        maxLength: {
+                           value: 50,
+                           message: 'Tidak boleh lebih dari 50 karakter',
+                        },
+                     })}
+                  />
+                  {errors.name && <p className="text-red-500 text-xs">{errors.name.message}</p>}
                </div>
+
                <div>
                   <Label htmlFor="type">Tipe Kamar</Label>
-                  <Input type="text" id="type" placeholder="Tipe Kamar" {...register('type', { required: 'Masukan Tipe Kamar' })} />
-                  {errors.type && <p className="text-red-500 text-xs">Masukan Tipe Kamar.</p>}
+                  <Input
+                     type="text"
+                     id="type"
+                     placeholder="Tipe Kamar"
+                     {...register('type', {
+                        required: 'Masukan Tipe Kamar',
+                        minLength: {
+                           value: 8,
+                           message: 'Nama kamar minimal 8 karakter',
+                        },
+                        maxLength: {
+                           value: 50,
+                           message: 'Tidak boleh lebih dari 50 karakter',
+                        },
+                     })}
+                  />
+                  {errors.name && <p className="text-red-500 text-xs">{errors.name.message}</p>}
                </div>
             </div>
             <div>
                <Label htmlFor="description">Deskripsi Kamar</Label>
-               <Textarea id="description" placeholder="Deskripsi" {...register('description', { required: 'Masukan Deskripsi' })} />
-               {errors.description && <p className="text-red-500 text-xs">Masukan Deskripsi.</p>}
+               <Textarea
+                  id="description"
+                  placeholder="Deskripsi"
+                  {...register('description', {
+                     required: 'Masukan Deskripsi',
+                     minLength: {
+                        value: 30,
+                        message: 'Deskripsi harus minimal 30 karakter',
+                     },
+                     maxLength: {
+                        value: 250,
+                        message: 'Deskripsi tidak boleh lebih dari 50 karakter',
+                     },
+                  })}
+               />
+               {errors.description && <p className="text-red-500 text-xs">{errors.description.message}</p>}
             </div>
+
             <div>
                <Label htmlFor="price">Harga Per Malam</Label>
-               <Input type="number" id="price" placeholder="0" {...register('price', { required: 'Masukan Harga' })} />
-               {errors.price && <p className="text-red-500 text-xs">Masukan Harga.</p>}
+               <Input
+                  type="number"
+                  id="price"
+                  placeholder="0"
+                  {...register('price', {
+                     required: 'Masukan Harga',
+                     min: {
+                        value: 1000,
+                        message: 'Harga harus minimal 4 digit',
+                     },
+                  })}
+               />
+               {errors.price && <p className="text-red-500 text-xs">{errors.price.message}</p>}
+            </div>
+            <div>
+               <Label htmlFor="room_count">Jumlah Kamar</Label>
+               <Input
+                  type="number"
+                  id="room_count"
+                  placeholder="0"
+                  {...register('room_count', {
+                     required: 'Masukan Jumlah Kamar',
+                     min: {
+                        value: 1,
+                        message: 'Jumlah kamar minimal 1',
+                     },
+                  })}
+               />
+               {errors.room_count && <p className="text-red-500 text-xs">{errors.room_count.message}</p>}
             </div>
             <div>
                <Label htmlFor="image">Foto Kamar</Label>

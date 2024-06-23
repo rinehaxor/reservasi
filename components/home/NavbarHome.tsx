@@ -41,6 +41,7 @@ export default function NavbarHome({ faqRef, contactRef }: { faqRef?: React.RefO
       await supabase.auth.signOut();
       router.push('/');
    };
+   const userJson = Cookies.get('user');
 
    const scrollToFaq = () => {
       faqRef?.current?.scrollIntoView({ behavior: 'smooth' });
@@ -114,11 +115,20 @@ export default function NavbarHome({ faqRef, contactRef }: { faqRef?: React.RefO
                                        <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Ganti Password</button>
                                     </Link>
                                  </li>
-                                 <li>
-                                    <Link href="/user/reservasi">
-                                       <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Reservasi</button>
-                                    </Link>
-                                 </li>
+                                 {userJson && JSON.parse(userJson).role === 2 ? (
+                                    <li>
+                                       <Link href="/admin/dashboard">
+                                          <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Dashboard Admin</button>
+                                       </Link>
+                                    </li>
+                                 ) : (
+                                    <li>
+                                       <Link href="/user/reservasi">
+                                          <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Reservasi</button>
+                                       </Link>
+                                    </li>
+                                 )}
+
                                  <li>
                                     <button onClick={handleLogout} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">
                                        Keluar
@@ -182,9 +192,16 @@ export default function NavbarHome({ faqRef, contactRef }: { faqRef?: React.RefO
                            <Link href="/user/ganti-password">
                               <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Ganti Password</button>
                            </Link>
-                           <Link href="/user/reservasi">
-                              <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Reservasi</button>
-                           </Link>
+                           {userJson && JSON.parse(userJson).role === 2 ? (
+                              <Link href="/admin/dashboard">
+                                 <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Dashboard Admin</button>
+                              </Link>
+                           ) : (
+                              <Link href="/user/reservasi">
+                                 <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Reservasi</button>
+                              </Link>
+                           )}
+
                            <button onClick={handleLogout} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">
                               Logout
                            </button>

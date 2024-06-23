@@ -46,7 +46,7 @@ export default function AvailableRoom() {
    }, [updateTrigger]);
 
    return (
-      <div className=" w-[100rem] md:w-full flex flex-col h-screen ">
+      <div className="w-full flex flex-col h-screen">
          <div className="w-full">
             {/* <NavbarAdmin /> */}
             <div className="flex w-full">
@@ -61,9 +61,9 @@ export default function AvailableRoom() {
                      <div className="w-[14%] ">
                         <SideBar />
                      </div>
-                     <div className=" md:w-full py-10 px-10">
+                     <div className=" md:w-full md:ml-[14%] py-10 px-10">
                         <div className="flex justify-end items-end mb-10 "></div>
-                        <div className="overflow-x-auto custom-scroll-container w-[100rem]">
+                        <div className="overflow-x-auto custom-scroll-container w-[90rem]">
                            <DataTableUser columns={columnsRoomAvailable} data={rooms} />
                         </div>
                      </div>

@@ -101,8 +101,17 @@ const AddFacility = () => {
          <p className="text-xl font-bold border-b-2 border-orange-500 mb-5">Tambah Fasilitas</p>
          <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
             <Label htmlFor="name">Nama Fasilitas </Label>
-            <Input type="text" id="name" placeholder="Nama Fasilitas" {...register('name', { required: 'Masukan Nama Fasilitas' })} className="form-input" />
-            {errors.name && <p className="text-red-500 text-xs">Masukan Nama Fasilitas .</p>}
+            <Input
+               type="text"
+               id="name"
+               placeholder="Nama Fasilitas"
+               {...register('name', {
+                  required: 'Masukan Nama Fasilitas',
+                  maxLength: { value: 50, message: 'Tidak boleh lebih dari 50 karakter' },
+               })}
+               className="form-input"
+            />
+            {errors.name && <p className="text-red-500 text-xs">{errors.name.message}</p>}
          </div>
          <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
             <Label htmlFor="image">Gambar Fasilitas </Label>

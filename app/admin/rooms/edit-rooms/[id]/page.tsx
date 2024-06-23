@@ -204,19 +204,56 @@ export default function Page({ params }: any) {
                   <div className="grid gap-4 md:grid-cols-2">
                      <div>
                         <Label htmlFor="name">Nama Kamar</Label>
-                        <Input type="text" id="name" placeholder="Nama Kamar" {...register('name', { required: 'Masukan Nama Kamar' })} />
-                        {errors.name && <p className="text-red-500 text-xs">Masukan Nama Kamar.</p>}
+                        <Input
+                           type="text"
+                           id="name"
+                           placeholder="Nama Kamar"
+                           {...register('name', {
+                              required: 'Masukan Nama Kamar',
+                              maxLength: {
+                                 value: 50,
+                                 message: 'Nama Kamar tidak boleh lebih dari 50 karakter',
+                              },
+                           })}
+                        />
+                        {errors.name && <p className="text-red-500 text-xs">{errors.name.message}</p>}
                      </div>
+
                      <div>
                         <Label htmlFor="type">Tipe Kamar</Label>
-                        <Input type="text" id="type" placeholder="Tipe Kamar" {...register('type', { required: 'Masukan Tipe Kamar' })} />
-                        {errors.type && <p className="text-red-500 text-xs">Masukan Tipe Kamar.</p>}
+                        <Input
+                           type="text"
+                           id="type"
+                           placeholder="Tipe Kamar"
+                           {...register('type', {
+                              required: 'Masukan Tipe Kamar',
+                              maxLength: {
+                                 value: 50,
+                                 message: 'Tidak boleh lebih dari 50 karakter',
+                              },
+                           })}
+                        />
+                        {errors.name && <p className="text-red-500 text-xs">{errors.name.message}</p>}
                      </div>
                   </div>
                   <div>
                      <Label htmlFor="description">Deskripsi Kamar</Label>
-                     <Textarea id="description" placeholder="Deskripsi" {...register('description', { required: 'Masukan Deskripsi' })} />
-                     {errors.description && <p className="text-red-500 text-xs">Masukan Deskripsi.</p>}
+                     <Textarea
+                        id="description"
+                        placeholder="Deskripsi"
+                        {...register('description', {
+                           required: 'Masukan Deskripsi',
+                           minLength: {
+                              value: 30,
+                              message: 'Deskripsi harus minimal 30 karakter',
+                           },
+                           maxLength: {
+                              value: 250,
+                              message: 'Deskripsi tidak boleh lebih dari 50 karakter',
+                           },
+                        })}
+                     />
+                     {errors.description && <p className="text-red-500 text-xs">{errors.description.message}</p>}
                   </div>
                   <div>
                      <Label htmlFor="price">Harga Per Malam</Label>
