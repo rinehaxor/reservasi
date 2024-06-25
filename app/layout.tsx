@@ -29,6 +29,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <html lang="en" suppressHydrationWarning>
          <head>
             <link rel="icon" href="/assets/favicon.ico" />
+            <meta property="og:image" content="/assets/favicon.ico" />
+            <meta property="og:type" content="website" />
          </head>
          <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
             <main className="min-h-screen flex flex-col items-center">

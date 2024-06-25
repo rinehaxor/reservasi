@@ -21,6 +21,7 @@ interface Room {
    image_url?: string;
    bathroom_image_url?: string;
    other_image_url?: string;
+   room_count: number;
 }
 
 interface Booking {
@@ -45,6 +46,7 @@ export default function Page({ params }: any) {
          image_url: '',
          bathroom_image_url: '',
          other_image_url: '',
+         room_count: 0,
       },
    });
 
@@ -133,7 +135,7 @@ export default function Page({ params }: any) {
    };
 
    const updateRoom = async (formData: Room) => {
-      const { name, type, description, price_per_night, image_url, bathroom_image_url, other_image_url } = formData;
+      const { name, type, description, price_per_night, image_url, bathroom_image_url, other_image_url, room_count } = formData;
 
       let updatedImageUrl = room?.image_url;
       let updatedBathroomImageUrl = room?.bathroom_image_url;
@@ -167,6 +169,7 @@ export default function Page({ params }: any) {
          image_url: updatedImageUrl,
          bathroom_image_url: updatedBathroomImageUrl,
          other_image_url: updatedOtherImageUrl,
+         room_count,
       };
 
       try {
@@ -259,6 +262,22 @@ export default function Page({ params }: any) {
                      <Label htmlFor="price">Harga Per Malam</Label>
                      <Input type="number" id="price" placeholder="0" {...register('price_per_night', { required: 'Masukan Harga' })} />
                      {errors.price_per_night && <p className="text-red-500 text-xs">Masukan Harga.</p>}
+                  </div>
+                  <div>
+                     <Label htmlFor="room_count">Jumlah Kamar</Label>
+                     <Input
+                        type="number"
+                        id="room_count"
+                        placeholder="0"
+                        {...register('room_count', {
+                           required: 'Masukan Jumlah Kamar',
+                           min: {
+                              value: 1,
+                              message: 'Jumlah kamar minimal 1',
+                           },
+                        })}
+                     />
+                     {errors.room_count && <p className="text-red-500 text-xs">{errors.room_count.message}</p>}
                   </div>
                   <div>
                      <Label htmlFor="image">Foto Kamar</Label>

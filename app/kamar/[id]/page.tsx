@@ -155,7 +155,7 @@ export default function Page({ params }: any) {
                         </div>
 
                         <div className="flex justify-end mt-10 flex-col items-end">
-                           <Button variant={'secondary'} size={'lg'} className="text-bold w-40 text-white " disabled={!dateRange?.from || !dateRange?.to || room?.room_available !== 'Tersedia' || !user}>
+                           <Button variant={'secondary'} size={'lg'} className="text-bold w-40 text-white " disabled={!dateRange?.from || !dateRange?.to || room?.room_available !== 'Tersedia' || !user || room?.room_count === 0}>
                               <Link href={`/kamar/${room.id}/pesan`}>Pesan</Link>
                            </Button>
                            <li className="md:font-bold md:text-xs text-xs font-bold mt-2">

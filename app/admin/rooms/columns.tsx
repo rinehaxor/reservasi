@@ -20,6 +20,7 @@ export type Room = {
    other_image_url: string;
    average_rating: number;
    bathroom_image_url: string;
+   room_count: number;
 };
 export type RoomFacility = {
    facility_id: number;
