@@ -71,10 +71,10 @@ const PersonalDetailsForm = ({ onNext }: any) => {
             <p className="font-poppins text-xl my-3">Informasi Pemesanan</p>
             <p className="font-poppins text-lg">Silakan isi kolom kosong di bawah ini</p>
          </div>
-         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center">
+         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center mx-48">
             <div className="flex flex-col lg:flex-row gap-5 mt-5 w-full px-4">
                {roomDetails ? (
-                  <div className="flex flex-col lg:w-1/2 items-center lg:items-end ml-48">
+                  <div className="flex flex-col lg:w-1/2 items-center lg:items-end">
                      <Image src={roomDetails.image_url} alt="Room Image" width={350} height={250} layout="responsive" />
                      <div className="flex flex-col lg:flex-row justify-between items-center w-full mt-4 lg:mt-0">
                         <div className="flex flex-col items-center lg:items-start lg:w-1/2 ">

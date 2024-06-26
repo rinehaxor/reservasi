@@ -87,7 +87,16 @@ export default function ListRooms() {
                            <span>{room.price_per_night.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</span>
                         </p>
                         <div className="flex mt-10 justify-between">
-                           <div className="">{room.average_rating ? <StarRating rating={room.average_rating} /> : <p className="text-xl font-bold">Belum ada rating</p>}</div>
+                           <div className="">
+                              {room.average_rating ? (
+                                 <>
+                                    <p className="text-xl font-bold">Rating</p>
+                                    <StarRating rating={room.average_rating} />{' '}
+                                 </>
+                              ) : (
+                                 <p className="text-xl font-bold">Belum ada rating</p>
+                              )}
+                           </div>
                            <Link href={`/kamar/${room.id}`}>
                               <Button className="ml-auto font-extrabold text-lg sm:text-xl py-2 px-4 " variant={'secondary'}>
                                  Pesan
