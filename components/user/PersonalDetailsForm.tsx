@@ -74,10 +74,10 @@ const PersonalDetailsForm = ({ onNext }: any) => {
          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center">
             <div className="flex flex-col lg:flex-row gap-5 mt-5 w-full px-4">
                {roomDetails ? (
-                  <div className="flex flex-col lg:w-1/2 items-center lg:items-end">
-                     <Image src={roomDetails.image_url} alt="Room Image" width={500} height={400} className="w-auto md:ml-[18.5rem]" />
+                  <div className="flex flex-col lg:w-1/2 items-center lg:items-end ml-48">
+                     <Image src={roomDetails.image_url} alt="Room Image" width={350} height={250} layout="responsive" />
                      <div className="flex flex-col lg:flex-row justify-between items-center w-full mt-4 lg:mt-0">
-                        <div className="flex flex-col items-center lg:items-start lg:w-1/2 md:ml-[17.5rem]">
+                        <div className="flex flex-col items-center lg:items-start lg:w-1/2 ">
                            <div className="text-xl font-bold">{roomDetails.name}</div>
                            <div className="text-lg font-normal">{roomDetails.type}</div>
                         </div>
@@ -93,9 +93,9 @@ const PersonalDetailsForm = ({ onNext }: any) => {
                   </div>
                )}
                <div className="bg-gray-300 w-full lg:w-px self-stretch lg:mx-8"></div> {/* Garis pemisah */}
-               <div className="flex flex-col w-full lg:w-1/2">
-                  <div className="w-full flex flex-col my-10">
-                     <div className="w-full">
+               <div className="flex flex-col w-full lg:w-1/2 ">
+                  <div className="w-full flex flex-col mt-auto mb-auto">
+                     <div className="w-full  ">
                         <div className="mb-4 w-full md:w-1/2">
                            <Label>Nama Lengkap</Label>
                            <Input
@@ -172,15 +172,17 @@ const PersonalDetailsForm = ({ onNext }: any) => {
                   </div>
                </div>
             </div>
-            <div className="flex flex-col items-center justify-center mt-10 w-full">
+            <div className="flex flex-col items-center justify-center mt-10 w-full ">
                <Button variant={'secondary'} type="submit" className="w-32 mb-5">
                   Next
                </Button>
-               <Button className="w-32" variant={'destructive'} onClick={handleBack}>
-                  Back
-               </Button>
             </div>
          </form>
+         <div className=" flex items-center justify-center mb-5">
+            <Button className="w-32" variant={'destructive'} onClick={handleBack}>
+               Back
+            </Button>
+         </div>
       </div>
    );
 };
