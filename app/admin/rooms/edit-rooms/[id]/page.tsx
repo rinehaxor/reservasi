@@ -83,6 +83,7 @@ export default function Page({ params }: any) {
                setValue('image_url', data.image_url);
                setValue('bathroom_image_url', data.bathroom_image_url);
                setValue('other_image_url', data.other_image_url);
+               setValue('room_count', data.room_count);
 
                const { data: facilityData, error: facilityError } = await supabase.from('room_facilities').select('facility_id').eq('room_id', data.id);
                if (facilityData) {
@@ -251,8 +252,8 @@ export default function Page({ params }: any) {
                               message: 'Deskripsi harus minimal 30 karakter',
                            },
                            maxLength: {
-                              value: 250,
-                              message: 'Deskripsi tidak boleh lebih dari 50 karakter',
+                              value: 500,
+                              message: 'Deskripsi tidak boleh lebih dari 500 karakter',
                            },
                         })}
                      />

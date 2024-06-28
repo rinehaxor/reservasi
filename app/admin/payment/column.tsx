@@ -82,7 +82,7 @@ export const columnsPayment: ColumnDef<Payment>[] = [
          return (
             <div className="flex flex-row items-center justify-center gap-4">
                <Button onClick={() => handleDelete(row.original.id)} variant={'destructive'}>
-                  <HiTrash className="mr-2" /> Delete
+                  <HiTrash className="mr-2" /> Hapus
                </Button>
                <Link href={`/admin/payment/edit-payment/${row.original.id}`} passHref>
                   <Button variant={'yellow'}>

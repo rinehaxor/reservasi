@@ -82,7 +82,7 @@ export const columnsFasilitas: ColumnDef<Fasilitas>[] = [
          return (
             <div className="flex flex-row items-center justify-center gap-4">
                <Button onClick={() => handleDelete(row.original.id)} variant={'destructive'}>
-                  <HiTrash /> Delete
+                  <HiTrash /> Hapus
                </Button>
                <Link href={`/admin/fasilitas/edit-fasilitas/${row.original.id}`} passHref>
                   <Button variant={'yellow'}>

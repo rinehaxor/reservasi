@@ -35,6 +35,7 @@ const AddRoom = () => {
          type: '',
          description: '',
          price: '',
+         room_count: 0,
          image: null,
          bathroom_image: null,
          other_image: null,
@@ -216,8 +217,8 @@ const AddRoom = () => {
                         message: 'Deskripsi harus minimal 30 karakter',
                      },
                      maxLength: {
-                        value: 250,
-                        message: 'Deskripsi tidak boleh lebih dari 50 karakter',
+                        value: 500,
+                        message: 'Deskripsi tidak boleh lebih dari 250 karakter',
                      },
                   })}
                />
