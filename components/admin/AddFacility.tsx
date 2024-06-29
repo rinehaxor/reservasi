@@ -100,14 +100,21 @@ const AddFacility = () => {
       <form onSubmit={handleSubmit(handleAddFacility)} className="flex flex-col gap-4">
          <p className="text-xl font-bold border-b-2 border-orange-500 mb-5">Tambah Fasilitas</p>
          <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-            <Label htmlFor="name">Nama Fasilitas </Label>
+            <Label htmlFor="name">Nama Fasilitas</Label>
             <Input
                type="text"
                id="name"
-               placeholder="Nama Fasilitas"
+               placeholder="Facility Name"
                {...register('name', {
                   required: 'Masukan Nama Fasilitas',
-                  maxLength: { value: 50, message: 'Tidak boleh lebih dari 50 karakter' },
+                  minLength: {
+                     value: 5,
+                     message: 'Nama kamar minimal 5 karakter',
+                  },
+                  maxLength: {
+                     value: 30,
+                     message: 'Tidak boleh lebih dari 30 karakter',
+                  },
                })}
                className="form-input"
             />

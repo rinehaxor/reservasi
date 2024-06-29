@@ -9,10 +9,16 @@ import { Input } from '../ui/input';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useAuth from '@/hooks/useAuth';
+import Swal from 'sweetalert2';
 
 export default function ChangePassword() {
    const supabase = createClient();
-   const { register, handleSubmit, setError } = useForm();
+   const {
+      register,
+      handleSubmit,
+      setError,
+      formState: { errors },
+   } = useForm();
    const [currentEmail, setCurrentEmail] = useState<string>('');
    const [sessionData, setSessionData] = useState<{ access_token: string; refresh_token: string } | null>(null);
 
@@ -46,6 +52,21 @@ export default function ChangePassword() {
    }, [supabase]);
 
    const onSubmitPassword = async (data: any) => {
+      const result = await Swal.fire({
+         title: 'Apakah Anda yakin?',
+         text: 'Pastikan data yang diubah sudah benar.',
+         icon: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: 'Ya, perbarui!',
+         cancelButtonText: 'Batal',
+      });
+
+      if (!result.isConfirmed) {
+         return;
+      }
+
       const { currentPassword, newPassword } = data;
 
       const currentSessionData = sessionData;
@@ -108,7 +129,7 @@ export default function ChangePassword() {
 
    return (
       <div>
-         <div className="flex flex-col md:flex-row items-start p-4 md:p-8">
+         <div className="flex flex-col md:flex-row items-start p-4 md:p-8 md:mx-48">
             <div className="hidden md:block md:w-1/4">
                <SidebarUser />
             </div>
@@ -121,7 +142,22 @@ export default function ChangePassword() {
                            <Label className="font-medium text-lg">Password Saat Ini</Label>
                         </div>
                         <div className="md:col-span-2">
-                           <Input type="password" {...register('currentPassword', { required: 'Current password is required' })} className="w-full p-2 border rounded" />
+                           <Input
+                              type="password"
+                              {...register('currentPassword', {
+                                 required: 'Masukan Password',
+                                 minLength: {
+                                    value: 8,
+                                    message: 'Password Saat Ini minimal 8 karakter',
+                                 },
+                                 maxLength: {
+                                    value: 25,
+                                    message: 'Password Saat Ini tidak boleh lebih dari 25 karakter',
+                                 },
+                              })}
+                              className="w-full p-2 border rounded"
+                           />
+                           {errors.currentPassword?.message && <p className="text-red-500 text-xs">{String(errors.currentPassword.message)}</p>}
                         </div>
                      </div>
 
@@ -130,7 +166,22 @@ export default function ChangePassword() {
                            <Label className="font-medium text-lg">Password Baru</Label>
                         </div>
                         <div className="md:col-span-2">
-                           <Input type="password" {...register('newPassword', { required: 'New password is required' })} className="w-full p-2 border rounded" />
+                           <Input
+                              type="password"
+                              {...register('newPassword', {
+                                 required: 'Masukan Password',
+                                 minLength: {
+                                    value: 8,
+                                    message: 'Password Saat Ini minimal 8 karakter',
+                                 },
+                                 maxLength: {
+                                    value: 25,
+                                    message: 'Password Saat Ini tidak boleh lebih dari 25 karakter',
+                                 },
+                              })}
+                              className="w-full p-2 border rounded"
+                           />
+                           {errors.newPassword?.message && <p className="text-red-500 text-xs">{String(errors.newPassword.message)}</p>}
                         </div>
                      </div>
 

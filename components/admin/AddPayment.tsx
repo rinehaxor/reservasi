@@ -89,13 +89,45 @@ const AddPayment = () => {
          <p className="text-xl font-bold border-b-2 border-orange-500 mb-5">Tambah Pembayaran</p>
          <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
             <Label htmlFor="bank_name">Nama Bank</Label>
-            <Input type="text" id="bank_name" placeholder="Nama Bank" {...register('bank_name', { required: 'Bank name is required' })} className="form-input" />
-            {errors.bank_name && <p className="text-red-500 text-xs">Masukan Nama Bank.</p>}
+            <Input
+               type="text"
+               id="bank_name"
+               placeholder="Nama Pembayaran"
+               {...register('bank_name', {
+                  required: 'Masukan Nama Pembayaran',
+                  minLength: {
+                     value: 5,
+                     message: 'Nama Pembayaran  minimal 5 karakter',
+                  },
+                  maxLength: {
+                     value: 30,
+                     message: 'Nama Pembayaran maksimal 30 karakter',
+                  },
+               })}
+               className="form-input"
+            />
+            {errors.bank_name && <p className="text-red-500 text-xs">{errors.bank_name.message}</p>}
          </div>
          <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
             <Label htmlFor="account_number">Nomer Rekening Bank</Label>
-            <Input type="number" id="account_number" placeholder="12345" {...register('account_number', { required: 'Account number is required' })} className="form-input" />
-            {errors.account_number && <p className="text-red-500 text-xs">Masukan Nomer Rekening.</p>}
+            <Input
+               type="text"
+               id="account_number"
+               placeholder="Nomer Rekening Bank"
+               {...register('account_number', {
+                  required: 'Masukan Nomer Rekening',
+                  minLength: {
+                     value: 10,
+                     message: 'Nomer Rekening  minimal 10 karakter',
+                  },
+                  maxLength: {
+                     value: 20,
+                     message: 'Nomer Rekening maksimal 20 karakter',
+                  },
+               })}
+               className="form-input"
+            />
+            {errors.account_number && <p className="text-red-500 text-xs">{errors.account_number.message}</p>}
          </div>
          <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
             <Label htmlFor="image">Bank Logo</Label>

@@ -172,8 +172,8 @@ const AddRoom = () => {
                      {...register('name', {
                         required: 'Masukan Nama Kamar',
                         minLength: {
-                           value: 8,
-                           message: 'Nama kamar minimal 8 karakter',
+                           value: 5,
+                           message: 'Nama kamar minimal 5 karakter',
                         },
                         maxLength: {
                            value: 50,
@@ -252,6 +252,10 @@ const AddRoom = () => {
                      min: {
                         value: 1,
                         message: 'Jumlah kamar minimal 1',
+                     },
+                     max: {
+                        value: 99,
+                        message: 'Jumlah kamar maksimal 99',
                      },
                   })}
                />

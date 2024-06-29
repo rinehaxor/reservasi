@@ -9,8 +9,9 @@ import { WaveSVG } from '@/components/ui/waves';
 import SideBar from '@/components/admin/SideBar';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+import Swal from 'sweetalert2';
 import useCheckUserRoleAndRedirect from '@/hooks/useCheckUserRoleAndRedirect ';
-// import useCheckUserRoleAndRedirect from '@/hooks/useCheckUserRoleAndRedirect';
 
 interface Payment {
    id: number;
@@ -39,7 +40,7 @@ export default function EditPayment({ params }: any) {
    const supabase = createClient();
 
    useEffect(() => {
-      async function fetchFacilityDetails() {
+      async function fetchPaymentDetails() {
          if (params?.id) {
             const { data, error } = await supabase.from('payments').select('*').eq('id', params.id).single();
             if (data) {
@@ -47,12 +48,11 @@ export default function EditPayment({ params }: any) {
                setValue('name', data.name);
                setValue('bank_name', data.bank_name);
                setValue('account_number', data.account_number);
-               // setValue for other fields as necessary
             }
          }
       }
 
-      fetchFacilityDetails();
+      fetchPaymentDetails();
       register('image');
    }, [params?.id, register, setValue]);
 
@@ -86,6 +86,21 @@ export default function EditPayment({ params }: any) {
    };
 
    const handleUpdatePayment = async (formData: any) => {
+      const result = await Swal.fire({
+         title: 'Apakah Anda yakin?',
+         text: 'Pastikan data yang diubah sudah benar.',
+         icon: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: 'Ya, perbarui!',
+         cancelButtonText: 'Batal',
+      });
+
+      if (!result.isConfirmed) {
+         return;
+      }
+
       const { name, image, account_number, bank_name } = formData;
 
       let imageUrl = payment?.image_url;
@@ -110,12 +125,12 @@ export default function EditPayment({ params }: any) {
 
       try {
          const { data, error } = await supabase.from('payments').update(updatedData).match({ id: payment?.id });
-         if (error) throw new Error(`Error updating facility: ${error.message}`);
+         if (error) throw new Error(`Error updating payment: ${error.message}`);
          toast.success('Berhasil Mengedit Pembayaran');
          setPayment({ ...payment, ...updatedData });
       } catch (error) {
          toast.error('Gagal Mengedit Pembayaran');
-         console.error('Error in handleUpdateFacility:', error);
+         console.error('Error in handleUpdatePayment:', error);
       }
    };
 
@@ -130,17 +145,49 @@ export default function EditPayment({ params }: any) {
                <div className="flex flex-row">
                   <form onSubmit={handleSubmit(handleUpdatePayment)} className="flex flex-col gap-4">
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-                        <Label htmlFor="bank_name">Nama Pembayaran </Label>
-                        <Input type="text" id="bank_name" placeholder="Nama Pembayaran" {...register('bank_name', { required: 'Masukan Nama Pembayaran' })} className="form-input" />
-                        {errors.bank_name && <p className="text-red-500 text-xs">Masukan Nama Bank.</p>}
+                        <Label htmlFor="bank_name">Nama Bank</Label>
+                        <Input
+                           type="text"
+                           id="bank_name"
+                           placeholder="Nama Pembayaran"
+                           {...register('bank_name', {
+                              required: 'Masukan Nama Pembayaran',
+                              minLength: {
+                                 value: 5,
+                                 message: 'Nama Pembayaran  minimal 5 karakter',
+                              },
+                              maxLength: {
+                                 value: 30,
+                                 message: 'Nama Pembayaran maksimal 30 karakter',
+                              },
+                           })}
+                           className="form-input"
+                        />
+                        {errors.bank_name && <p className="text-red-500 text-xs">{errors.bank_name.message}</p>}
                      </div>
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-                        <Label htmlFor="account_number">Nomer Rekening Bank </Label>
-                        <Input type="text" id="account_number" placeholder="Nomer Rekening Bank" {...register('account_number', { required: 'Masukan Nomer Rekening Pembayaran.' })} className="form-input" />
-                        {errors.account_number && <p className="text-red-500 text-xs">Masukan Nomer Rekening.</p>}
+                        <Label htmlFor="account_number">Nomer Rekening Bank</Label>
+                        <Input
+                           type="text"
+                           id="account_number"
+                           placeholder="Nomer Rekening Bank"
+                           {...register('account_number', {
+                              required: 'Masukan Nomer Rekening',
+                              minLength: {
+                                 value: 10,
+                                 message: 'Nomer Rekening  minimal 10 karakter',
+                              },
+                              maxLength: {
+                                 value: 20,
+                                 message: 'Nomer Rekening maksimal 20 karakter',
+                              },
+                           })}
+                           className="form-input"
+                        />
+                        {errors.account_number && <p className="text-red-500 text-xs">{errors.account_number.message}</p>}
                      </div>
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
-                        <Label htmlFor="image">Masukan Gambar Bank.</Label>
+                        <Label htmlFor="image">Masukan Gambar Bank</Label>
                         <Input type="file" className="form-input" onChange={handleFileChange} />
                      </div>
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">

@@ -214,9 +214,13 @@ export default function Page({ params }: any) {
                            placeholder="Nama Kamar"
                            {...register('name', {
                               required: 'Masukan Nama Kamar',
+                              minLength: {
+                                 value: 5,
+                                 message: 'Nama kamar minimal 5 karakter',
+                              },
                               maxLength: {
                                  value: 50,
-                                 message: 'Nama Kamar tidak boleh lebih dari 50 karakter',
+                                 message: 'Tidak boleh lebih dari 50 karakter',
                               },
                            })}
                         />
@@ -231,6 +235,10 @@ export default function Page({ params }: any) {
                            placeholder="Tipe Kamar"
                            {...register('type', {
                               required: 'Masukan Tipe Kamar',
+                              minLength: {
+                                 value: 8,
+                                 message: 'Nama kamar minimal 8 karakter',
+                              },
                               maxLength: {
                                  value: 50,
                                  message: 'Tidak boleh lebih dari 50 karakter',
@@ -253,7 +261,7 @@ export default function Page({ params }: any) {
                            },
                            maxLength: {
                               value: 500,
-                              message: 'Deskripsi tidak boleh lebih dari 500 karakter',
+                              message: 'Deskripsi tidak boleh lebih dari 250 karakter',
                            },
                         })}
                      />
@@ -261,8 +269,19 @@ export default function Page({ params }: any) {
                   </div>
                   <div>
                      <Label htmlFor="price">Harga Per Malam</Label>
-                     <Input type="number" id="price" placeholder="0" {...register('price_per_night', { required: 'Masukan Harga' })} />
-                     {errors.price_per_night && <p className="text-red-500 text-xs">Masukan Harga.</p>}
+                     <Input
+                        type="number"
+                        id="price"
+                        placeholder="0"
+                        {...register('price_per_night', {
+                           required: 'Masukan Harga',
+                           min: {
+                              value: 1000,
+                              message: 'Harga harus minimal 4 digit',
+                           },
+                        })}
+                     />
+                     {errors.price_per_night && <p className="text-red-500 text-xs">{errors.price_per_night.message}</p>}
                   </div>
                   <div>
                      <Label htmlFor="room_count">Jumlah Kamar</Label>
@@ -275,6 +294,10 @@ export default function Page({ params }: any) {
                            min: {
                               value: 1,
                               message: 'Jumlah kamar minimal 1',
+                           },
+                           max: {
+                              value: 99,
+                              message: 'Jumlah kamar maksimal 99',
                            },
                         })}
                      />
