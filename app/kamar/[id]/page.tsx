@@ -117,10 +117,10 @@ export default function Page({ params }: any) {
                   </BreadcrumbList>
                </Breadcrumb>
                <div className="flex justify-center flex-col md:flex-row">
-                  <div className="">{room && <Image src={room.image_url} alt="Room Image" width={'500'} height={'400'} className="w-[700px] h-auto" />}</div>
+                  <div className="">{room && <Image src={room.image_url} alt="Room Image" width={'500'} height={'400'} className="w-[700px] md:h-[516px]" />}</div>
                   <div className="flex-row md:flex-col">
-                     <div className="">{room && <Image src={room?.bathroom_image_url} alt="Room Image" width={'250'} height={'200'} className="w-full md:w-[350px] h-auto" />}</div>
-                     <div className="">{room && <Image src={room?.other_image_url} alt="Room Image" width={'250'} height={'200'} className="w-full md:w-[350px] h-auto" />}</div>
+                     <div className="">{room && <Image src={room?.bathroom_image_url} alt="Room Image" width={'250'} height={'200'} className="w-full md:w-[350px] h-[258px] md:my-0 my-1" />}</div>
+                     <div className="">{room && <Image src={room?.other_image_url} alt="Room Image" width={'250'} height={'200'} className="w-full md:w-[350px] h-[258px]" />}</div>
                   </div>
                </div>
                {room && (

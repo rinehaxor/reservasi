@@ -69,12 +69,12 @@ export default function ListRooms() {
                   <div key={room.id} className="flex flex-col sm:flex-row p-4 mx-4 sm:mx-48 gap-5">
                      <div className="w-full sm:w-1/2">
                         <div className="flex justify-center sm:justify-end w-full">
-                           <img src={room.image_url} alt="Room Image" style={{ width: '100%', maxWidth: '500px', height: 'auto' }} />
+                           <Image src={room.image_url} layout="responsive" width={300} height={200} alt="Room Image" />
                         </div>
                      </div>
                      <div className="w-full sm:w-1/2 mt-4 sm:mt-0">
                         <h2 className="font-extrabold text-2xl sm:text-4xl">{room.name}</h2>
-                        <h2 className="text-xl sm:text-2xl">{room.type}</h2>
+                        <h2 className="text-xl sm:text-2xl font-bold md:my-10">{room.type}</h2>
                         <div className="flex flex-wrap gap-2 sm:gap-5 mt-3">
                            {room.room_facilities.map((rf) => (
                               <div key={rf.facility_id}>
@@ -82,7 +82,7 @@ export default function ListRooms() {
                               </div>
                            ))}
                         </div>
-                        <p className="mt-3 text-xl sm:text-2xl font-bold mb-2">Harga</p>
+                        <p className="mt-3 text-xl sm:text-2xl font-bold my-5">Harga</p>
                         <p className="inline-block bg-orange-500 font-extrabold text-xl sm:text-3xl text-white rounded-sm border-orange-500 border-2 p-2">
                            <span>{room.price_per_night.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</span>
                         </p>
