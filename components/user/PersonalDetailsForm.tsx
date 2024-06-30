@@ -155,8 +155,8 @@ const PersonalDetailsForm = ({ onNext }: any) => {
                                     message: 'Email harus minimal 8 karakter.',
                                  },
                                  maxLength: {
-                                    value: 30,
-                                    message: 'Email harus maksimal 30 karakter.',
+                                    value: 50,
+                                    message: 'Email harus maksimal 50 karakter.',
                                  },
                                  pattern: {
                                     value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,

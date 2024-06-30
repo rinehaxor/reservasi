@@ -194,6 +194,7 @@ const PaymentDetailsForm = ({ onConfirm, onBack, onNext }: any) => {
                               {errors.paymentName && <p className="text-red-500 text-xs">{errors.paymentName.message as string}</p>}
                            </div>
                            <div className="mb-4">
+                              <Label>Nomer Rekening</Label>
                               <Input
                                  type="text"
                                  id="paymentAccountNumber"

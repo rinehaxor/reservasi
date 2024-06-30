@@ -132,7 +132,7 @@ export default function Page({ params }: any) {
                         <div className="flex flex-row flex-wrap gap-5">
                            {room?.room_facilities.map((rf) => (
                               <div key={rf.facility_id}>
-                                 <div>
+                                 <div className="md:w-48 gap-5">
                                     <Image src={rf.facility.image_url} width={'50'} height={'50'} alt="Facility" />
                                     <p className="text-center font-semibold">{rf.facility.name}</p>
                                  </div>

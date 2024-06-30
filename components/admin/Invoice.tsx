@@ -1,4 +1,4 @@
-import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
 import { format } from 'date-fns';
 
 // Refined styles to match the provided design
@@ -15,11 +15,36 @@ const styles = StyleSheet.create({
       fontSize: 10,
    },
    header: {
-      fontSize: 16,
-      marginBottom: 10,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      marginBottom: 20,
       textAlign: 'center',
-      color: '#003366',
+   },
+   logo: {
+      width: 50,
+      height: 50,
+      marginRight: 10,
+   },
+   headerText: {
+      textAlign: 'center',
+   },
+   title: {
+      fontSize: 14,
       fontWeight: 'bold',
+      textAlign: 'center',
+   },
+   contactDetails: {
+      fontSize: 10,
+      textAlign: 'center',
+   },
+   link: {
+      color: 'blue',
+   },
+   body: {
+      margin: 10,
+      padding: 10,
+      fontSize: 10,
    },
    label: {
       fontSize: 10,
@@ -80,11 +105,18 @@ const styles = StyleSheet.create({
 const formatDate = (dateString: Date) => {
    return format(new Date(dateString), 'yyyy-MM-dd');
 };
+
 // Document component
 const MyDocument = ({ bookingData }: any) => (
    <Document>
       <Page size="A4" orientation="landscape" style={styles.page}>
-         <Text style={styles.header}>Booking Confirmation</Text>
+         <View style={styles.header}>
+            <Text style={styles.title}>Hotel Maerokoco</Text>
+            <Text style={styles.contactDetails}>JL. Dr. Moh. Hatta No.3, Sentul, Kec. Kepanjenkidul, Kota Blitar +62-342-801427</Text>
+            <Text style={styles.contactDetails}>
+               Website: <Text style={styles.link}>hotelmaerokoco.online</Text> Email: <Text style={styles.link}>hotelmaerokoco03@gmail.com</Text>
+            </Text>
+         </View>
 
          <View style={styles.section}>
             <View style={styles.row}>
@@ -161,7 +193,10 @@ const MyDocument = ({ bookingData }: any) => (
                </View>
             </View>
 
-            <Text style={styles.footer}>Thank you for booking with us!</Text>
+            <Text style={styles.footer}>Terimakasih Telah Mimilih Kami</Text>
+            <Text style={styles.footer}>
+               Jika Ada Masalah Hubungi Kami Email: <Text style={styles.link}>hotelmaerokoco03@gmail.com</Text>
+            </Text>
          </View>
       </Page>
    </Document>
