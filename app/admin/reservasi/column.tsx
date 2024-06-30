@@ -19,6 +19,8 @@ import { MdOutlineBedroomChild } from 'react-icons/md';
 import { LuCalendarCheck } from 'react-icons/lu';
 import { RiCalendarCloseLine } from 'react-icons/ri';
 import { IoCloseCircleOutline } from 'react-icons/io5';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 export type Bookings = {
    id: string;
@@ -30,10 +32,12 @@ export type Bookings = {
    payment_status: string;
    total_price: number;
    invoice_number: string;
+   phone_number: number;
    name: string;
    checkindate: any;
    checkoutdate: any;
    payment_proof_url: string;
+   rejection_reason: string;
    room: {
       name: string;
    };
@@ -111,11 +115,34 @@ export const columnsBookings: ColumnDef<Bookings>[] = [
       header: 'Aksi',
       cell: ({ row }) => {
          const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+         const [rejectionReason, setRejectionReason] = useState(row.original.rejection_reason || '');
+         const [guestName, setGuestName] = useState(row.original.name || '');
+         const [guestPhone, setGuestPhone] = useState(row.original.phone_number || '');
+         const [showReasonInput, setShowReasonInput] = useState(false);
+         const [showGuestInput, setShowGuestInput] = useState(false);
+
+         const updateGuestInfo = async (bookingId: any, name: any, phone: any) => {
+            const supabase = createClient();
+            const { error } = await supabase.from('bookings').update({ name, phone_number: phone }).eq('id', bookingId);
+            if (!error) {
+               row.original.name = name;
+               row.original.phone_number = phone;
+               window.location.reload();
+            }
+         };
 
          const updatePaymentStatus = useUpdatePaymentStatus();
          const updateBookingStatus = useUpdateBookingStatus();
+         const handleReject = () => {
+            updatePaymentStatus(row.original.id, 'Ditolak', rejectionReason);
+         };
+
+         const handleSaveGuestInfo = () => {
+            updateGuestInfo(row.original.id, guestName, guestPhone);
+            setShowGuestInput(false);
+         };
          return (
-            <div className="flex flex-row items-center justify-center gap-4">
+            <div className="flex flex-row items-center justify-center gap-4 ">
                <Dialog>
                   <DialogTrigger asChild>
                      <Button variant="outline">
@@ -123,12 +150,27 @@ export const columnsBookings: ColumnDef<Bookings>[] = [
                         Reservasi
                      </Button>
                   </DialogTrigger>
-                  <DialogContent className="sm:max-w-[425px]">
+                  <DialogContent className="sm:max-w-[425px] ">
                      <DialogHeader>
                         <DialogTitle>Reservasi</DialogTitle>
                         <DialogDescription>Ubah Informasi Booking Status Check In / Check Out / Cancel</DialogDescription>
                      </DialogHeader>
-                     <div className="grid gap-4 py-4"></div>
+                     <div className="grid gap-4 py-4">
+                        <Button variant={'secondary'} onClick={() => setShowGuestInput(!showGuestInput)}>
+                           Edit Tamu
+                        </Button>
+                        {showGuestInput && (
+                           <>
+                              <Label>Nama Tamu</Label>
+                              <Input value={guestName} onChange={(e) => setGuestName(e.target.value)} placeholder="Nama Tamu" className="w-full p-2 border border-gray-300 rounded" />
+                              <Label>Nomer HP</Label>
+                              <Input type="number" value={guestPhone} onChange={(e) => setGuestPhone(e.target.value)} placeholder="Nomer HP" className="w-full p-2 border border-gray-300 rounded" />
+                              <Button variant={'outline'} onClick={handleSaveGuestInfo} className="bg-yellow-500 text-white mt-2">
+                                 Simpan
+                              </Button>
+                           </>
+                        )}
+                     </div>
                      <DialogFooter>
                         <Button onClick={() => updateBookingStatus(row.original.id, 'Check-In')} type="submit" className="bg-green-500 text-white">
                            <LuCalendarCheck className="w-5 h-5 mr-2" />
@@ -152,19 +194,23 @@ export const columnsBookings: ColumnDef<Bookings>[] = [
                         Pembayaran
                      </Button>
                   </DialogTrigger>
-                  <DialogContent className="sm:max-w-[425px]">
+                  <DialogContent className="sm:max-w-[425px] md:h-[500px]">
                      <DialogHeader>
                         <DialogTitle>Pembayaran</DialogTitle>
                      </DialogHeader>
                      <div className="grid gap-4 py-4">
                         <Image src={row.original.payment_proof_url} alt="Room Image" width={500} height={400} />
+                        <Button className="bg-red-500 text-white" onClick={() => setShowReasonInput(!showReasonInput)}>
+                           Alasan Penolakan
+                        </Button>
+                        {showReasonInput && <textarea value={rejectionReason} onChange={(e) => setRejectionReason(e.target.value)} placeholder="Tuliskan alasan penolakan" className="w-full p-2 border border-gray-300 rounded" />}
                      </div>
                      <DialogFooter>
-                        <Button onClick={() => updatePaymentStatus(row.original.id, 'Disetujui')} type="submit" className="bg-green-500 text-white">
+                        <Button onClick={() => updatePaymentStatus(row.original.id, 'Disetujui', 'sasa')} type="submit" className="bg-green-500 text-white">
                            <IoCheckmarkDoneCircleOutline />
                            <span className="ml-2">Setujui</span>
                         </Button>
-                        <Button onClick={() => updatePaymentStatus(row.original.id, 'Ditolak')} type="submit" className="bg-red-500 text-white">
+                        <Button onClick={handleReject} type="submit" className="bg-red-500 text-white">
                            <TiDeleteOutline />
                            Tolak
                         </Button>

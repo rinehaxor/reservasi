@@ -40,7 +40,6 @@ export default function SideBar() {
       } else {
          Cookies.remove('user');
          console.log('Logged out successfully');
-         redirect('/');
       }
    };
    return (

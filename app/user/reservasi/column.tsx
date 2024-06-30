@@ -31,6 +31,7 @@ export type Bookings = {
    checkoutdate: any;
    payment_proof_url: string;
    rating: number; // Kolom untuk rating individual
+   rejection_reason: string;
 };
 
 export const columnsBookingsUser = (handleRatingChange: (bookingId: string, roomId: number, newRating: number) => void): ColumnDef<Bookings>[] => [
@@ -190,6 +191,23 @@ export const columnsBookingsUser = (handleRatingChange: (bookingId: string, room
                <PDFDownloadLink document={<MyDocument bookingData={row.original} />} fileName={`booking-${row.original.id}.pdf`}>
                   {({ loading }) => (loading ? 'Preparing document...' : <Button variant={'secondary'}>Download Invoice </Button>)}
                </PDFDownloadLink>
+               {row.original.payment_status === 'Ditolak' && (
+                  <Dialog>
+                     <DialogTrigger asChild>
+                        <Button className="bg-red-500 text-white hover:bg-red-700">Alasan Penolakan</Button>
+                     </DialogTrigger>
+                     <DialogContent className="sm:max-w-[425px]">
+                        <DialogHeader>
+                           <DialogTitle className="text-center font-bold text-xl">Alasan Penolakan</DialogTitle>
+                        </DialogHeader>
+                        <div className="font-bold ">
+                           <span></span>
+                           {row.original.rejection_reason}
+                        </div>
+                        <DialogFooter></DialogFooter>
+                     </DialogContent>
+                  </Dialog>
+               )}
             </div>
          );
       },

@@ -23,6 +23,7 @@ export type Booking = {
    checkoutdate: string;
    payment_proof_url: string;
    rating: number; // Kolom untuk rating individual
+   rejection_reason: string;
 };
 
 export default function UserBookingHistory() {

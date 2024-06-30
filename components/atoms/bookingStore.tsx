@@ -22,17 +22,26 @@ export const bookingDetailsAtom = atom({
 });
 
 export const bookingsAtom = atom<Bookings[]>([]);
-
 export const useUpdatePaymentStatus = () => {
    const [bookings, setBookings] = useAtom(bookingsAtom);
    const [, setUpdateTrigger] = useAtom(updateTriggerAtom);
    const supabase = createClient();
 
-   const updatePaymentStatus = async (bookingId: string, newStatus: string) => {
-      const { data, error } = await supabase.from('bookings').update({ payment_status: newStatus }).match({ id: bookingId });
+   const updatePaymentStatus = async (bookingId: string, newStatus: string, reason?: string) => {
+      const updates: any = {
+         payment_status: newStatus,
+      };
+
+      if (newStatus === 'Disetujui') {
+         updates.rejection_reason = null;
+      } else if (reason !== undefined) {
+         updates.rejection_reason = reason;
+      }
+
+      const { data, error } = await supabase.from('bookings').update(updates).match({ id: bookingId });
 
       if (!error) {
-         setBookings((currentBookings) => currentBookings.map((booking) => (booking.id === bookingId ? { ...booking, payment_status: newStatus } : booking)));
+         setBookings((currentBookings) => currentBookings.map((booking) => (booking.id === bookingId ? { ...booking, payment_status: newStatus, rejection_reason: updates.rejection_reason } : booking)));
          setUpdateTrigger((prev) => prev + 1);
       } else {
          console.error('Error updating Payment:', error);
@@ -41,6 +50,7 @@ export const useUpdatePaymentStatus = () => {
 
    return updatePaymentStatus;
 };
+
 export const useUpdateBookingStatus = () => {
    const [bookings, setBookings] = useAtom(bookingsAtom);
    const [, setUpdateTrigger] = useAtom(updateTriggerAtom);
