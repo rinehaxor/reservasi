@@ -21,6 +21,7 @@ import { RiCalendarCloseLine } from 'react-icons/ri';
 import { IoCloseCircleOutline } from 'react-icons/io5';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useForm } from 'react-hook-form';
 
 export type Bookings = {
    id: string;
@@ -115,11 +116,23 @@ export const columnsBookings: ColumnDef<Bookings>[] = [
       header: 'Aksi',
       cell: ({ row }) => {
          const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-         const [rejectionReason, setRejectionReason] = useState(row.original.rejection_reason || '');
-         const [guestName, setGuestName] = useState(row.original.name || '');
-         const [guestPhone, setGuestPhone] = useState(row.original.phone_number || '');
+         //  const [rejectionReason, setRejectionReason] = useState(row.original.rejection_reason || '');
+         //  const [guestName, setGuestName] = useState(row.original.name || '');
+         //  const [guestPhone, setGuestPhone] = useState(row.original.phone_number || '');
          const [showReasonInput, setShowReasonInput] = useState(false);
          const [showGuestInput, setShowGuestInput] = useState(false);
+         const {
+            register,
+            handleSubmit,
+            setValue,
+            formState: { errors },
+         } = useForm({
+            defaultValues: {
+               guestName: row.original.name || '',
+               guestPhone: row.original.phone_number || '',
+               rejectionReason: row.original.rejection_reason || '',
+            },
+         });
 
          const updateGuestInfo = async (bookingId: any, name: any, phone: any) => {
             const supabase = createClient();
@@ -133,14 +146,16 @@ export const columnsBookings: ColumnDef<Bookings>[] = [
 
          const updatePaymentStatus = useUpdatePaymentStatus();
          const updateBookingStatus = useUpdateBookingStatus();
-         const handleReject = () => {
-            updatePaymentStatus(row.original.id, 'Ditolak', rejectionReason);
+         const handleReject = (data: any) => {
+            updatePaymentStatus(row.original.id, 'Ditolak', data.rejectionReason);
+            window.location.reload();
+         };
+         const handleSaveGuestInfo = (data: any) => {
+            updateGuestInfo(row.original.id, data.guestName, data.guestPhone);
+            setShowGuestInput(false);
+            window.location.reload();
          };
 
-         const handleSaveGuestInfo = () => {
-            updateGuestInfo(row.original.id, guestName, guestPhone);
-            setShowGuestInput(false);
-         };
          return (
             <div className="flex flex-row items-center justify-center gap-4 ">
                <Dialog>
@@ -161,13 +176,35 @@ export const columnsBookings: ColumnDef<Bookings>[] = [
                         </Button>
                         {showGuestInput && (
                            <>
-                              <Label>Nama Tamu</Label>
-                              <Input value={guestName} onChange={(e) => setGuestName(e.target.value)} placeholder="Nama Tamu" className="w-full p-2 border border-gray-300 rounded" />
-                              <Label>Nomer HP</Label>
-                              <Input type="number" value={guestPhone} onChange={(e) => setGuestPhone(e.target.value)} placeholder="Nomer HP" className="w-full p-2 border border-gray-300 rounded" />
-                              <Button variant={'outline'} onClick={handleSaveGuestInfo} className="bg-yellow-500 text-white mt-2">
-                                 Simpan
-                              </Button>
+                              <form onSubmit={handleSubmit(handleSaveGuestInfo)}>
+                                 <Label>Nama Tamu</Label>
+                                 <Input
+                                    {...register('guestName', {
+                                       required: 'Masukan Nama Tamu',
+                                       minLength: { value: 3, message: 'Nama Tamu minimal 3 karakter' },
+                                       maxLength: { value: 35, message: 'Nama Tamu maksimal 35 karakter' },
+                                    })}
+                                    placeholder="Nama Tamu"
+                                    className="w-full p-2 border border-gray-300 rounded"
+                                 />
+                                 {errors.guestName && <p className="text-red-500 text-xs">{errors.guestName.message}</p>}
+
+                                 <Label>Nomor HP</Label>
+                                 <Input
+                                    {...register('guestPhone', {
+                                       required: 'Masukan Nomor HP',
+                                       minLength: { value: 10, message: 'Nomor HP minimal 10 karakter' },
+                                       maxLength: { value: 13, message: 'Nomor HP maksimal 13 karakter' },
+                                    })}
+                                    placeholder="Nomor HP"
+                                    className="w-full p-2 border border-gray-300 rounded"
+                                 />
+                                 {errors.guestPhone && <p className="text-red-500 text-xs">{errors.guestPhone.message}</p>}
+
+                                 <Button type="submit" variant={'secondary'} className="w-full mt-4">
+                                    Simpan
+                                 </Button>
+                              </form>
                            </>
                         )}
                      </div>
@@ -203,14 +240,25 @@ export const columnsBookings: ColumnDef<Bookings>[] = [
                         <Button className="bg-red-500 text-white" onClick={() => setShowReasonInput(!showReasonInput)}>
                            Alasan Penolakan
                         </Button>
-                        {showReasonInput && <textarea value={rejectionReason} onChange={(e) => setRejectionReason(e.target.value)} placeholder="Tuliskan alasan penolakan" className="w-full p-2 border border-gray-300 rounded" />}
+                        {showReasonInput && (
+                           <textarea
+                              {...register('rejectionReason', {
+                                 required: 'Masukan Alasan Penolakan',
+                                 minLength: { value: 5, message: 'Alasan penolakan minimal 5 karakter' },
+                                 maxLength: { value: 30, message: 'Alasan penolakan maksimal 30 karakter' },
+                              })}
+                              placeholder="Tuliskan alasan penolakan"
+                              className="w-full p-2 border border-gray-300 rounded"
+                           />
+                        )}
+                        {errors.rejectionReason && <p className="text-red-500 text-xs">{errors.rejectionReason.message}</p>}
                      </div>
                      <DialogFooter>
                         <Button onClick={() => updatePaymentStatus(row.original.id, 'Disetujui', 'sasa')} type="submit" className="bg-green-500 text-white">
                            <IoCheckmarkDoneCircleOutline />
                            <span className="ml-2">Setujui</span>
                         </Button>
-                        <Button onClick={handleReject} type="submit" className="bg-red-500 text-white">
+                        <Button onClick={handleSubmit(handleReject)} type="submit" className="bg-red-500 text-white">
                            <TiDeleteOutline />
                            Tolak
                         </Button>
