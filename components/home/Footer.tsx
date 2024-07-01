@@ -20,7 +20,7 @@ export default function Footer() {
                </p>
             </div>
          </div>
-         <div className="text-center mt-10 mb-5">&copy;2024</div>
+         <div className="text-center mt-10 pb-5 bg-orange-500">&copy;2024</div>
       </div>
    );
 }

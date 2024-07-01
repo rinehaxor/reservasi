@@ -129,12 +129,12 @@ export default function Page({ params }: any) {
                         <h2 className="font-extrabold text-2xl md:text-4xl">{room?.name}</h2>
                         <h2 className="text-xl md:text-2xl">{room?.type}</h2>
                         <p className="mt-5 text-xl md:text-2xl font-bold mb-2">Fasilitas</p>
-                        <div className="flex flex-row flex-wrap gap-5">
+                        <div className="flex  flex-wrap gap-5 md:gap-1">
                            {room?.room_facilities.map((rf) => (
                               <div key={rf.facility_id}>
-                                 <div className="md:w-48 gap-5">
+                                 <div className="md:w-48 gap-3 md:gap-1 justify-center align-center">
                                     <Image src={rf.facility.image_url} width={'50'} height={'50'} alt="Facility" />
-                                    <p className="text-center font-semibold">{rf.facility.name}</p>
+                                    <p className=" md:text-base text-xs font-semibold">{rf.facility.name}</p>
                                  </div>
                               </div>
                            ))}
@@ -158,15 +158,16 @@ export default function Page({ params }: any) {
                            <Button variant={'secondary'} size={'lg'} className="text-bold w-40 text-white " disabled={!dateRange?.from || !dateRange?.to || room?.room_available !== 'Tersedia' || !user || room?.room_count === 0}>
                               <Link href={`/kamar/${room.id}/pesan`}>Pesan</Link>
                            </Button>
-                           <li className="md:font-bold md:text-xs text-xs font-bold mt-2">
-                              <i>
+                           <div className="mt-5">
+                              <li className="md:font-bold md:text-xs text-xs font-bold mt-2">
                                  Catatan : Sebelum memesan harap{' '}
                                  <span className="text-orange-500 border-b-2 border-orange-500">
                                     <Link href="/login">login</Link>
                                  </span>{' '}
                                  terlebih dahulu
-                              </i>
-                           </li>
+                              </li>
+                              <li className="md:font-bold md:text-xs text-xs font-bold mt-2">1 Kamar Maksimal 2 Orang</li>
+                           </div>
                         </div>
                      </div>
                   </div>

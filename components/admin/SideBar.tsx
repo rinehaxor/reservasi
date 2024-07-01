@@ -7,13 +7,14 @@ import { ImList } from 'react-icons/im';
 import { createClient } from '@/utils/supabase/client';
 import { HiFolderOpen } from 'react-icons/hi2';
 import { HiCurrencyDollar } from 'react-icons/hi';
-import { redirect } from 'next/navigation';
+import { usePathname } from 'next/navigation'; // Menggunakan usePathname dari next/navigation
 import Cookies from 'js-cookie';
 import Image from 'next/image';
 
 export default function SideBar() {
    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
    const sidebarRef = useRef<HTMLDivElement>(null);
+   const pathname = usePathname(); // Menggunakan usePathname untuk mendapatkan pathname
 
    const toggleSidebar = () => {
       setIsSidebarOpen(!isSidebarOpen);
@@ -32,6 +33,7 @@ export default function SideBar() {
          document.removeEventListener('mousedown', handleOutsideClick);
       };
    }, []);
+
    const supabase = createClient();
    const handleLogout = async () => {
       const { error } = await supabase.auth.signOut();
@@ -42,6 +44,7 @@ export default function SideBar() {
          console.log('Logged out successfully');
       }
    };
+
    return (
       <div className="flex flex-col">
          <div>
@@ -76,7 +79,10 @@ export default function SideBar() {
 
                   <ul className="space-y-2 font-medium">
                      <li>
-                        <Link href="/admin/dashboard" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <Link
+                           href="/admin/dashboard"
+                           className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${pathname === '/admin/dashboard' ? 'bg-gray-200 dark:bg-gray-700' : ''}`}
+                        >
                            <svg
                               className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                               aria-hidden="true"
@@ -91,13 +97,19 @@ export default function SideBar() {
                         </Link>
                      </li>
                      <li>
-                        <a href="/admin/rooms" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <Link
+                           href="/admin/rooms"
+                           className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${pathname.startsWith('/admin/rooms') ? 'bg-gray-200 dark:bg-gray-700' : ''}`}
+                        >
                            <ImHome2 className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                            <span className="flex-1 ms-3 whitespace-nowrap">Kamar</span>
-                        </a>
+                        </Link>
                      </li>
                      <li>
-                        <Link href="/admin/reservasi" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <Link
+                           href="/admin/reservasi"
+                           className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${pathname.startsWith('/admin/reservasi') ? 'bg-gray-200 dark:bg-gray-700' : ''}`}
+                        >
                            <svg
                               className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                               aria-hidden="true"
@@ -111,28 +123,40 @@ export default function SideBar() {
                         </Link>
                      </li>
                      <li>
-                        <Link href="/admin/reservasi-selesai" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <Link
+                           href="/admin/reservasi-selesai"
+                           className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${pathname.startsWith('/admin/reservasi-selesai') ? 'bg-gray-200 dark:bg-gray-700' : ''}`}
+                        >
                            <HiInboxArrowDown className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                            <span className="flex-1 ms-3 whitespace-nowrap">Riwayat Reservasi</span>
                         </Link>
                      </li>
                      <li>
-                        <Link href="/admin/ketersediaan-room" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <Link
+                           href="/admin/ketersediaan-room"
+                           className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${pathname.startsWith('/admin/ketersediaan-room') ? 'bg-gray-200 dark:bg-gray-700' : ''}`}
+                        >
                            <HiFolderOpen className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                            <span className="flex-1 ms-3 whitespace-nowrap">Ketersediaan Kamar</span>
                         </Link>
                      </li>
                      <li>
-                        <a href="/admin/fasilitas" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <Link
+                           href="/admin/fasilitas"
+                           className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${pathname.startsWith('/admin/fasilitas') ? 'bg-gray-200 dark:bg-gray-700' : ''}`}
+                        >
                            <ImList className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                            <span className="flex-1 ms-3 whitespace-nowrap">Fasilitas</span>
-                        </a>
+                        </Link>
                      </li>
                      <li>
-                        <a href="/admin/payment" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <Link
+                           href="/admin/payment"
+                           className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${pathname.startsWith('/admin/payment') ? 'bg-gray-200 dark:bg-gray-700' : ''}`}
+                        >
                            <HiCurrencyDollar className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
                            <span className="flex-1 ms-3 whitespace-nowrap">Pembayaran</span>
-                        </a>
+                        </Link>
                      </li>
                      <li>
                         <Link href="/login" onClick={handleLogout} className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
