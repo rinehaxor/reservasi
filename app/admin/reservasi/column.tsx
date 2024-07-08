@@ -231,12 +231,12 @@ export const columnsBookings: ColumnDef<Bookings>[] = [
                         Pembayaran
                      </Button>
                   </DialogTrigger>
-                  <DialogContent className="sm:max-w-[425px] md:h-[500px]">
+                  <DialogContent className="sm:max-w-[425px] md:h-auto">
                      <DialogHeader>
                         <DialogTitle>Pembayaran</DialogTitle>
                      </DialogHeader>
                      <div className="grid gap-4 py-4">
-                        <Image src={row.original.payment_proof_url} alt="Room Image" width={500} height={400} />
+                        <Image src={row.original.payment_proof_url} alt="Room Image" width={200} height={100} className="justify-center items-center" />
                         <Button className="bg-red-500 text-white" onClick={() => setShowReasonInput(!showReasonInput)}>
                            Alasan Penolakan
                         </Button>
