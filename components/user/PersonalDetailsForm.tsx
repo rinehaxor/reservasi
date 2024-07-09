@@ -104,8 +104,8 @@ const PersonalDetailsForm = ({ onNext }: any) => {
                               {...register('name', {
                                  required: 'Masukan Nama Lengkap.',
                                  minLength: {
-                                    value: 5,
-                                    message: 'Nama Lengkap harus minimal 5 karakter.',
+                                    value: 3,
+                                    message: 'Nama Lengkap harus minimal 3 karakter.',
                                  },
                                  maxLength: {
                                     value: 35,
