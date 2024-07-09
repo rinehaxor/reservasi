@@ -71,7 +71,7 @@ const PersonalDetailsForm = ({ onNext }: any) => {
             <p className="font-poppins text-xl my-3">Informasi Pemesanan</p>
             <p className="font-poppins text-lg">Silakan isi kolom kosong di bawah ini</p>
          </div>
-         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center mx-48">
+         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center md:mx-48">
             <div className="flex flex-col lg:flex-row gap-5 mt-5 w-full px-4">
                {roomDetails ? (
                   <div className="flex flex-col lg:w-1/2 items-center lg:items-end">
@@ -92,8 +92,8 @@ const PersonalDetailsForm = ({ onNext }: any) => {
                      <Spinner />
                   </div>
                )}
-               <div className="bg-gray-300 w-full lg:w-px self-stretch lg:mx-8"></div> {/* Garis pemisah */}
-               <div className="flex flex-col w-full lg:w-1/2 ">
+               <div className="bg-gray-300 w-full md:w-px self-stretch lg:mx-8"></div> {/* Garis pemisah */}
+               <div className="flex flex-col w-full md:w-1/2  ">
                   <div className="w-full flex flex-col mt-auto mb-auto">
                      <div className="w-full  ">
                         <div className="mb-4 w-full md:w-1/2">

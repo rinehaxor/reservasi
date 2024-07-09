@@ -32,8 +32,8 @@ export default function DescriptionHome({ contactRef }: any) {
                <div className="border-l-4 border-orange-500 mr-5">
                   <p className="text-4xl sm:text-6xl font-bold ml-6">Wisata</p>
                   <p className="text-xl sm:text-3xl font-thin ml-6 mt-5">Hotel Maerokoco berada di lokasi strategis di pusat kota, hanya beberapa langkah dari berbagai atraksi populer.</p>
-                  <Link href="https://pariwisata.visit.blitarkota.go.id">
-                     <Button className="bg-orange-500 border-none ml-6 mt-10 w-full sm:w-1/4" variant={'secondary'}>
+                  <Link href="https://www.google.com/maps/search/wisata+blitar/@-8.0987554,112.1559832,14.27z?entry=ttu">
+                     <Button className=" border-none ml-6 mt-10 w-full sm:w-1/4" variant={'secondary'}>
                         <span className="font-bold text-white">Jelajahi</span>
                      </Button>
                   </Link>
