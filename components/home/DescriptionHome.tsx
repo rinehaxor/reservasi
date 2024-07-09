@@ -6,6 +6,7 @@ import { Button } from '../ui/button';
 import { IoLocationOutline } from 'react-icons/io5';
 import { FiPhone } from 'react-icons/fi';
 import { MdOutlineEmail } from 'react-icons/md';
+import Link from 'next/link';
 
 const cardVariants = {
    hidden: { opacity: 0, y: 100 },
@@ -31,9 +32,11 @@ export default function DescriptionHome({ contactRef }: any) {
                <div className="border-l-4 border-orange-500 mr-5">
                   <p className="text-4xl sm:text-6xl font-bold ml-6">Wisata</p>
                   <p className="text-xl sm:text-3xl font-thin ml-6 mt-5">Hotel Maerokoco berada di lokasi strategis di pusat kota, hanya beberapa langkah dari berbagai atraksi populer.</p>
-                  <Button className="bg-orange-500 border-none ml-6 mt-10 w-full sm:w-1/4" variant={'secondary'}>
-                     <span className="font-bold text-white">Jelajahi</span>
-                  </Button>
+                  <Link href="https://pariwisata.visit.blitarkota.go.id">
+                     <Button className="bg-orange-500 border-none ml-6 mt-10 w-full sm:w-1/4" variant={'secondary'}>
+                        <span className="font-bold text-white">Jelajahi</span>
+                     </Button>
+                  </Link>
                </div>
             </div>
             <div className="w-full sm:w-1/2 flex justify-end items-center">

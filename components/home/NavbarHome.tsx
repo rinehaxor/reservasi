@@ -20,14 +20,25 @@ export default function NavbarHome({ faqRef, contactRef }: { faqRef?: React.RefO
    const pathname = usePathname();
 
    useEffect(() => {
-      const fetchUser = async () => {
-         const {
-            data: { user },
-         } = await supabase.auth.getUser();
-         setUser(user);
-      };
+      const userJson = Cookies.get('user');
 
-      fetchUser();
+      if (!userJson) {
+         const signOutAndClearUser = async () => {
+            await supabase.auth.signOut();
+            setUser(null);
+         };
+
+         signOutAndClearUser();
+      } else {
+         const fetchUser = async () => {
+            const {
+               data: { user },
+            } = await supabase.auth.getUser();
+            setUser(user);
+         };
+
+         fetchUser();
+      }
    }, []);
 
    const toggleMenu = () => {
