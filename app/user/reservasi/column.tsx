@@ -200,10 +200,7 @@ export const columnsBookingsUser = (handleRatingChange: (bookingId: string, room
                         <DialogHeader>
                            <DialogTitle className="text-center font-bold text-xl">Alasan Penolakan</DialogTitle>
                         </DialogHeader>
-                        <div className="font-bold ">
-                           <span></span>
-                           {row.original.rejection_reason}
-                        </div>
+                        <div className="font-bold ">{row.original.rejection_reason === null ? 'Hubungi Pihak Hotel.' : 'Hubungi Pihak Hotel.'}</div>
                         <DialogFooter></DialogFooter>
                      </DialogContent>
                   </Dialog>

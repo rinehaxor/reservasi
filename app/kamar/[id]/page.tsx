@@ -151,7 +151,13 @@ export default function Page({ params }: any) {
 
                            <DatePickerWithRange date={dateRange} setDate={setDateRange} />
 
-                           <p className={`font-extrabold text-xl md:text-3xl mt-5 ${room?.room_available === 'Tersedia' ? 'text-white bg-green-500 p-2 rounded-md' : 'text-white bg-red-500 p-2 rounded-md'}`}>Kamar {room?.room_available}</p>
+                           <p
+                              className={`font-extrabold text-xl md:text-3xl mt-5 ${
+                                 room?.room_count === 0 ? 'text-white bg-red-500 p-2 rounded-md' : room?.room_available === 'Tersedia' ? 'text-white bg-green-500 p-2 rounded-md' : 'text-white bg-red-500 p-2 rounded-md'
+                              }`}
+                           >
+                              Kamar {room?.room_count === 0 ? 'Tidak Tersedia' : room?.room_available}
+                           </p>
                         </div>
 
                         <div className="flex justify-end mt-10 flex-col items-end">

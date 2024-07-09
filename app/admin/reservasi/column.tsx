@@ -209,18 +209,20 @@ export const columnsBookings: ColumnDef<Bookings>[] = [
                         )}
                      </div>
                      <DialogFooter>
-                        <Button onClick={() => updateBookingStatus(row.original.id, 'Check-In')} type="submit" className="bg-green-500 text-white">
-                           <LuCalendarCheck className="w-5 h-5 mr-2" />
-                           Check-In
-                        </Button>
-                        <Button onClick={() => updateBookingStatus(row.original.id, 'Check-Out')} type="submit" className="bg-yellow-500 text-white">
-                           <RiCalendarCloseLine className="w-5 h-5 mr-2" />
-                           Check-Out
-                        </Button>
-                        <Button onClick={() => updateBookingStatus(row.original.id, 'Cancel')} type="submit" className="bg-red-500 text-white">
-                           <IoCloseCircleOutline className="w-5 h-5 mr-2" />
-                           Cancel
-                        </Button>
+                        <div className="flex flex-row gap-5">
+                           <Button onClick={() => updateBookingStatus(row.original.id, 'Check-In')} type="submit" className="bg-green-500 text-white">
+                              <LuCalendarCheck className="w-5 h-5 mr-2" />
+                              Check-In
+                           </Button>
+                           <Button onClick={() => updateBookingStatus(row.original.id, 'Check-Out')} type="submit" className="bg-yellow-500 text-white">
+                              <RiCalendarCloseLine className="w-5 h-5 mr-2" />
+                              Check-Out
+                           </Button>
+                           <Button onClick={() => updateBookingStatus(row.original.id, 'Cancel')} type="submit" className="bg-red-500 text-white">
+                              <IoCloseCircleOutline className="w-5 h-5 mr-2" />
+                              Cancel
+                           </Button>
+                        </div>
                      </DialogFooter>
                   </DialogContent>
                </Dialog>
@@ -236,7 +238,10 @@ export const columnsBookings: ColumnDef<Bookings>[] = [
                         <DialogTitle>Pembayaran</DialogTitle>
                      </DialogHeader>
                      <div className="grid gap-4 py-4">
-                        <Image src={row.original.payment_proof_url} alt="Room Image" width={200} height={100} className="justify-center items-center" />
+                        <div className="flex justify-center items-center">
+                           <Image src={row.original.payment_proof_url} alt="Room Image" width={200} height={100} />
+                        </div>
+
                         <Button className="bg-red-500 text-white" onClick={() => setShowReasonInput(!showReasonInput)}>
                            Alasan Penolakan
                         </Button>
@@ -254,14 +259,16 @@ export const columnsBookings: ColumnDef<Bookings>[] = [
                         {errors.rejectionReason && <p className="text-red-500 text-xs">{errors.rejectionReason.message}</p>}
                      </div>
                      <DialogFooter>
-                        <Button onClick={() => updatePaymentStatus(row.original.id, 'Disetujui', 'sasa')} type="submit" className="bg-green-500 text-white">
-                           <IoCheckmarkDoneCircleOutline />
-                           <span className="ml-2">Setujui</span>
-                        </Button>
-                        <Button onClick={handleSubmit(handleReject)} type="submit" className="bg-red-500 text-white">
-                           <TiDeleteOutline />
-                           Tolak
-                        </Button>
+                        <div className="flex flex-row gap-5">
+                           <Button onClick={() => updatePaymentStatus(row.original.id, 'Disetujui', 'sasa')} type="submit" className="bg-green-500 text-white">
+                              <IoCheckmarkDoneCircleOutline />
+                              <span className="ml-2">Setujui</span>
+                           </Button>
+                           <Button onClick={handleSubmit(handleReject)} type="submit" className="bg-red-500 text-white">
+                              <TiDeleteOutline />
+                              Tolak
+                           </Button>
+                        </div>
                      </DialogFooter>
                   </DialogContent>
                </Dialog>
