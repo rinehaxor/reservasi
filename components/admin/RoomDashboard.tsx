@@ -32,11 +32,13 @@ export default function RoomDashboard() {
 
    useEffect(() => {
       async function initializeRooms() {
-         if (rooms.length === 0) {
+         if (rooms.length === 0 || !rooms) {
             // Fetch only if the atom is empty, assuming this is initial load.
             setLoading(true);
             const fetchedRooms = await fetchRooms();
             setRooms(fetchedRooms);
+            setLoading(false);
+         } else {
             setLoading(false);
          }
       }

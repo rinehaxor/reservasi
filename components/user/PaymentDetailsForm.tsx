@@ -181,8 +181,8 @@ const PaymentDetailsForm = ({ onConfirm, onBack, onNext }: any) => {
                                  {...register('paymentName', {
                                     required: 'Masukan Nama Pengirim.',
                                     minLength: {
-                                       value: 5,
-                                       message: 'Nama Pengirim harus minimal 5 karakter.',
+                                       value: 3,
+                                       message: 'Nama Pengirim harus minimal 3 karakter.',
                                     },
                                     maxLength: {
                                        value: 35,
@@ -196,7 +196,7 @@ const PaymentDetailsForm = ({ onConfirm, onBack, onNext }: any) => {
                            <div className="mb-4">
                               <Label>Nomer Rekening</Label>
                               <Input
-                                 type="text"
+                                 type="number"
                                  id="paymentAccountNumber"
                                  {...register('paymentAccountNumber', {
                                     required: 'Masukan Nomer Rekening.',

@@ -35,11 +35,13 @@ export default function PaymentDashboard() {
 
    useEffect(() => {
       async function initializeRooms() {
-         if (payment.length === 0) {
+         if (payment.length === 0 || !payment) {
             // Fetch only if the atom is empty, assuming this is initial load.
             setLoading(true);
             const fetchedRooms = await fetchPayment();
             setPayment(fetchedRooms);
+            setLoading(false);
+         } else {
             setLoading(false);
          }
       }

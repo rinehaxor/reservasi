@@ -168,7 +168,7 @@ export default function EditPayment({ params }: any) {
                      <div className="grid w-full max-w-sm items-center gap-1.5 mb-2">
                         <Label htmlFor="account_number">Nomer Rekening Bank</Label>
                         <Input
-                           type="text"
+                           type="number"
                            id="account_number"
                            placeholder="Nomer Rekening Bank"
                            {...register('account_number', {

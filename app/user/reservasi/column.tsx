@@ -127,7 +127,7 @@ export const columnsBookingsUser = (handleRatingChange: (bookingId: string, room
                </DialogTrigger>
                <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
-                     <DialogTitle className="text-center font-bold text-xl">Beri Niali Reservasi</DialogTitle>
+                     <DialogTitle className="text-center font-bold text-xl">Beri Nilai Reservasi</DialogTitle>
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
                      <RadioGroup

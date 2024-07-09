@@ -193,8 +193,8 @@ const AddRoom = () => {
                      {...register('type', {
                         required: 'Masukan Tipe Kamar',
                         minLength: {
-                           value: 8,
-                           message: 'Nama kamar minimal 8 karakter',
+                           value: 5,
+                           message: 'Nama kamar minimal 5 karakter',
                         },
                         maxLength: {
                            value: 50,

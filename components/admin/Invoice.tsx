@@ -193,9 +193,9 @@ const MyDocument = ({ bookingData }: any) => (
                </View>
             </View>
 
-            <Text style={styles.footer}>Terimakasih Telah Mimilih Kami</Text>
+            <Text style={styles.footer}>Terimakasih Telah Memilih Kami</Text>
             <Text style={styles.footer}>
-               Jika Ada Masalah Hubungi Kami Email: <Text style={styles.link}>hotelmaerokoco03@gmail.com</Text>
+               Jika Ada Masalah Hubungi Email Kami <Text style={styles.link}>hotelmaerokoco03@gmail.com</Text>
             </Text>
          </View>
       </Page>
