@@ -147,7 +147,7 @@ export default function Page({ params }: any) {
                      </div>
                      <div className="md:w-1/2 flex flex-col mt-5 md:mt-0">
                         <div className="flex justify-end mb-5 items-end flex-col">
-                           <p className="font-extrabold text-xl md:text-3xl mb-5">{room?.price_per_night.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}/Malam</p>
+                           <p className="font-extrabold text-xl md:text-3xl mb-5">{room?.price_per_night?.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}/Malam</p>
 
                            <DatePickerWithRange date={dateRange} setDate={setDateRange} />
 

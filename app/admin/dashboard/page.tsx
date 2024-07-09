@@ -91,7 +91,7 @@ export default function DashboardAdmin() {
                               <LuCircleDollarSign className="w-20 h-20 md:w-40 md:h-40 items-center" />
                            </p>
                            <p className="text-black font-bold dark:text-gray-500 text-center text-xs md:text-lg">Pemasukan</p>
-                           <p className="text-xs text-black font-bold dark:text-gray-500 text-center md:text-lg">{totalIncome.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</p>
+                           <p className="text-xs text-black font-bold dark:text-gray-500 text-center md:text-lg">{totalIncome?.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</p>
                         </div>
                         <div className="flex flex-col items-center justify-center h-72 rounded bg-gray-50 dark:bg-gray-800">
                            <p className="text-2xl text-black font-bold dark:text-gray-500">
@@ -105,7 +105,7 @@ export default function DashboardAdmin() {
                               <HiOutlineUserCircle className="w-20 h-20 md:w-40 md:h-40 items-center" />
                            </p>
                            <p className="text-xs text-black font-bold dark:text-gray-500 text-center md:text-lg">Jumlah Pengguna</p>
-                           <p className="text-xs text-black font-bold dark:text-gray-500 text-center md:text-lg">{totalUsers.toLocaleString()}</p>
+                           <p className="text-xs text-black font-bold dark:text-gray-500 text-center md:text-lg">{totalUsers?.toLocaleString()}</p>
                         </div>
                      </div>
                   </div>

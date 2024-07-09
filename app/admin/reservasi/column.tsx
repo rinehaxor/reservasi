@@ -109,7 +109,7 @@ export const columnsBookings: ColumnDef<Bookings>[] = [
    {
       accessorKey: 'total_price',
       header: 'Total Harga',
-      cell: ({ row }) => `${row.original.total_price.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}`,
+      cell: ({ row }) => `${row.original.total_price?.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}`,
    },
    {
       id: 'Aksi',

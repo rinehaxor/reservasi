@@ -53,7 +53,7 @@ export const columns: ColumnDef<Room>[] = [
    {
       accessorKey: 'price_per_night', // Mengakses data menggunakan key 'price_per_night'
       header: 'Harga ',
-      cell: ({ row }) => `${row.original.price_per_night.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}`,
+      cell: ({ row }) => `${row.original.price_per_night?.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}`,
    },
    {
       accessorKey: 'image_url',
