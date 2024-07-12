@@ -202,7 +202,7 @@ const AddRoom = () => {
                         },
                      })}
                   />
-                  {errors.name && <p className="text-red-500 text-xs">{errors.name.message}</p>}
+                  {errors.type && <p className="text-red-500 text-xs">{errors.type.message}</p>}
                </div>
             </div>
             <div>

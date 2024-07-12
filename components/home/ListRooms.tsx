@@ -82,10 +82,11 @@ export default function ListRooms() {
                               </div>
                            ))}
                         </div>
-                        <p className="mt-3 text-xl sm:text-2xl font-bold my-5">Harga</p>
+                        <p className="mt-3 text-xl sm:text-2xl font-bold ">Harga</p>
                         <p className="inline-block bg-orange-500 font-extrabold text-xl sm:text-3xl text-white rounded-sm border-orange-500 border-2 p-2">
                            <span>{room.price_per_night.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</span>
                         </p>
+                        <p className="text-orange-500 font-bold">Kamar Tersisa {room?.room_count}</p>
                         <div className="flex mt-10 justify-between">
                            <div className="">
                               {room.average_rating ? (
@@ -97,6 +98,7 @@ export default function ListRooms() {
                                  <p className="text-xl font-bold">Belum ada rating</p>
                               )}
                            </div>
+
                            <Link href={`/kamar/${room.id}`}>
                               <Button className="ml-auto font-extrabold text-lg sm:text-xl py-2 px-4 " variant={'secondary'}>
                                  Pesan
