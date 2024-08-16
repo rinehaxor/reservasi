@@ -20,7 +20,9 @@ export default function DescriptionHome({ contactRef }: any) {
             <div className="w-full sm:w-1/2 flex justify-center items-center">
                <div className="border-l-4 border-orange-500">
                   <p className="text-4xl sm:text-6xl font-bold ml-6">Suasana Alam</p>
-                  <p className="text-xl sm:text-3xl font-thin ml-6 mt-5">Hotel ini menawarkan suasana alam yang mempesona, ada ruangan dihiasi dengan hiasan alami yang menenangkan.</p>
+                  <p className="text-xl sm:text-3xl font-thin ml-6 mt-5">
+                     Hotel ini menawarkan suasana <Link href="https://rinelisa.com/when-to-visit-palawan-top-7-hotels/">alam</Link> yang mempesona, ada ruangan dihiasi dengan hiasan alami yang menenangkan.
+                  </p>
                </div>
             </div>
             <div className="w-full sm:w-1/2 flex justify-end items-center">
